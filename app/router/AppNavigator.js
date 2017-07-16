@@ -1,5 +1,4 @@
-import React, { Component } from 'react';
-import { Platform } from 'react-native';
+import React from 'react';
 import { StackNavigator } from 'react-navigation';
 import SplashScreen from '../containers/SplashScreen';
 import {
@@ -8,6 +7,7 @@ import {
   OnBoardingStep3,
   OnBoardingStep4,
 } from '../containers/OnBoarding';
+import EditProfileScreen from '../containers/EditProfileScreen';
 
 const AppNavigator = StackNavigator({
   SplashScreen: { screen: SplashScreen },
@@ -15,6 +15,7 @@ const AppNavigator = StackNavigator({
   OnBoardingStep2: { screen: OnBoardingStep2 },
   OnBoardingStep3: { screen: OnBoardingStep3 },
   OnBoardingStep4: { screen: OnBoardingStep4 },
+  EditProfileScreen: { screen: EditProfileScreen },
 }, {
   initialRouteName: 'SplashScreen',
   headerMode: 'none',
@@ -22,6 +23,6 @@ const AppNavigator = StackNavigator({
    * Use modal on iOS because the card mode comes from the right,
    * which conflicts with the drawer example gesture
    */
-  mode: Platform.OS === 'ios' ? 'modal' : 'card',
+  // mode: Platform.OS === 'ios' ? 'modal' : 'card',
 });
 export default () => <AppNavigator />;

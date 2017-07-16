@@ -5,7 +5,7 @@ import styles from './styles';
 import Button from '../../components/Button';
 import { locationPermission } from '../../utils/permissionUtils';
 
-const requestLocationPermission = () => {
+const requestLocationPermission = (props) => {
   locationPermission()
     .then(() => {
       console.tron.display({
@@ -13,7 +13,7 @@ const requestLocationPermission = () => {
         value: {},
         important: true,
       });
-      // NavigationActions.introStep4Screen();
+      props.navigation.navigate('OnBoardingStep4');
     })
     .catch((e) => {
       console.log('requestLocationPermission err', e);
@@ -22,12 +22,13 @@ const requestLocationPermission = () => {
         'Your device does not support location services.',
         [
           { text: 'Cancel', style: 'cancel' },
-          { text: 'Continue', onPress: () => { /* NavigationActions.introStep4Screen*/ } },
+          { text: 'Continue', onPress: () => props.navigation.navigate('OnBoardingStep4') },
         ]
       );
     });
-}
-export default () => (
+};
+
+export default props => (
   <View style={styles.container}>
     <ScrollView style={styles.contentContainer}>
       <View style={styles.section}>
@@ -36,7 +37,7 @@ export default () => (
       </View>
     </ScrollView>
     <View styles={styles.footer}>
-      <Button onPress={requestLocationPermission} text={I18n.t('Introduction_step3_btn')} />
+      <Button onPress={() => requestLocationPermission(props)} text={I18n.t('Introduction_step3_btn')} />
     </View>
   </View>
 );

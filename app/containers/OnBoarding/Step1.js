@@ -6,7 +6,8 @@ import I18n from 'react-native-i18n';
 import styles from './styles';
 import Button from '../../components/Button';
 
-export default () => (
+const navigateStep2 = props => props.navigation.navigate('OnBoardingStep2');
+export default props => (
   <View style={styles.container}>
     <ScrollView style={styles.contentContainer}>
       <View style={styles.section}>
@@ -19,7 +20,7 @@ export default () => (
       </View>
     </ScrollView>
     <View styles={styles.footer}>
-      <Button text={I18n.t('Introduction_next')} />
+      <Button text={I18n.t('Introduction_next')} onPress={() => navigateStep2(props)} />
     </View>
   </View>
 )

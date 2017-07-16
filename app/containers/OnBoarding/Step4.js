@@ -27,14 +27,10 @@ class OnboardingPushNotifications extends Component {
   }
 
   doUpdateDay = (day, on) => {
-    this.setState(state => ({
-      pushNotifications: Object.assign({
-        [day]: on,
-      }, state.pushNotifications),
-    }));
-
-    const { pushNotifications } = this.state;
+    console.log('day', day, on);
+    const pushNotifications = { ...this.state.pushNotifications };
     pushNotifications[day] = !!on;
+    this.setState({ pushNotifications });
     this.props.actions.updateProfile({ pushNotifications });
   };
 
@@ -77,7 +73,7 @@ class OnboardingPushNotifications extends Component {
     updateProfile({
       pushNotifications,
     });
-
+    this.props.navigation.navigate('EditProfileScreen');
     // NavigationActions.editProfile();
   };
 

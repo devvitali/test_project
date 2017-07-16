@@ -6,7 +6,8 @@ import styles from './styles';
 import Button from '../../components/Button';
 import { Images } from '../../themes';
 
-export default () => (
+const navigateStep3 = props => props.navigation.navigate('OnBoardingStep3');
+export default props => (
   <View style={styles.container}>
     <ScrollView style={styles.contentContainer}>
       <View style={[styles.contentContainer, styles.centerContainer]}>
@@ -19,7 +20,7 @@ export default () => (
       </View>
     </ScrollView>
     <View styles={styles.footer}>
-      <Button text={I18n.t('Introduction_step2_btn')} />
+      <Button text={I18n.t('Introduction_step2_btn')} onPress={() => navigateStep3(props)} />
     </View>
   </View>
 );

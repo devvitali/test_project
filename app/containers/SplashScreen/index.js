@@ -4,6 +4,10 @@ import { User } from '../../firebase/models/index';
 import { Connect } from '../../redux/index';
 
 class SplashScreen extends Component {
+  constructor(props) {
+    super(props);
+    this.routedScene = '';
+  }
   componentDidMount() {
     this.props.actions.startBackgroundGeolocation();
   }
@@ -13,9 +17,10 @@ class SplashScreen extends Component {
   }
 
   redirect() {
-    const { joined, user, isUserValid } = this.props;
-    console.log('SplashScreen', user, joined, isUserValid);
-    if (!user) {
+    const { joined, user, isUserValid, navigation } = this.props;
+    console.log('SplashScreen', user, joined, isUserValid, navigation);
+    if (!user && this.routedScene !== 'OnBoardingStep1') {
+      this.routedScene = 'OnBoardingStep1';
       this.props.navigation.navigate('OnBoardingStep1');
     } else if (!isUserValid && user.onboardingComplete && Object.keys(user).length > 0) {
       console.log('goto editProfile');
@@ -23,7 +28,8 @@ class SplashScreen extends Component {
       console.log('goto drinkUp');
     } else if (isUserValid) {
       console.log('goto map');
-    } else {
+    } else if (this.routedScene !== 'OnBoardingStep1') {
+      this.routedScene = 'OnBoardingStep1';
       this.props.navigation.navigate('OnBoardingStep1');
     }
   }
