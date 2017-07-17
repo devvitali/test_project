@@ -9,9 +9,12 @@ export default class NavigationBar extends React.Component {
     if (this.props.renderTitle) {
       return this.props.renderTitle();
     }
-    return (
-      <Text style={[Styles.title, this.props.titleStyle]}>{this.props.title.toUpperCase()}</Text>
-    );
+    if (this.props.title) {
+      return (
+        <Text style={[Styles.title, this.props.titleStyle]}>{this.props.title.toUpperCase()}</Text>
+      );
+    }
+    return null;
   }
 
   renderLeftButton() {

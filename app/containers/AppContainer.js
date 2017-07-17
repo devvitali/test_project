@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
 });
 export default props => (
   <View style={styles.container}>
-    <NavigationBar {...props} />
+    {!props.hideNavBar && <NavigationBar {...props} />}
     <View style={styles.viewContainer}>
       {props.children}
     </View>

@@ -15,6 +15,9 @@ import {
   PrivacyPolicyScreen,
   TermsOfServiceScreen,
 } from '../containers/LegalScreen';
+import FeedBackScreen from '../containers/FeedBackScreen';
+import SponsoredScreen from '../containers/SponsoredScreen';
+import Redeem2For1Screen from '../containers/Redeem2For1Screen';
 
 const AppNavigator = StackNavigator({
   SplashScreen: { screen: SplashScreen },
@@ -29,8 +32,11 @@ const AppNavigator = StackNavigator({
   PushNotificationsScreen: { screen: PushNotificationsScreen },
   PrivacyPolicyScreen: { screen: PrivacyPolicyScreen },
   TermsOfServiceScreen: { screen: TermsOfServiceScreen },
+  FeedBackScreen: { screen: FeedBackScreen },
+  SponsoredScreen: { screen: SponsoredScreen },
+  Redeem2For1Screen: { screen: Redeem2For1Screen },
 }, {
-  initialRouteName: 'TermsOfServiceScreen',
+  initialRouteName: 'Redeem2For1Screen',
   headerMode: 'none',
   /*
    * Use modal on iOS because the card mode comes from the right,
