@@ -34,7 +34,7 @@ export default class PrivacyPolicyScreen extends Component {
     return (
       <AppContainers
         title={I18n.t('PRIVACY_POLICY')}
-        renderLeftButton={NavItems.hamburgerButton()}
+        renderLeftButton={NavItems.hamburgerButton(this.props.navigation)}
       >
         {this.renderContent()}
       </AppContainers>

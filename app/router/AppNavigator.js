@@ -38,6 +38,7 @@ const DrawerNavigation = DrawerNavigator(
 );
 const AppNavigator = StackNavigator({
   SplashScreen: { screen: SplashScreen },
+  EditProfileScreenWithoutSignIn: { screen: EditProfileScreen },
   OnBoardingStep1: { screen: OnBoardingStep1 },
   OnBoardingStep2: { screen: OnBoardingStep2 },
   OnBoardingStep3: { screen: OnBoardingStep3 },
@@ -46,7 +47,7 @@ const AppNavigator = StackNavigator({
   DrawerNavigation: { screen: DrawerNavigation },
   SponsoredScreen: { screen: SponsoredScreen },
 }, {
-  initialRouteName: 'DrawerNavigation',
+  initialRouteName: 'SplashScreen',
   headerMode: 'none',
   /*
    * Use modal on iOS because the card mode comes from the right,

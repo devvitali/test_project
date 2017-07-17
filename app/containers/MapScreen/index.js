@@ -290,7 +290,7 @@ class MapScreen extends Component {
       <AppContainer
         title="ALKO"
         renderTitle={NavItems.brandTitle}
-        renderLeftButton={NavItems.hamburgerButton(this.openDrawer)}
+        renderLeftButton={NavItems.hamburgerButton(this.props.navigation)}
       >
         <View style={Styles.mainContainer}>
           <View style={Styles.mapContainer}>

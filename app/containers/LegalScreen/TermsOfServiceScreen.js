@@ -33,7 +33,7 @@ export default class TermsOfServiceScreen extends Component {
     return (
       <AppContainers
         title={I18n.t('TERMS_OF_SERVICE')}
-        renderLeftButton={NavItems.hamburgerButton()}
+        renderLeftButton={NavItems.hamburgerButton(this.props.navigation)}
       >
         {this.renderContent()}
       </AppContainers>

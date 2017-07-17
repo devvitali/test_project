@@ -31,26 +31,23 @@ class DrinkUp extends Component {
       if (!this.props.users) {
         this.props.getUsers(this.props.bar.currentDrinkUp);
       }
-      // NavigationActions.refresh({
-      //   title: this.props.bar.name,
-      //   renderRightButton: NavItems.mapButton(this.showDirectionDialog),
-      // });
-    }
-  }
-
-  componentDidUpdate(prevProps) {
-    if (this.props.bar && prevProps.bar && this.props.bar.id !== prevProps.bar.id) {
-      // NavigationActions.refresh({
-      //   title: this.props.bar.name,
-      //   renderRightButton: NavItems.mapButton(this.showDirectionDialog),
-      // });
     }
   }
 
   componentWillUnmount() {
     this.props.clearDrinkupUsers();
   }
-
+  getTitle() {
+    if (this.props.bar) {
+      return this.props.bar.title;
+    }
+    return 'DrinkUp';
+  }
+  getRightNavBarButton() {
+    if (this.props.bar) {
+      return NavItems.mapButton(this.showDirectionDialog);
+    }
+  }
   showDirectionDialog = () => {
     this.setState({ isDirectionDialogShowing: true });
   }
@@ -86,8 +83,9 @@ class DrinkUp extends Component {
   render() {
     return (
       <AppContainer
-        title="DrinkUp"
-        renderLeftButton={NavItems.hamburgerButton()}
+        title={this.getTitle()}
+        renderLeftButton={NavItems.hamburgerButton(this.props.navigation)}
+        renderRightButton={this.getRightNavBarButton()}
       >
         <View style={styles.contentContainer}>
           {this.renderScreen()}

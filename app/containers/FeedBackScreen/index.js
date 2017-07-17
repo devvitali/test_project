@@ -41,7 +41,7 @@ export default class FeedbackScreen extends Component {
     return (
       <AppContainer
         title={I18n.t('SEND_FEEDBACK')}
-        renderLeftButton={NavItems.hamburgerButton()}
+        renderLeftButton={NavItems.hamburgerButton(this.props.navigation)}
       >
         <View style={Styles.mainContainer}>
           <View style={Styles.formContainer}>

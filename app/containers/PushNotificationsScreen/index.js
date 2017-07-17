@@ -41,7 +41,7 @@ class PushNotificationsScreen extends Component {
     return (
       <AppContainer
         title={I18n.t('PUSH_NOTIFICATIONS')}
-        renderLeftButton={NavItems.hamburgerButton()}
+        renderLeftButton={NavItems.hamburgerButton(this.props.navigation)}
       >
         <View style={Styles.mainContainer}>
           <View style={Styles.formContainer}>

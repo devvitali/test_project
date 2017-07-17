@@ -5,7 +5,8 @@ import { debounce, map } from 'lodash';
 import AppContainer from '../AppContainer';
 import { Connect } from '../../redux';
 import Button from '../../components/Button';
-import * as SelectPhoto from '../../utils/photoUtils';
+import NavItems from '../../components/NavigationBar/NavigationBarItems';
+import { openCamera, openPicker } from '../../utils/photoUtils';
 import Styles from './styles';
 import { Colors, DrinkIcons } from '../../themes';
 import PicPhotoSourceDialog from '../../components/Dialogs/PicPhotoSourceDialog';
@@ -52,8 +53,7 @@ class EditProfileScreen extends Component {
 
     const opts = { width: 512, height: 512, cropping: true };
 
-    SelectPhoto
-      .openPicker(opts)
+    openPicker(opts)
       .then(uploadProfilePhoto)
       .catch(this.isNotLoading);
 
@@ -79,7 +79,7 @@ class EditProfileScreen extends Component {
   }
 
   render() {
-    const { user, isProfileComplete, fetching } = this.props;
+    const { user, isProfileComplete, fetching, isUserValid } = this.props;
     const { firstName, showPicDialog } = this.state;
     const opacity = fetching ? 0.3 : 1.0;
 
@@ -89,7 +89,10 @@ class EditProfileScreen extends Component {
     }
 
     return (
-      <AppContainer>
+      <AppContainer
+        title={I18n.t('Profile_Edit')}
+        renderLeftButton={isUserValid ? NavItems.hamburgerButton() : null}
+      >
         <View style={Styles.mainContainer}>
           <View style={Styles.formContainer}>
             <View style={Styles.selectPhotoContainer}>

@@ -15,9 +15,10 @@ export default {
     );
   },
 
-  hamburgerButton(onPress) {
+  hamburgerButton(navigation) {
+
     return () => (
-      <TouchableOpacity onPress={() => {}} style={styles.navButtonLeft}>
+      <TouchableOpacity onPress={() => navigation.navigate('DrawerOpen')} style={styles.navButtonLeft}>
         <IconAlko name="sidebar_toggle" size={20} color={Colors.snow} />
       </TouchableOpacity>
     );
