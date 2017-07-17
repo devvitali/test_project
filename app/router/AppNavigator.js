@@ -27,7 +27,6 @@ const DrawerNavigation = DrawerNavigator(
     JoinDrinkUpScreen: { screen: JoinDrinkUpScreen },
     DrinkUpScreen: { screen: DrinkUpScreen },
     FeedBackScreen: { screen: FeedBackScreen },
-    SponsoredScreen: { screen: SponsoredScreen },
     PushNotificationsScreen: { screen: PushNotificationsScreen },
     PrivacyPolicyScreen: { screen: PrivacyPolicyScreen },
     TermsOfServiceScreen: { screen: TermsOfServiceScreen },
@@ -45,6 +44,7 @@ const AppNavigator = StackNavigator({
   OnBoardingStep4: { screen: OnBoardingStep4 },
   Redeem2For1Screen: { screen: Redeem2For1Screen },
   DrawerNavigation: { screen: DrawerNavigation },
+  SponsoredScreen: { screen: SponsoredScreen },
 }, {
   initialRouteName: 'DrawerNavigation',
   headerMode: 'none',

@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { ScrollView, Image, BackAndroid, View, Text, TouchableOpacity } from 'react-native';
 import I18n from 'react-native-i18n';
-
+import AppContainer from '../AppContainer';
 import { Connect } from '../../redux';
 import DrawerButton from '../../components/DrawerButton';
 import styles from './styles';
@@ -17,13 +17,13 @@ class DrawBar extends Component {
   }
 
   componentDidMount() {
-    BackAndroid.addEventListener('hardwareBackPress', () => {
-      if (this.context.drawer.props.open) {
-        this.toggleDrawer();
-        return true;
-      }
-      return false;
-    });
+    // BackAndroid.addEventListener('hardwareBackPress', () => {
+    //   if (this.context.drawer.props.open) {
+    //     this.toggleDrawer();
+    //     return true;
+    //   }
+    //   return false;
+    // });
   }
 
   onLogout = () => {
@@ -38,103 +38,91 @@ class DrawBar extends Component {
   }
 
   navigateTo = page => () => {
+    this.props.navigation.navigate(page);
     // this.props.actions.setActivePage(page);
     // // NavigationActions[page]();
     // this.props.actions.closeDrawer();
   }
 
-  render = () => {
-    const { auth: { profile }, active, joined } = this.props;
+  render() {
+    console.log('property', this.props);
+    const { activeItemKey, auth: { profile }, joined } = this.props;
 
     return (
-      <View style={styles.container}>
-        <View style={styles.header}>
-
-          <View style={styles.avatarContainer}>
-            {profile.photoURL ? (
-              <Image
-                source={{ uri: profile.photoURL }}
-                style={styles.avatar}
+      <AppContainer hideNavBar>
+        <View style={styles.container}>
+          <View style={styles.header}>
+            <View style={styles.avatarContainer}>
+              {profile.photoURL ?
+                <Image source={{ uri: profile.photoURL }} style={styles.avatar}/> :
+                <Image source={avatar} style={styles.avatar} />
+              }
+            </View>
+            <Text style={styles.name}>
+              {profile.firstName}
+            </Text>
+          </View>
+          <ScrollView style={styles.contentContainer}>
+            {joined ? (
+              <DrawerButton
+                isActive={activeItemKey === 'DrinkUpScreen'}
+                text={I18n.t('DRINK_UP')}
+                onPress={this.navigateTo('DrinkUpScreen')}
+                iconFamily="alko"
+                iconName="mug"
               />
             ) : (
-              <Image
-                source={avatar}
-                style={styles.avatar}
+              <DrawerButton
+                isActive={activeItemKey === 'MapScreen'}
+                text={I18n.t('BARS')}
+                onPress={this.navigateTo('MapScreen')}
               />
             )}
+
+            <DrawerButton
+              isActive={activeItemKey === 'EditProfileScreen'}
+              text={I18n.t('PROFILE')}
+              onPress={this.navigateTo('EditProfileScreen')}
+            />
+
+            <DrawerButton
+              isActive={activeItemKey === 'PushNotificationsScreen'}
+              text={I18n.t('PUSH_NOTIFICATIONS')}
+              onPress={this.navigateTo('PushNotificationsScreen')}
+            />
+
+            <DrawerButton
+              isActive={activeItemKey === 'TermsOfServiceScreen'}
+              text={I18n.t('TERMS_OF_SERVICE')}
+              onPress={this.navigateTo('TermsOfServiceScreen')}
+            />
+
+            <DrawerButton
+              isActive={activeItemKey === 'PrivacyPolicyScreen'}
+              text={I18n.t('PRIVACY_POLICY')}
+              onPress={this.navigateTo('PrivacyPolicyScreen')}
+            />
+
+            <DrawerButton
+              isActive={activeItemKey === 'FeedBackScreen'}
+              text={I18n.t('SEND_FEEDBACK')}
+              onPress={this.navigateTo('FeedBackScreen')}
+            />
+
+          </ScrollView>
+          <View style={styles.footer}>
+            <TouchableOpacity onPress={this.onLogout}>
+              <Text style={styles.copyright}>© 2017 ALKO</Text>
+            </TouchableOpacity>
           </View>
-
-          <Text style={styles.name}>
-            {profile.firstName}
-          </Text>
-
         </View>
-        <ScrollView style={styles.contentContainer}>
-
-          {joined ? (
-            <DrawerButton
-              isActive={active === 'drinkUp'}
-              text={I18n.t('DRINK_UP')}
-              onPress={this.navigateTo('drinkUp')}
-              iconFamily="alko"
-              iconName="mug"
-            />
-          ) : (
-            <DrawerButton
-              isActive={active === 'map'}
-              text={I18n.t('BARS')}
-              onPress={this.navigateTo('map')}
-            />
-          )}
-
-          <DrawerButton
-            isActive={active === 'editProfile'}
-            text={I18n.t('PROFILE')}
-            onPress={this.navigateTo('editProfile')}
-          />
-
-          <DrawerButton
-            isActive={active === 'pushNotifications'}
-            text={I18n.t('PUSH_NOTIFICATIONS')}
-            onPress={this.navigateTo('pushNotifications')}
-          />
-
-          <DrawerButton
-            isActive={active === 'termsOfService'}
-            text={I18n.t('TERMS_OF_SERVICE')}
-            onPress={this.navigateTo('termsOfService')}
-          />
-
-          <DrawerButton
-            isActive={active === 'privacyPolicy'}
-            text={I18n.t('PRIVACY_POLICY')}
-            onPress={this.navigateTo('privacyPolicy')}
-          />
-
-          <DrawerButton
-            isActive={active === 'feedback'}
-            text={I18n.t('SEND_FEEDBACK')}
-            onPress={this.navigateTo('feedback')}
-          />
-
-        </ScrollView>
-        <View style={styles.footer}>
-          <TouchableOpacity onPress={this.onLogout}>
-            <Text style={styles.copyright}>© 2017 ALKO</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+      </AppContainer>
     );
   }
 }
 
-DrawBar.contextTypes = {
-  drawer: React.PropTypes.object,
-};
-
 const mapStateToProps = state => ({
   auth: state.auth,
-  active: state.drawer.page,
   joined: state.drinkup.joined,
 });
 
