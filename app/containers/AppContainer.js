@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Colors } from '../themes';
+import NavigationBar from '../components/NavigationBar';
 
 const styles = StyleSheet.create({
   container: {
@@ -15,9 +16,15 @@ const styles = StyleSheet.create({
     shadowOpacity: 1.0,
     elevation: 2,
   },
+  viewContainer: {
+    flex: 1,
+  },
 });
 export default props => (
   <View style={styles.container}>
-    {props.children}
+    <NavigationBar {...props} />
+    <View style={styles.viewContainer}>
+      {props.children}
+    </View>
   </View>
 );

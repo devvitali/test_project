@@ -8,6 +8,7 @@ import {
   OnBoardingStep4,
 } from '../containers/OnBoarding';
 import EditProfileScreen from '../containers/EditProfileScreen';
+import MapScreen from '../containers/MapScreen';
 
 const AppNavigator = StackNavigator({
   SplashScreen: { screen: SplashScreen },
@@ -16,8 +17,9 @@ const AppNavigator = StackNavigator({
   OnBoardingStep3: { screen: OnBoardingStep3 },
   OnBoardingStep4: { screen: OnBoardingStep4 },
   EditProfileScreen: { screen: EditProfileScreen },
+  MapScreen: { screen: MapScreen },
 }, {
-  initialRouteName: 'SplashScreen',
+  initialRouteName: 'MapScreen',
   headerMode: 'none',
   /*
    * Use modal on iOS because the card mode comes from the right,
