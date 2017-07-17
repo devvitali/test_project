@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 // import FCM, { FCMEvent } from 'react-native-fcm';
-import './i18n/i18n'; // keep before root container
+import './i18n'; // keep before root container
 import createStore from './redux';
 import applyConfigSettings from './config';
 import RootContainer from './router/RootContainer';

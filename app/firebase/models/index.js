@@ -1,4 +1,4 @@
-import { firebaseDb } from '../index';
+import { firebaseDb } from '../';
 import UserModel from './user';
 import BarModel from './bar';
 import DrinkUpModel from './drinkup';

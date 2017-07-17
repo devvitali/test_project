@@ -1,4 +1,4 @@
-import { firebaseDb } from './index';
+import { firebaseDb } from './';
 
 export default class FirebaseList {
 

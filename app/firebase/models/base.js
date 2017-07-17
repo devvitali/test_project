@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { firebaseDb } from '../index';
+import { firebaseDb } from '../';
 
 export default class Base {
   constructor(db, actions) {

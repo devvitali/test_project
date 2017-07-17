@@ -13,7 +13,7 @@ export default class DirectionsDialogWrapper extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      visible: false,
+      visible: props.visible,
     };
   }
   componentWillReceiveProps(newProps) {

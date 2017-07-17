@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
-import { User } from '../../firebase/models/index';
-import { Connect } from '../../redux/index';
+import { User } from '../../firebase/models';
+import { Connect } from '../../redux';
 
 class SplashScreen extends Component {
   constructor(props) {

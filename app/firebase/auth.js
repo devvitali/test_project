@@ -1,4 +1,4 @@
-import { firebaseAuth } from './index';
+import { firebaseAuth } from './';
 import authActions from '../redux/auth';
 
 export default function initAuth(dispatch) {

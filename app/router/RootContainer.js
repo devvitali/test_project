@@ -6,7 +6,7 @@ import AppNavigator from './AppNavigator';
 import StartupActions from '../redux/startup';
 import ReduxPersist from '../config/reduxPersist';
 import styles from './styles';
-import { Colors } from '../themes/index';
+import { Colors } from '../themes';
 
 class RootContainer extends Component {
   componentDidMount() {

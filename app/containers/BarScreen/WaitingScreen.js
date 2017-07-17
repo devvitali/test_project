@@ -9,9 +9,9 @@ import { connect } from 'react-redux';
 import * as Animatable from 'react-native-animatable';
 
 import styles from './styles';
-import Button from '../../components/Button/index';
-import Banner from '../../components/Banner/index';
-import { AvatarList } from '../../components/Avatar/index';
+import Button from '../../components/Button';
+import Banner from '../../components/Banner';
+import { AvatarList } from '../../components/Avatar';
 import DrinkupActions from '../../redux/drinkup';
 import { requestingMember } from '../../fixture/drinkupMembers';
 

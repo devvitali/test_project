@@ -4,8 +4,8 @@ import I18n from 'react-native-i18n';
 import { connect } from 'react-redux';
 
 import Styles from './styles';
-import Button from '../../components/Button/index';
-import Banner from '../../components/Banner/index';
+import Button from '../../components/Button';
+import Banner from '../../components/Banner';
 import DrinkupActions from '../../redux/drinkup';
 
 class NoDrinkUpScreen extends Component {
