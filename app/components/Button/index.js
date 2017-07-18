@@ -18,13 +18,8 @@ const Button = (props) => {
     onPress: disabled ? null : onPress,
   };
   const ButtonViewProps = {
-    style: [
-      styles.btn,
-      style,
-      disabled ? disabledStyle : null,
-    ],
+    style: [styles.btn, style, disabled ? disabledStyle : null],
   };
-
   if (gradient) {
     ButtonViewProps.colors = gradientColors;
   }

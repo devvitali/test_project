@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
 import { Text, TextInput, View } from 'react-native';
 import I18n from 'react-native-i18n';
-import { firebaseDb } from '../../firebase';
 import AppContainer from '../AppContainer';
-import NavItems from '../../components/NavigationBar/NavigationBarItems';
+import { Button, NavItems } from '../../components';
 import Styles from './styles';
-import Button from '../../components/Button';
+import { firebaseDb } from '../../firebase';
 import { Colors } from '../../themes';
 
 export default class FeedbackScreen extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -17,11 +15,7 @@ export default class FeedbackScreen extends Component {
     };
   }
 
-  updateFeedback = (feedback) => {
-    console.tron.log(`feedback: ${feedback}`);
-    this.setState({ feedback });
-  };
-
+  updateFeedback = (feedback) => this.setState({ feedback });
   doSubmitFeedback = () => {
     const data = {
       feedback: this.state.feedback,
@@ -34,8 +28,7 @@ export default class FeedbackScreen extends Component {
     })
       .then(() => console.tron.log('Thanks!'))
       .catch(() => console.tron.log('Fail!'));
-  }
-
+  };
   render() {
     const { feedback } = this.state;
     return (

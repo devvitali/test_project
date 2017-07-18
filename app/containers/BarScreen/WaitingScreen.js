@@ -1,38 +1,28 @@
-import React, { Component, PropTypes } from 'react';
-import {
-  View,
-  TouchableOpacity,
-  Text,
-} from 'react-native';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { View, TouchableOpacity, Text } from 'react-native';
 import I18n from 'react-native-i18n';
 import { connect } from 'react-redux';
-import * as Animatable from 'react-native-animatable';
-
-import styles from './styles';
-import Button from '../../components/Button';
-import Banner from '../../components/Banner';
-import { AvatarList } from '../../components/Avatar';
-import DrinkupActions from '../../redux/drinkup';
+import * as Animation from 'react-native-animatable';
+import { Button, Banner, AvatarList } from '../../components';
+import { DrinkupActions } from '../../redux';
 import { requestingMember } from '../../fixture/drinkupMembers';
+import styles from './styles';
 
 class WaitingScreen extends Component {
-
   static propTypes = {
     users: PropTypes.object,
     column: PropTypes.number,
     columnPadding: PropTypes.number,
     joined: PropTypes.bool,
     joinDrinkup: PropTypes.func,
-  }
-
+  };
   static defaultProps = {
     column: 3,
     columnPadding: 15,
-  }
-
+  };
   constructor(props) {
     super(props);
-
     this.state = {
       waiting: false,
       isDirectionDialogShowing: false,
@@ -40,7 +30,6 @@ class WaitingScreen extends Component {
       joiningUser: requestingMember, // only use for demo
     };
   }
-
   componentDidMount() {
     if (!this.props.bar) {
       this.props.getBar(this.props.barId);
@@ -48,12 +37,14 @@ class WaitingScreen extends Component {
       this.props.getDrinkup(this.props.bar.currentDrinkUp);
     }
   }
-
   componentDidUpdate() {
-    if (this.props.joined) {
-      // NavigationActions.drinkUp({ barId: this.props.bar.id });
+    const { joined, bar, navigation, users, getDrinkup } = this.props;
+    if (joined) {
+      navigation.navigate('DrinkUpScreen', { barId: bar.id });
     }
-    if (this.props.bar && this.props.bar.currentDrinkUp && !this.props.users) this.props.getDrinkup(this.props.bar.currentDrinkUp);
+    if (bar && bar.currentDrinkUp && !users) {
+      getDrinkup(bar.currentDrinkUp);
+    }
   }
 
   // this function is only use for demo
@@ -65,18 +56,15 @@ class WaitingScreen extends Component {
     const { waiting } = this.state;
     return (
       <View style={[styles.mainContainer, styles.container]}>
-
         {currentSpecial &&
         <Banner theme="info" text={I18n.t('Drinkup_JoinDrinkUpAndGet2For1Drinks')} onPress={this.onWaiting} />
         }
-
         <AvatarList users={users} iconOnly />
-
         {waiting ? (
           <View>
-            <Animatable.View animation="fadeIn" delay={1000} duration={500}>
+            <Animation.View animation="fadeIn" delay={1000} duration={500}>
               <Button theme={'disallow'} onPress={this.onCancel} text={I18n.t('Drinkup_CancelRequest')} />
-            </Animatable.View>
+            </Animation.View>
             <TouchableOpacity onPress={this.onDraftJoined}>
               <Text style={styles.waitingInviteText}>{I18n.t('Drinkup_WaitingInvite')}</Text>
             </TouchableOpacity>

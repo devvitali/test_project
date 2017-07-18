@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Alert, Text, ScrollView, Switch, View } from 'react-native';
 import I18n from 'react-native-i18n';
 import { Connect } from '../../redux';
-import Button from '../../components/Button';
+import { Button } from '../../components';
 import styles from './styles';
 import { notificationPermission } from '../../utils/permissionUtils';
 import { Colors } from '../../themes';

@@ -3,46 +3,27 @@ import { Text, View } from 'react-native';
 import I18n from 'react-native-i18n';
 import { connect } from 'react-redux';
 
-import Styles from './styles';
-import Button from '../../components/Button';
-import { AvatarList } from '../../components/Avatar';
-import CheersDialog from '../../components/Dialogs/CheersDialog';
-import DrinkupActions from '../../redux/drinkup';
+import { Button, CheersDialog, AvatarList } from '../../components';
+import { DrinkupActions } from '../../redux';
 import { requestingMember } from '../../fixture/drinkupMembers';
+import Styles from './styles';
 
 class ItsJustMeScreen extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
       showDialog: true,
     };
   }
-
   componentDidUpdate() {
     if (this.props.joined !== null && !this.props.joined) {
-      // NavigationActions.map();
+      this.props.navigation.navigate('MapScreen');
     }
   }
 
-  onCloseDialog = () => {
-    this.setState({ showDialog: false });
-  }
-
+  onCloseDialog = () => this.setState({ showDialog: false });
   // this function is only use for demo
-  onDraftLeave = () => {
-    this.props.leaveDrinkup(requestingMember);
-  }
-
-  renderCheersDialog() {
-    return (
-      <CheersDialog
-        onClose={this.onCloseDialog}
-        visible={this.state.showDialog}
-      />
-    );
-  }
-
+  onDraftLeave = () => this.props.leaveDrinkup(requestingMember);
   render() {
     return (
       <View style={Styles.mainContainer}>
@@ -63,7 +44,7 @@ class ItsJustMeScreen extends Component {
             text={I18n.t('Bar_ItsJustMe_Button')}
           />
         </View>
-        {this.renderCheersDialog()}
+        <CheersDialog onClose={this.onCloseDialog} visible={this.state.showDialog} />
       </View>
     );
   }
@@ -76,7 +57,6 @@ const mapStateToProps = state => ({
   users: state.drinkup.users,
 });
 
-//eslint-disable-next-line
 const mapDispatchToProps = dispatch => ({
   leaveDrinkup: user => dispatch(DrinkupActions.leaveDrinkup(user)),
 });

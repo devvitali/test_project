@@ -1,10 +1,8 @@
 import React from 'react';
 import { View, Text, ScrollView } from 'react-native';
-
 import I18n from 'react-native-i18n';
-
 import styles from './styles';
-import Button from '../../components/Button';
+import { Button } from '../../components';
 
 const navigateStep2 = props => props.navigation.navigate('OnBoardingStep2');
 export default props => (

@@ -1,9 +1,8 @@
 import React from 'react';
 import { View, ScrollView } from 'react-native';
-import Markdown, { parseFile } from '../../components/MarkDown';
 import { download } from '../../utils/downloadUtils';
 import AppContainer from '../AppContainer';
-import NavItems from '../../components/NavigationBar/NavigationBarItems';
+import { NavItems, MarkDown, parseFile } from '../../components';
 import styles from './styles';
 
 export default class SponsoredScreen extends React.Component {
@@ -33,7 +32,7 @@ export default class SponsoredScreen extends React.Component {
       return (
         <View style={styles.mainContainer}>
           <ScrollView>
-            <Markdown content={file.content} style={styles} />
+            <MarkDown content={file.content} style={styles} />
           </ScrollView>
         </View>
       );

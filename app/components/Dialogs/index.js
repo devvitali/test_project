@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import {
   Modal,
@@ -71,3 +71,9 @@ Dialog.defaultProps = {
   visible: false,
 };
 export default Dialog;
+export { default as AlkoSpecialWarningDialog } from './AlkoSpecialWarningDialog';
+export { default as CheersDialog } from './CheersDialog';
+export { default as ComposeMessageDialog } from './ComposeMessageDialog';
+export { default as DirectionDialog } from './DirectionDialog';
+export { default as JoinDialog } from './JoinDialog';
+export { default as PicPhotoSourceDialog } from './PicPhotoSourceDialog';

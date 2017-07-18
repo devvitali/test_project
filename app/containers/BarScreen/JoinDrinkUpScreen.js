@@ -1,15 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 import { View } from 'react-native';
 import { connect } from 'react-redux';
-
-import { User } from '../../firebase/models';
-import NavItems from '../../components/NavigationBar/NavigationBarItems';
-import styles from './styles';
 import AppContainer from '../AppContainer';
 import WaitingScreen from './WaitingScreen';
 import NoDrinkUp from './NoDrinkUpScreen';
-import DirectionsDialog from '../../components/Dialogs/DirectionDialog';
-import DrinkupActions from '../../redux/drinkup';
+import { NavItems, DirectionsDialog } from '../../components';
+import { User } from '../../firebase/models';
+import { DrinkupActions } from '../../redux';
+import styles from './styles';
 
 class JoinDrinkUp extends Component {
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, ScrollView, Alert } from 'react-native';
 import I18n from 'react-native-i18n';
 import styles from './styles';
-import Button from '../../components/Button';
+import { Button } from '../../components';
 import { locationPermission } from '../../utils/permissionUtils';
 
 const requestLocationPermission = (props) => {

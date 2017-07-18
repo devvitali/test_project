@@ -1,10 +1,10 @@
 // @flow
 import React, { Component } from 'react';
-import { ScrollView, Image, BackAndroid, View, Text, TouchableOpacity } from 'react-native';
+import { ScrollView, Image, View, Text, TouchableOpacity } from 'react-native';
 import I18n from 'react-native-i18n';
 import AppContainer from '../AppContainer';
 import { Connect } from '../../redux';
-import DrawerButton from '../../components/DrawerButton';
+import { DrawerButton } from '../../components';
 import styles from './styles';
 const avatar = require('../../images/avatar.png');
 
@@ -25,29 +25,13 @@ class DrawBar extends Component {
     //   return false;
     // });
   }
-
   onLogout = () => {
     this.props.actions.signOut();
-    // Just to test onboard multiple times
-    // setTimeout(() => this.toggleDrawer(), 500);
-    // setTimeout(() => this.props.actions.signIn(), 1500);
-  }
+  };
 
-  toggleDrawer = () => {
-    // this.context.drawer.toggle();
-  }
-
-  navigateTo = page => () => {
-    this.props.navigation.navigate(page);
-    // this.props.actions.setActivePage(page);
-    // // NavigationActions[page]();
-    // this.props.actions.closeDrawer();
-  }
-
+  navigateTo = page => () => this.props.navigation.navigate(page);
   render() {
-    console.log('property', this.props);
     const { activeItemKey, auth: { profile }, joined } = this.props;
-
     return (
       <AppContainer hideNavBar>
         <View style={styles.container}>

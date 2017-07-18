@@ -3,40 +3,36 @@ import PropTypes from 'prop-types';
 import { View } from 'react-native';
 import { connect } from 'react-redux';
 import AppContainer from '../AppContainer';
-import NavItems from '../../components/NavigationBar/NavigationBarItems';
+import { NavItems, DirectionsDialog } from '../../components';
 import styles from './styles';
 import DrinkUpLobby from './DrinkUpLobbyScreen';
 import ItsJustMe from './ItsJustMeScreen';
-import DrinkupActions from '../../redux/drinkup';
-import DirectionsDialog from '../../components/Dialogs/DirectionDialog';
+import { DrinkupActions } from '../../redux';
 
 class DrinkUp extends Component {
-
   static propTypes = {
     barId: PropTypes.string,
   };
-
   constructor(props) {
     super(props);
     this.state = {
       isDirectionDialogShowing: false,
     };
   }
-
   componentDidMount() {
     if (this.props.bar) {
       const barId = this.props.barId ? this.props.barId : this.props.bar.id;
       this.props.getBar(barId);
-
       if (!this.props.users) {
         this.props.getUsers(this.props.bar.currentDrinkUp);
       }
     }
   }
-
   componentWillUnmount() {
     this.props.clearDrinkupUsers();
   }
+  onShowDirectionDialog = () => this.setState({ isDirectionDialogShowing: true });
+  onCloseDirectionDialog = () => this.setState({ isDirectionDialogShowing: false });
   getTitle() {
     if (this.props.bar) {
       return this.props.bar.title;
@@ -45,36 +41,26 @@ class DrinkUp extends Component {
   }
   getRightNavBarButton() {
     if (this.props.bar) {
-      return NavItems.mapButton(this.showDirectionDialog);
+      return NavItems.mapButton(this.onShowDirectionDialog);
     }
+    return null;
   }
-  showDirectionDialog = () => {
-    this.setState({ isDirectionDialogShowing: true });
-  }
-
-  closeDirectionDialog = () => {
-    this.setState({ isDirectionDialogShowing: false });
-  }
-
   renderScreen() {
     if (!this.props.users) {
       return null;
     }
-
     if (this.props.users && Object.keys(this.props.users).length > 1) {
       return <DrinkUpLobby />;
     }
-
     return <ItsJustMe />;
   }
-
   renderDirectionDialog() {
     return (
       <DirectionsDialog
         bar={this.props.bar}
-        onClose={this.closeDirectionDialog}
-        onGoogleMapsPress={this.closeDirectionDialog}
-        onAppleMapsPress={this.closeDirectionDialog}
+        onClose={this.onCloseDirectionDialog}
+        onGoogleMapsPress={this.onCloseDirectionDialog}
+        onAppleMapsPress={this.onCloseDirectionDialog}
         visible={this.state.isDirectionDialogShowing}
       />
     );

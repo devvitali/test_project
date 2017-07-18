@@ -6,17 +6,12 @@ import { getDistance } from 'geolib';
 import I18n from 'react-native-i18n';
 import { map } from 'lodash';
 import AppContainer from '../AppContainer';
-import NavItems from '../../components/NavigationBar/NavigationBarItems';
-import { AlertActions, BarActions, DrinkupActions } from '../../redux';
+import { NavItems, MapCallout, BarResult, Button, Banner, IconAlko } from '../../components';
+import { AlertActions, BarActions, DrinkupActions, LocationActions } from '../../redux';
 import { geoFire } from '../../firebase';
 import { Bar } from '../../firebase/models';
 import { Colors, Images } from '../../themes';
 import { calculateRegion } from '../../utils/mapUtils';
-import MapCallout from '../../components/Map/MapCallout';
-import BarResult from '../../components/Map/BarResult';
-import Button from '../../components/Button';
-import Banner from '../../components/Banner';
-import IconAlko from '../../components/IconAlko';
 import Styles from './styles';
 
 const GoogleAPIAvailability = Platform.OS === 'android' ? require('react-native-google-api-availability-bridge') : null;
@@ -49,7 +44,6 @@ class MapScreen extends Component {
       isGooglePlayServicesAvailable: true,
       event: null,
     };
-
     this.geoQuery = geoFire('barLocations')
       .query({
         center: props.region ? [props.region.latitude, props.region.longitude]
@@ -71,7 +65,9 @@ class MapScreen extends Component {
   }
 
   componentDidMount() {
+    this.props.startBackgroundGeolocation();
     this.props.clearBars();
+    this.props.getBars();
     if (GoogleAPIAvailability) {
       GoogleAPIAvailability.checkGooglePlayServices((result) => {
         this.setState({ isGooglePlayServicesAvailable: result === 'success' });
@@ -233,12 +229,10 @@ class MapScreen extends Component {
   }
 
   renderBarResults = () => {
+    console.show('bars', this.props.bars);
     if (!this.props.bars) {
       return null;
     }
-
-    console.show('bars', this.props.bars);
-
     return (
       map(this.props.bars, (bar, id) => this.renderBarResult(bar, id))
     );
@@ -249,11 +243,9 @@ class MapScreen extends Component {
     if (!this.props.bars) {
       return null;
     }
-
     return (
       map(this.props.bars, (bar, id) => this.renderBarMarker(bar, id))
     );
-
   }
 
   renderMap() {
@@ -286,6 +278,7 @@ class MapScreen extends Component {
   }
 
   render() {
+    console.log('bars', this.props.bars);
     return (
       <AppContainer
         title="ALKO"
@@ -321,6 +314,8 @@ const mapStateToProps = state => ({
 //eslint-disable-next-line
 const mapDispatchToProps = dispatch => ({
   getAlerts: () => dispatch(AlertActions.alertsRequest()),
+  startBackgroundGeolocation: () => dispatch(LocationActions.startBackgroundGeolocation()),
+  getBars: () => dispatch(BarActions.barsRequest()),
   clearBars: () => dispatch(BarActions.clearBars()),
   addBar: barId => dispatch(BarActions.addBar(barId)),
   removeBar: barId => dispatch(BarActions.removeBar(barId)),

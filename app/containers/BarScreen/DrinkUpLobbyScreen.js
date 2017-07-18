@@ -3,22 +3,16 @@ import { View, Text } from 'react-native';
 import I18n from 'react-native-i18n';
 import { connect } from 'react-redux';
 import moment from 'moment';
-
-import styles from './styles';
-import Button from '../../components/Button';
-import Dialog from '../../components/Dialogs';
-import AlkoSpecialWarningDialog from '../../components/Dialogs/AlkoSpecialWarningDialog';
-import JoinDialog from '../../components/Dialogs/JoinDialog';
-import ComposeMessageDialog from '../../components/Dialogs/ComposeMessageDialog';
-import Banner from '../../components/Banner';
-import { AvatarList } from '../../components/Avatar';
-import DrinkupActions from '../../redux/drinkup';
+import {
+  Button, Dialog, AlkoSpecialWarningDialog, JoinDialog, ComposeMessageDialog, Banner, AvatarList,
+} from '../../components';
+import { DrinkupActions } from '../../redux';
 import { requestingMember } from '../../fixture/drinkupMembers';
+import styles from './styles';
 
 class DrinkupLobbyScreen extends React.Component {
-
-  constructor(...props) {
-    super(...props);
+  constructor(props) {
+    super(props);
     this.state = {
       user: null,
       joiningUser: requestingMember,
@@ -27,66 +21,44 @@ class DrinkupLobbyScreen extends React.Component {
       composedMessage: '',
     };
   }
-
   componentDidUpdate() {
     if (!this.props.joined) {
       // NavigationActions.map();
     }
   }
-
-  onShowMessage = (user) => {
-    this.setState({ user });
-  }
-
-  onCloseMessage = () => {
-    this.setState({ user: null });
-  }
-
+  onShowMessage = user => this.setState({ user });
+  onCloseMessage = () => this.setState({ user: null });
   onRedeem = () => {
-    // Draft only
     const firstTime = true;
     if (firstTime) {
       this.setState({ showRedeemWarning: true });
     } else {
       this.redeem();
     }
-  }
-
+  };
   onLeave = () => {
     this.props.leaveDrinkup(requestingMember);
     this.setState({ waiting: false });
-  }
-
+  };
   onCloseJoiningDialog = () => {
     this.setState({ joiningUser: null });
     this.setState({ showComposeMessage: true });
-  }
+  };
 
-  onCloseRedeemWarningDialog = () => {
-    this.setState({ showRedeemWarning: false });
-  }
-
-  onCloseComposeMessageDialog = () => {
-    this.setState({ showComposeMessage: false });
-  }
-
+  onCloseRedeemWarningDialog = () => this.setState({ showRedeemWarning: false });
+  onCloseComposeMessageDialog = () => this.setState({ showComposeMessage: false });
   onAcceptRedeemWarning = () => {
     this.setState({ showRedeemWarning: false });
     this.redeem();
-  }
-
-  onComposedMessageChange = (message) => {
-    this.setState({ composedMessage: message });
-  }
-
+  };
+  onComposedMessageChange = composedMessage => this.setState({ composedMessage });
   redeem() {
-    // NavigationActions.redeem2for1Screen({
-    //   bar: this.props.bar.name,
-    //   redeemDate: moment(),
-    //   expiryDate: moment().add(3, 'minutes'),
-    // });
+    this.props.navigation.navigate('Redeem2For1Screen', {
+      bar: this.props.bar.name,
+      redeemDate: moment(),
+      expiryDate: moment().add(3, 'minutes'),
+    });
   }
-
   renderRedeemWarningDialog() {
     return (
       <AlkoSpecialWarningDialog
@@ -96,7 +68,6 @@ class DrinkupLobbyScreen extends React.Component {
       />
     );
   }
-
   renderComposeMessageDialog() {
     return (
       <ComposeMessageDialog
@@ -108,7 +79,6 @@ class DrinkupLobbyScreen extends React.Component {
       />
     );
   }
-
   renderMessageDialog() {
     const { user } = this.state;
     if (!user) {
@@ -121,7 +91,6 @@ class DrinkupLobbyScreen extends React.Component {
       </Dialog>
     );
   }
-
   renderRequestToJoinDialog() {
     if (this.state.joiningUser) {
       const { firstName, distance, avatar } = this.state.joiningUser;
@@ -135,41 +104,26 @@ class DrinkupLobbyScreen extends React.Component {
         />
       );
     }
-
     return null;
   }
-
   render() {
     const { bar, users } = this.props;
     const special = bar.currentSpecial;
-
-    // eslint-disable-next-line no-mixed-operators
     return (
       <View style={[styles.mainContainer, styles.container]}>
-
-        {special ? (
+        {special &&
           <Banner
             onPress={this.onRedeem}
             theme="info"
             text={I18n.t('Drinkup_ClickToGet2For1ALKOSpecial')}
           />
-        ) : null}
-
-        <AvatarList
-          users={users}
-        />
-
-        <Button
-          onPress={this.onLeave}
-          theme="disallow"
-          text={I18n.t('Drinkup_LeaveTheDrinkUp')}
-        />
-
+        }
+        <AvatarList users={users} />
+        <Button onPress={this.onLeave} theme="disallow" text={I18n.t('Drinkup_LeaveTheDrinkUp')} />
         {this.renderMessageDialog()}
         {this.renderRequestToJoinDialog()}
         {this.renderRedeemWarningDialog()}
         {this.renderComposeMessageDialog()}
-
       </View>
     );
   }
@@ -181,7 +135,6 @@ const mapStateToProps = state => ({
   users: state.drinkup.users,
 });
 
-//eslint-disable-next-line
 const mapDispatchToProps = dispatch => ({
   leaveDrinkup: user => dispatch(DrinkupActions.leaveDrinkup(user)),
 });

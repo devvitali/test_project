@@ -2,28 +2,22 @@ import React, { Component } from 'react';
 import { Text, View } from 'react-native';
 import I18n from 'react-native-i18n';
 import { connect } from 'react-redux';
-
+import { Button, Banner } from '../../components';
+import { DrinkupActions } from '../../redux';
 import Styles from './styles';
-import Button from '../../components/Button';
-import Banner from '../../components/Banner';
-import DrinkupActions from '../../redux/drinkup';
 
 class NoDrinkUpScreen extends Component {
 
   componentDidUpdate() {
     if (this.props.joined) {
-      // NavigationActions.drinkUp();
+      this.props.navigation.navigate('DrinkUpScreen');
     }
   }
 
   // this function is only use for demo
-  onDraftJoined = () => {
-    this.props.startDrinkup(this.props.bar.id, this.props.user);
-  }
-
+  onDraftJoined = () => this.props.startDrinkup(this.props.bar.id, this.props.user);
   render() {
     const { special } = this.props;
-
     return (
       <View style={Styles.mainContainer}>
         {special &&

@@ -1,16 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {
-  View,
-  Text,
-  Image,
-  ScrollView,
-} from 'react-native';
+import { View, Text, Image, ScrollView } from 'react-native';
 import I18n from 'react-native-i18n';
 import moment from 'moment';
 import styles from './styles';
 import AppContainer from '../AppContainer';
-import Button from '../../components/Button';
+import { Button } from '../../components';
 import { Images } from '../../themes';
 
 export default class Redeem2For1Screen extends Component {

@@ -68,3 +68,4 @@ Banner.defaultProps = {
   iconName: 'badge',
   iconSize: 20,
 };
+export default Banner;

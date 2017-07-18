@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet } from 'react-native';
 import I18n from 'react-native-i18n';
@@ -12,47 +12,25 @@ const styles = StyleSheet.create({
   },
 });
 
+const PicPhotoSourceDialog = ({ onClose, visible, onUsePhotosPress, onUseCameraPress }) => (
+  <Dialog closeButton closeOnBackdropPress onClose={this.props.onClose} visible={visible}>
+    <Button
+      text={I18n.t('Pic_UsePhotos')}
+      style={styles.firstButton}
+      onPress={() => { onClose(); onUsePhotosPress(); }}
+    />
+    <Button
+      text={I18n.t('Pic_UseCamera')}
+      onPress={() => { onClose(); onUseCameraPress(); }}
+    />
+  </Dialog>
+);
 
-export default class PicPhotoSourceDialog extends Component {
+PicPhotoSourceDialog.propTypes = {
+  visible: PropTypes.bool,
+  onClose: PropTypes.func,
+  onUseCameraPress: PropTypes.func,
+  onUsePhotosPress: PropTypes.func,
+};
+export default PicPhotoSourceDialog;
 
-  static propTypes = {
-    visible: PropTypes.bool,
-    onClose: PropTypes.func,
-    onUseCameraPress: PropTypes.func,
-    onUsePhotosPress: PropTypes.func,
-  }
-
-  onUsePhotosPress = () => {
-    this.props.onClose();
-    this.props.onUsePhotosPress();
-  }
-
-  onUseCameraPress = () => {
-    this.props.onClose();
-    this.props.onUseCameraPress();
-  }
-
-  render() {
-    return (
-      <Dialog
-        closeButton
-        closeOnBackdropPress
-        onClose={this.props.onClose}
-        visible={this.props.visible}
-      >
-
-        <Button
-          text={I18n.t('Pic_UsePhotos')}
-          style={styles.firstButton}
-          onPress={this.onUsePhotosPress}
-        />
-
-        <Button
-          text={I18n.t('Pic_UseCamera')}
-          onPress={this.onUseCameraPress}
-        />
-
-      </Dialog>
-    );
-  }
-}

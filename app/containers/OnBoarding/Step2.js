@@ -1,9 +1,8 @@
 import React from 'react';
 import { View, Text, Image, ScrollView } from 'react-native';
 import I18n from 'react-native-i18n';
-
 import styles from './styles';
-import Button from '../../components/Button';
+import { Button } from '../../components';
 import { Images } from '../../themes';
 
 const navigateStep3 = props => props.navigation.navigate('OnBoardingStep3');

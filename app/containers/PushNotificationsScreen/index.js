@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Switch, Text, View } from 'react-native';
 import I18n from 'react-native-i18n';
 import AppContainer from '../AppContainer';
-import NavItems from '../../components/NavigationBar/NavigationBarItems';
+import { NavItems } from '../../components';
 import { Colors } from '../../themes/';
 import { Connect } from '../../redux';
 import Styles from './styles';

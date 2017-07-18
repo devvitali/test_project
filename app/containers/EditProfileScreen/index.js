@@ -4,14 +4,11 @@ import I18n from 'react-native-i18n';
 import { debounce, map } from 'lodash';
 import AppContainer from '../AppContainer';
 import { Connect } from '../../redux';
-import Button from '../../components/Button';
-import NavItems from '../../components/NavigationBar/NavigationBarItems';
+import { Button, PicPhotoSourceDialog, NavItems } from '../../components';
 import { openCamera, openPicker } from '../../utils/photoUtils';
-import Styles from './styles';
 import { Colors, DrinkIcons } from '../../themes';
-import PicPhotoSourceDialog from '../../components/Dialogs/PicPhotoSourceDialog';
 import { User } from '../../firebase/models';
-// import NavItems from '../../Navigation/NavItems';
+import Styles from './styles';
 
 const avatar = require('../../images/avatar-dark.png');
 
@@ -19,75 +16,39 @@ class EditProfileScreen extends Component {
 
   constructor(props) {
     super(props);
-
     this.state = {
       firstName: props.user.firstName,
       showPicDialog: false,
     };
   }
 
-  componentDidMount() {
-    // NavigationActions.refresh({
-    //   renderLeftButton: this.props.isUserValid ? NavItems.hamburgerButton(this.props.actions.openDrawer) : null,
-    // });
-  }
-
-  componentDidUpdate(prevProps) {
-    // if (prevProps.isUserValid !== this.props.isUserValid) {
-    //   NavigationActions.refresh({
-    //     renderLeftButton: this.props.isUserValid ? NavItems.hamburgerButton(this.props.actions.openDrawer) : null,
-    //   });
-    // }
-  }
-
-  onFirstNameChange = (e) => {
-    this.setState({
-      firstName: e.nativeEvent.text,
-    });
-  }
-
-  onSelectIcon = icon => this.props.actions.updateProfile({ icon })
-
+  onFirstNameChange = e => this.setState({ firstName: e.nativeEvent.text });
+  onSelectIcon = icon => this.props.actions.updateProfile({ icon });
   doShowPicDialog = () => {
     const { uploadProfilePhoto } = this.props.actions;
-
     const opts = { width: 512, height: 512, cropping: true };
-
     openPicker(opts)
       .then(uploadProfilePhoto)
       .catch(this.isNotLoading);
-
-  }
-
+  };
   saveProfile = () => {
     const { updateProfile } = this.props.actions;
     const { firstName } = this.state;
-
-    updateProfile({
-      firstName,
-    });
-  }
-
+    updateProfile({ firstName });
+  };
   saveProfileDelayed = debounce(this.saveProfile, 1000);
-
   doCompleteOnboarding = () => {
     this.props.actions.updateProfile({
       onboardingComplete: true,
     });
-
-    // NavigationActions.map();
-  }
+    this.props.navigation.navigate('DrawerNavigation');
+  };
 
   render() {
     const { user, isProfileComplete, fetching, isUserValid } = this.props;
     const { firstName, showPicDialog } = this.state;
     const opacity = fetching ? 0.3 : 1.0;
-
-    let source = avatar;
-    if (user.photoURL) {
-      source = { uri: user.photoURL };
-    }
-
+    const source = user.photoURL ? { uri: user.photoURL } : avatar;
     return (
       <AppContainer
         title={I18n.t('Profile_Edit')}
@@ -96,11 +57,7 @@ class EditProfileScreen extends Component {
         <View style={Styles.mainContainer}>
           <View style={Styles.formContainer}>
             <View style={Styles.selectPhotoContainer}>
-
-              <TouchableOpacity
-                activeOpacity={0.7}
-                onPress={this.doShowPicDialog}
-              >
+              <TouchableOpacity activeOpacity={0.7} onPress={this.doShowPicDialog}>
                 <Image
                   source={source}
                   onLoadStart={this.isLoading}
@@ -108,19 +65,12 @@ class EditProfileScreen extends Component {
                   style={[Styles.photo, { opacity }]}
                 />
               </TouchableOpacity>
-
               <TouchableOpacity activeOpacity={0.7} onPress={this.doChoosePhoto}>
                 <Text style={Styles.updatePhoto}>{I18n.t('Profile_TapToAddPhoto').toUpperCase()}</Text>
               </TouchableOpacity>
-
             </View>
-
             <View style={Styles.labelContainer}>
-              <Text
-                style={Styles.label}
-              >
-                {I18n.t('Profile_FirstName')}
-              </Text>
+              <Text style={Styles.label}>{I18n.t('Profile_FirstName')}</Text>
               <TextInput
                 style={Styles.input}
                 value={firstName}
@@ -133,17 +83,10 @@ class EditProfileScreen extends Component {
                 selectionColor={Colors.brand.clear.orange}
               />
             </View>
-
             <View style={Styles.spacer} />
-
             <View style={Styles.labelContainer}>
-              <Text
-                style={Styles.label}
-              >
-                {I18n.t('Profile_FavoriteDrink')}
-              </Text>
+              <Text style={Styles.label}>{I18n.t('Profile_FavoriteDrink')}</Text>
             </View>
-
             <View style={Styles.iconContainer}>
               {map(DrinkIcons, (img, icon) => (
                 <TouchableOpacity
@@ -163,7 +106,6 @@ class EditProfileScreen extends Component {
                 </TouchableOpacity>
               ))}
             </View>
-
             {(!user.onboardingComplete) &&
             <View style={Styles.footer}>
               <Text style={Styles.incompleteProfileText}>{I18n.t('Profile_IncompleteWarning')}</Text>
@@ -175,7 +117,6 @@ class EditProfileScreen extends Component {
               />
             </View>
             }
-
             {(user.onboardingComplete && !isProfileComplete) &&
             <View style={Styles.footer}>
               <Text style={Styles.incompleteProfileText}>{I18n.t('Profile_IncompleteWarning')}</Text>
@@ -194,7 +135,6 @@ class EditProfileScreen extends Component {
       </AppContainer>
     );
   }
-
 }
 
 const mapStateToProps = state => ({
