@@ -17,7 +17,7 @@ class ItsJustMeScreen extends Component {
   }
   componentDidUpdate() {
     if (this.props.joined !== null && !this.props.joined) {
-      this.props.navigation.navigate('MapScreen');
+      this.props.navigation.navigate('DrawerNavigation');
     }
   }
 

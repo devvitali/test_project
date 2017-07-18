@@ -65,9 +65,8 @@ class MapScreen extends Component {
   }
 
   componentDidMount() {
-    this.props.startBackgroundGeolocation();
-    this.props.clearBars();
     this.props.getBars();
+    this.props.clearBars();
     if (GoogleAPIAvailability) {
       GoogleAPIAvailability.checkGooglePlayServices((result) => {
         this.setState({ isGooglePlayServicesAvailable: result === 'success' });
@@ -278,7 +277,7 @@ class MapScreen extends Component {
   }
 
   render() {
-    console.log('bars', this.props.bars);
+    console.log('bars', this.props.bars, this.props.orgBars);
     return (
       <AppContainer
         title="ALKO"
@@ -305,6 +304,7 @@ class MapScreen extends Component {
 const mapStateToProps = state => ({
   region: state.location.coords && calculateRegion([state.location.coords], { latPadding: 0.016, longPadding: 0.008 }),
   bars: state.location.coords && Bar.constructor.getBarsSortedByDistance(state.location.coords, state.bar.bars),
+  orgBars: state.bar.bars,
   alerts: state.alert.alerts,
   profile: state.auth.profile,
   location: state.location.coords,

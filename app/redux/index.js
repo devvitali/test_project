@@ -26,7 +26,7 @@ export default () => {
 
 const mapDispatchToProps = dispatch => ({
   actions: {
-    signOut: () => dispatch(AuthActions.signOut()),
+    signOut: navigation => dispatch(AuthActions.signOut(navigation)),
     signIn: () => dispatch(AuthActions.signIn()),
     updateProfile: diff => dispatch(AuthActions.updateProfile(diff)),
     uploadProfilePhoto: photo => dispatch(AuthActions.uploadProfilePhoto(photo)),

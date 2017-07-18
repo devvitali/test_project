@@ -19,19 +19,20 @@ export function* signIn() {
   }
 }
 
-export function* signOut() {
+export function* signOut(navigation) {
   try {
     const authData = yield call([firebaseAuth, firebaseAuth.getCurrentUser]);
     yield call([User, User.unsubscribe], authData.user.uid);
     yield call([User, User.remove], authData.user.uid);
-    yield put(authActions.signOutFulfilled());
+    yield put(authActions.signOutFulfilled(navigation));
   } catch (error) {
-    yield put(authActions.signOutFailed(error));
+    yield put(authActions.signOutFailed(error, navigation));
   }
 }
 
-export function* signOutSuccess() {
-  // yield call([NavigationActions, NavigationActions.onboard]);
+export function* signOutSuccess(navigation) {
+  console.log('signOutSuccess');
+  yield call([navigation, navigation.navigation.navigation.navigate], 'OnBoardingStep1');
 }
 
 export function* getOrCreateProfile() {

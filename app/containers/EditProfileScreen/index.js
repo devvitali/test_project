@@ -52,7 +52,7 @@ class EditProfileScreen extends Component {
     return (
       <AppContainer
         title={I18n.t('Profile_Edit')}
-        renderLeftButton={isUserValid ? NavItems.hamburgerButton() : null}
+        renderLeftButton={isUserValid ? NavItems.hamburgerButton(this.props.navigation) : null}
       >
         <View style={Styles.mainContainer}>
           <View style={Styles.formContainer}>

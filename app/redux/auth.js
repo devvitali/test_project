@@ -8,8 +8,8 @@ const { Types, Creators } = createActions({
   signInFulfilled: ['authUser'],
   signInFailed: ['error'],
   // Sign Out Actions
-  signOut: [],
-  signOutFulfilled: [],
+  signOut: ['navigation'],
+  signOutFulfilled: ['navigation'],
   signOutFailed: ['error'],
   // Create Profile Actions
   createProfile: [],

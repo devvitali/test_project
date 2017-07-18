@@ -13,24 +13,29 @@ class SplashScreen extends Component {
   }
 
   componentDidUpdate() {
-    this.redirect();
+    if (this.routedScene === '') {
+      this.redirect();
+    }
   }
-
+  navigate(route) {
+    if (route !== this.routedScene) {
+      this.props.navigation.navigate(route);
+    }
+    this.routedScene = route;
+  }
   redirect() {
-    const { joined, user, isUserValid, navigation } = this.props;
-    console.log('SplashScreen', user, joined, isUserValid, navigation);
+    const { joined, user, isUserValid } = this.props;
+    console.log('SplashScreen', user, joined, isUserValid);
     if (!user && this.routedScene !== 'OnBoardingStep1') {
-      this.routedScene = 'OnBoardingStep1';
-      this.props.navigation.navigate('OnBoardingStep1');
+      this.navigate('OnBoardingStep1');
     } else if (!isUserValid && user.onboardingComplete && Object.keys(user).length > 0) {
-      console.log('goto editProfile');
+      this.navigate('EditProfileScreenWithoutSignIn');
     } else if (joined) {
       console.log('goto drinkUp');
     } else if (isUserValid) {
-      console.log('goto map');
+      this.navigate('DrawerNavigation');
     } else if (this.routedScene !== 'OnBoardingStep1') {
-      this.routedScene = 'OnBoardingStep1';
-      this.props.navigation.navigate('OnBoardingStep1');
+      this.navigate('OnBoardingStep1');
     }
   }
 

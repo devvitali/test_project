@@ -6,7 +6,6 @@ export default class Bar extends Base {
   constructor(db, actions) {
     super(db, actions);
     this.ref = 'bars';
-
   }
 
   static getBarsLocations(bars) {

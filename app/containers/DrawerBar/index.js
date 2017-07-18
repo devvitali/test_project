@@ -26,7 +26,8 @@ class DrawBar extends Component {
     // });
   }
   onLogout = () => {
-    this.props.actions.signOut();
+    console.log('onLogout');
+    this.props.actions.signOut(this.props.navigation);
   };
 
   navigateTo = page => () => this.props.navigation.navigate(page);

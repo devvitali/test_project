@@ -47,7 +47,7 @@ const AppNavigator = StackNavigator({
   DrawerNavigation: { screen: DrawerNavigation },
   SponsoredScreen: { screen: SponsoredScreen },
 }, {
-  initialRouteName: 'DrawerNavigation',
+  initialRouteName: 'SplashScreen',
   headerMode: 'none',
   /*
    * Use modal on iOS because the card mode comes from the right,
