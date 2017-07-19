@@ -25,7 +25,7 @@ const defaultState = {
 };
 /* ------------- Reducers ------------- */
 const request = state => ({ ...state, fetching: true });
-const barsRequestSuccess = (state, { bars }) => ({ ...state, fetching: false, bars });
+const barsRequestSuccess = (state, { bars }) => ({ ...state, fetching: false, bars: { ...state.bars, ...bars } });
 const barsRequestFailure = (state, { error }) => ({ ...state, bars: null, fetching: false, error });
 const updateBar = (state, { bar, barId }) => {
   const updatedBar = Object.assign({}, state.bars[barId], bar);

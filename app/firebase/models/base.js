@@ -101,11 +101,12 @@ export default class Base {
 
   subscribe(emit, key) {
     if (this.unsubscribers[key]) return false;
-
+    console.log('subscribe', key, emit);
     let initialized = false;
 
     if (this.actions.onLoad) {
       this.dbRef(key).once('value', (snapshot) => {
+        console.log('subscribe value', snapshot);
         if (!key) {
           emit(this.actions.onLoad(snapshot.val()));
         } else {
@@ -118,6 +119,7 @@ export default class Base {
 
     if (this.actions.onAdd) {
       this.dbRef(key).on('child_added', (snapshot) => {
+        console.log('subscribe child_added', snapshot);
         if (!initialized) return;
         if (!key) {
           emit(this.actions.onAdd(this.constructor.unwrapSnapshot(snapshot)));
@@ -129,6 +131,7 @@ export default class Base {
 
     if (this.actions.onChange) {
       this.dbRef(key).on('child_changed', (snapshot) => {
+        console.log('subscribe child_changed', snapshot);
         if (!key) {
           emit(this.actions.onChange(this.constructor.unwrapSnapshot(snapshot)));
         } else {
@@ -139,6 +142,7 @@ export default class Base {
 
     if (this.actions.onRemove) {
       this.dbRef(key).on('child_removed', (snapshot) => {
+        console.log('subscribe child_removed', snapshot);
         if (!key) {
           emit(this.actions.onRemove(this.constructor.unwrapSnapshot(snapshot), snapshot.key));
         } else {

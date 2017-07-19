@@ -20,15 +20,8 @@ function barSubscribe(MapBar, key) {
 
 export function* getBars() {
   try {
-    // Left as population example
-    // Bar.populate('currentDrinkUp', 'currentDrinkUp', bar => new Promise((resolve, reject) => {
-    //   if (!bar.currentDrinkUp) resolve({});
-    //
-    //   DrinkUp.get(bar.currentDrinkUp, true)
-    //     .then(resolve)
-    //     .catch(reject);
-    // }));
     const bars = yield call([Bar, Bar.get]);
+    yield call(watch, barSubscribe, Bar, null);
     yield put(BarActions.barsRequestSuccess(bars));
   } catch (error) {
     yield put(BarActions.barsRequestFailure(error));
