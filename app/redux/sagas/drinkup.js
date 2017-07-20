@@ -20,8 +20,10 @@ export function* getDrinkup({ drinkupId, userId }) {
   try {
     const drinkup = yield call([DrinkUp, DrinkUp.get], drinkupId);
     const { users } = drinkup;
+    const waitingUsers = drinkup.waitingUsers || {};
     const joined = !!users[userId];
-    yield put(DrinkupActions.drinkupRequestSuccessful(drinkup, joined));
+    const waitingInvite = !!waitingUsers[userId];
+    yield put(DrinkupActions.drinkupRequestSuccessful(drinkup, joined, waitingInvite));
   } catch (error) {
     yield put(DrinkupActions.drinkupRequestFailure(error));
   }
@@ -70,6 +72,6 @@ export function* sendRequestDrinkUp({ bar, user }) {
     yield call([DrinkUp, DrinkUp.update], bar.currentDrinkUp, { waitingUsers });
     yield put(DrinkupActions.sendRequestDrinkUpSuccessful());
   } catch (err) {
-    yield put(DrinkupActions.sendRequesteDrinkupFailure(err));
+    yield put(DrinkupActions.sendRequestDrinkupFailure(err));
   }
 }
