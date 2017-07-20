@@ -34,16 +34,17 @@ class WaitingScreen extends Component {
     if (!this.props.bar) {
       this.props.getBar(this.props.barId);
     } else if (this.props.bar.currentDrinkUp) {
-      this.props.getDrinkup(this.props.bar.currentDrinkUp);
+      this.props.getDrinkup(this.props.bar.currentDrinkUp, this.props.uid);
     }
   }
   componentDidUpdate() {
-    const { joined, bar, navigation, users, getDrinkup } = this.props;
+    const { joined, bar, navigation, users, getDrinkup, uid } = this.props;
+    console.log('waiting componentDidUpdate', this.props);
     if (joined) {
       navigation.navigate('DrinkUpScreen', { barId: bar.id });
     }
     if (bar && bar.currentDrinkUp && !users) {
-      getDrinkup(bar.currentDrinkUp);
+      getDrinkup(bar.currentDrinkUp, uid);
     }
   }
 
@@ -81,13 +82,14 @@ class WaitingScreen extends Component {
 const mapStateToProps = state => ({
   joined: state.drinkup.joined,
   users: state.drinkup.users,
+  uid: state.auth.uid,
   bar: state.drinkup.bar,
 });
 
 //eslint-disable-next-line
 const mapDispatchToProps = dispatch => ({
   getBar: barId => dispatch(DrinkupActions.barRequest(barId)),
-  getDrinkup: drinkupId => dispatch(DrinkupActions.drinkupRequest(drinkupId)),
+  getDrinkup: (drinkupId, userId) => dispatch(DrinkupActions.drinkupRequest(drinkupId, userId)),
   joinDrinkup: user => dispatch(DrinkupActions.joinDrinkup(user)),
 });
 

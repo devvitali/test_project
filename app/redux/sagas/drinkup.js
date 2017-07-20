@@ -16,10 +16,12 @@ export function* getBar({ barId }) {
   }
 }
 
-export function* getDrinkup({ drinkupId }) {
+export function* getDrinkup({ drinkupId, userId }) {
   try {
     const drinkup = yield call([DrinkUp, DrinkUp.get], drinkupId);
-    yield put(DrinkupActions.drinkupRequestSuccessful(drinkup));
+    const { users } = drinkup;
+    const joined = users[userId] ? true : false;
+    yield put(DrinkupActions.drinkupRequestSuccessful(drinkup, joined));
   } catch (error) {
     yield put(DrinkupActions.drinkupRequestFailure(error));
   }
@@ -44,12 +46,13 @@ export function* startDrinkUp({ barId, user }) {
 export function* leaveDrinkUp({ bar, user }) {
   try {
     const drinkup = yield call([DrinkUp, DrinkUp.get], bar.currentDrinkUp);
-    const users = [...drinkup.users];
+    let users = [...drinkup.users];
     const joinedUsers = drinkup.joinedUsers ? { ...drinkup.joinedUsers } : {};
     delete users[user.uid];
     let active = true;
     if (users && Object.keys(users).length === 0) {
       active = false;
+      users = {};
       yield call([Bar, Bar.update], bar.id, { currentDrinkUp: null });
     }
     joinedUsers[user.uid] = user;

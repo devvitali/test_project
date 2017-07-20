@@ -4,8 +4,8 @@ const { Types, Creators } = createActions({
   barRequest: ['barId'],
   barRequestSuccessful: ['bar'],
   barRequestFailure: ['error'],
-  drinkupRequest: ['drinkupId'],
-  drinkupRequestSuccessful: ['drinkup'],
+  drinkupRequest: ['drinkupId', 'userId'],
+  drinkupRequestSuccessful: ['drinkup', 'joined'],
   drinkupRequestFailure: ['error'],
   joinDrinkup: ['user'],
   startDrinkup: ['barId', 'user'],
@@ -46,10 +46,11 @@ const barRequestFailure = (state, { error }) => ({
 });
 
 const drinkupRequest = state => ({ ...state, fetching: true });
-const drinkupRequestSuccessful = (state, { drinkup: { users } }) => ({
+const drinkupRequestSuccessful = (state, { drinkup: { users }, joined }) => ({
   ...state,
   fetching: false,
   users,
+  joined,
 });
 
 const startDrinkupSuccessful = (state, { drinkup: { users } }) => ({
