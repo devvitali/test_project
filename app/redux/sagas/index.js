@@ -19,7 +19,7 @@ import {
   uploadProfilePhoto,
 } from './auth';
 
-import { getDrinkup, getBar, startDrinkUp, leaveDrinkUp } from './drinkup';
+import { getDrinkup, getBar, startDrinkUp, leaveDrinkUp, sendRequestDrinkUp } from './drinkup';
 import { getBars, addBar } from './bar';
 import { startBackgroundGeolocation, startBackgroundGeolocationWatchers } from './location';
 import { getAlerts } from './alert';
@@ -52,6 +52,7 @@ export default function* root() {
     takeLatest(DrinkupTypes.DRINKUP_REQUEST, getDrinkup),
     takeLatest(DrinkupTypes.START_DRINKUP, startDrinkUp),
     takeLatest(DrinkupTypes.LEAVE_DRINKUP, leaveDrinkUp),
+    takeLatest(DrinkupTypes.SEND_REQUEST_DRINKUP, sendRequestDrinkUp),
     takeLatest(AlertTypes.ALERTS_REQUEST, getAlerts),
   ]);
 }

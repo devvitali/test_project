@@ -7,7 +7,9 @@ const { Types, Creators } = createActions({
   drinkupRequest: ['drinkupId', 'userId'],
   drinkupRequestSuccessful: ['drinkup', 'joined'],
   drinkupRequestFailure: ['error'],
-  joinDrinkup: ['user'],
+  sendRequestDrinkup: ['bar', 'user'],
+  sendRequestDrinkupSuccessful: [],
+  sendRequestDrinkupFailure: ['error'],
   startDrinkup: ['barId', 'user'],
   startDrinkupSuccessful: ['drinkup'],
   startDrinkupFailure: ['error'],
@@ -24,6 +26,7 @@ export default Creators;
 /* ------------- Initial State ------------- */
 const defaultState = {
   joined: null,
+  waitingInvite: null,
   bar: null,
   users: null,
   fetching: false,
@@ -32,6 +35,11 @@ const defaultState = {
 /* ------------- Reducers ------------- */
 
 const request = state => ({ ...state, fetching: true });
+const requestFailure = (state, { error }) => ({
+  ...state,
+  fetching: false,
+  error,
+});
 const barRequestSuccessful = (state, { bar }) => ({
   ...state,
   fetching: false,
@@ -45,7 +53,6 @@ const barRequestFailure = (state, { error }) => ({
   error,
 });
 
-const drinkupRequest = state => ({ ...state, fetching: true });
 const drinkupRequestSuccessful = (state, { drinkup: { users }, joined }) => ({
   ...state,
   fetching: false,
@@ -67,10 +74,9 @@ const drinkupRequestFailure = (state, { error }) => ({
   error,
 });
 
-const joinDrinkup = (state, { user }) => ({
+const sendRequestDrinkupSuccessful = state => ({
   ...state,
-  joined: true,
-  users: ({ ...state.users, newUser: user }),
+  waitingInvite: true,
 });
 
 const leaveDrinkupSuccessful = (state, { users }) => ({
@@ -80,11 +86,6 @@ const leaveDrinkupSuccessful = (state, { users }) => ({
   users,
 });
 
-const leaveRequestFailure = (state, { error }) => ({
-  ...state,
-  fetching: false,
-  error,
-});
 const clearDrinkupUsers = state => ({ ...state, users: null });
 const clearDrinkupData = () => defaultState;
 
@@ -93,16 +94,18 @@ export const drinkupReducer = createReducer(defaultState, {
   [Types.BAR_REQUEST]: request,
   [Types.BAR_REQUEST_SUCCESSFUL]: barRequestSuccessful,
   [Types.BAR_REQUEST_FAILURE]: barRequestFailure,
-  [Types.DRINKUP_REQUEST]: drinkupRequest,
+  [Types.DRINKUP_REQUEST]: request,
   [Types.DRINKUP_REQUEST_SUCCESSFUL]: drinkupRequestSuccessful,
   [Types.DRINKUP_REQUEST_FAILURE]: drinkupRequestFailure,
   [Types.START_DRINKUP]: request,
   [Types.START_DRINKUP_SUCCESSFUL]: startDrinkupSuccessful,
   [Types.START_DRINKUP_FAILURE]: drinkupRequestFailure,
-  [Types.JOIN_DRINKUP]: joinDrinkup,
+  [Types.SEND_REQUEST_DRINKUP]: request,
+  [Types.SEND_REQUEST_DRINKUP_SUCCESSFUL]: sendRequestDrinkupSuccessful(),
+  [Types.JSEND_REQUEST_DRINKUP_FAILURE]: requestFailure,
   [Types.LEAVE_DRINKUP]: request,
   [Types.LEAVE_DRINKUP_SUCCESSFUL]: leaveDrinkupSuccessful,
-  [Types.LEAVE_DRINKUP_FAILURE]: leaveRequestFailure,
+  [Types.LEAVE_DRINKUP_FAILURE]: requestFailure,
   [Types.CLEAR_DRINKUP_DATA]: clearDrinkupData,
   [Types.CLEAR_DRINKUP_USERS]: clearDrinkupUsers,
 });

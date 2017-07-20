@@ -24,7 +24,6 @@ class WaitingScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      waiting: false,
       isDirectionDialogShowing: false,
       user: null,
       joiningUser: requestingMember, // only use for demo
@@ -50,28 +49,31 @@ class WaitingScreen extends Component {
 
   // this function is only use for demo
   onDraftJoined = () => this.props.joinDrinkup(requestingMember);
-  onWaiting = () => this.setState({ waiting: true });
-  onCancel = () => this.setState({ waiting: false });
+  onSendRequestDrinkup = () => {
+    const { user, uid, bar } = this.props;
+    const currentUser = { ...user, uid };
+    this.props.sendRequestDrinkup(bar, currentUser);
+  };
+  onCancelRequest = () => {
+
+  };
   render() {
-    const { bar: { currentSpecial }, users } = this.props;
-    const { waiting } = this.state;
+    const { bar: { currentSpecial }, users, waitingInvite } = this.props;
     return (
       <View style={[styles.mainContainer, styles.container]}>
         {currentSpecial &&
         <Banner theme="info" text={I18n.t('Drinkup_JoinDrinkUpAndGet2For1Drinks')} onPress={this.onWaiting} />
         }
         <AvatarList users={users} iconOnly />
-        {waiting ? (
+        {waitingInvite ? (
           <View>
             <Animation.View animation="fadeIn" delay={1000} duration={500}>
-              <Button theme={'disallow'} onPress={this.onCancel} text={I18n.t('Drinkup_CancelRequest')} />
+              <Button theme={'disallow'} onPress={this.onCancelRequest} text={I18n.t('Drinkup_CancelRequest')} />
             </Animation.View>
-            <TouchableOpacity onPress={this.onDraftJoined}>
-              <Text style={styles.waitingInviteText}>{I18n.t('Drinkup_WaitingInvite')}</Text>
-            </TouchableOpacity>
+            <Text style={styles.waitingInviteText}>{I18n.t('Drinkup_WaitingInvite')}</Text>
           </View>
         ) : (
-          <Button onPress={this.onWaiting} text={I18n.t('Drinkup_JoinDrinkUp')} />
+          <Button onPress={this.onSendRequestDrinkup} text={I18n.t('Drinkup_JoinDrinkUp')} />
         )}
 
       </View>
@@ -81,6 +83,7 @@ class WaitingScreen extends Component {
 
 const mapStateToProps = state => ({
   joined: state.drinkup.joined,
+  waitingInvite: state.drinkup.waitingInvite,
   users: state.drinkup.users,
   uid: state.auth.uid,
   bar: state.drinkup.bar,
@@ -90,7 +93,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   getBar: barId => dispatch(DrinkupActions.barRequest(barId)),
   getDrinkup: (drinkupId, userId) => dispatch(DrinkupActions.drinkupRequest(drinkupId, userId)),
-  joinDrinkup: user => dispatch(DrinkupActions.joinDrinkup(user)),
+  sendRequestDrinkup: user => dispatch(DrinkupActions.sendRequestDrinkup(user)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(WaitingScreen);

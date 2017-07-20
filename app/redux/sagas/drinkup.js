@@ -62,3 +62,14 @@ export function* leaveDrinkUp({ bar, user }) {
     yield put(DrinkupActions.leaveDrinkupFailure(error));
   }
 }
+export function* sendRequestDrinkUp({ bar, user }) {
+  try {
+    const drinkup = yield call([DrinkUp, DrinkUp.get], bar.currentDrinkUp);
+    const waitingUsers = drinkup.waitingUsers ? { ...drinkup.waitingUsers } : {};
+    waitingUsers[user.uid] = user;
+    yield call([DrinkUp, DrinkUp.update], bar.currentDrinkUp, { waitingUsers });
+    yield put(DrinkupActions.sendRequestDrinkUpSuccessful());
+  } catch (err) {
+    yield put(DrinkupActions.sendRequesteDrinkupFailure(err));
+  }
+}
