@@ -94,7 +94,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   getBar: barId => dispatch(DrinkupActions.barRequest(barId)),
   getDrinkup: (drinkupId, userId) => dispatch(DrinkupActions.drinkupRequest(drinkupId, userId)),
-  sendRequestDrinkup: user => dispatch(DrinkupActions.sendRequestDrinkup(user)),
+  sendRequestDrinkup: (bar, user) => dispatch(DrinkupActions.sendRequestDrinkup(bar, user)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(WaitingScreen);
