@@ -70,7 +70,7 @@ export function* sendRequestDrinkUp({ bar, user }) {
     const waitingUsers = drinkup.waitingUsers ? { ...drinkup.waitingUsers } : {};
     waitingUsers[user.uid] = user;
     yield call([DrinkUp, DrinkUp.update], bar.currentDrinkUp, { waitingUsers });
-    yield put(DrinkupActions.sendRequestDrinkUpSuccessful());
+    yield put(DrinkupActions.sendRequestDrinkupSuccessful());
   } catch (err) {
     yield put(DrinkupActions.sendRequestDrinkupFailure(err));
   }
