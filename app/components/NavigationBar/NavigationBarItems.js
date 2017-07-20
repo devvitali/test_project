@@ -7,9 +7,9 @@ import styles from './styles';
 import { Colors } from '../../themes';
 
 export default {
-  backButton() {
-    return (
-      <TouchableOpacity onPress={() => {}} style={styles.backButton}>
+  backButton(navigation) {
+    return () => (
+      <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
         <Icon name="angle-left" size={35} color={Colors.snow} style={styles.backIcon} />
       </TouchableOpacity>
     );

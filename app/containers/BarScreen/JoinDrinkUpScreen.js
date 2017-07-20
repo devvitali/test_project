@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import AppContainer from '../AppContainer';
 import WaitingScreen from './WaitingScreen';
 import NoDrinkUp from './NoDrinkUpScreen';
-import { NavItems, DirectionsDialog } from '../../components';
+import { NavItems, DirectionDialog } from '../../components';
 import { User } from '../../firebase/models';
 import { DrinkupActions } from '../../redux';
 import styles from './styles';
@@ -24,51 +24,37 @@ class JoinDrinkUp extends Component {
 
   componentDidMount() {
     if (!this.props.isUserValid) {
-      // NavigationActions.editProfile();
-    } else {
-      this.props.getBar(this.props.barId);
-      // if (this.props.bar) {
-      //   NavigationActions.refresh({
-      //     title: this.props.bar.name,
-      //     renderRightButton: NavItems.mapButton(this.showDirectionDialog),
-      //   });
-      // }
+      this.props.navigation.navigate('EditProfileScreen');
     }
   }
-
-  componentDidUpdate(prevProps) {
-    if (!prevProps.bar) {
-      // NavigationActions.refresh({
-      //   title: this.props.bar.name,
-      //   renderRightButton: NavItems.mapButton(this.showDirectionDialog),
-      // });
+  onShowDirectionDialog = () => this.setState({ isDirectionDialogShowing: true });
+  onCloseDirectionDialog = () => this.setState({ isDirectionDialogShowing: false });
+  getTitle() {
+    if (this.props.bar) {
+      return this.props.bar.name;
     }
+    return 'Join DrinkUp';
   }
-
-  showDirectionDialog = () => {
-    this.setState({ isDirectionDialogShowing: true });
+  getRightNavBarButton() {
+    if (this.props.bar) {
+      return NavItems.mapButton(this.onShowDirectionDialog);
+    }
+    return null;
   }
-
-  closeDirectionDialog = () => {
-    this.setState({ isDirectionDialogShowing: false });
-  }
-
   renderScreen() {
     if (this.props.bar) {
       if (this.props.bar.currentDrinkUp) {
-        return <WaitingScreen />;
+        return <WaitingScreen navigation={this.props.navigation} />;
       }
-
       const special = this.props.bar.currentSpecial;
-      return <NoDrinkUp special={special} />;
+      return <NoDrinkUp special={special} navigation={this.props.navigation} />;
     }
-
     return null;
   }
 
   renderDirectionDialog() {
     return (
-      <DirectionsDialog
+      <DirectionDialog
         bar={{
           name: 'Bohemian Biergarten',
           address: {
@@ -76,9 +62,9 @@ class JoinDrinkUp extends Component {
             state: 'CO',
           },
         }}
-        onClose={this.closeDirectionDialog}
-        onGoogleMapsPress={this.closeDirectionDialog}
-        onAppleMapsPress={this.closeDirectionDialog}
+        onClose={this.onCloseDirectionDialog}
+        onGoogleMapsPress={this.onCloseDirectionDialog}
+        onAppleMapsPress={this.onCloseDirectionDialog}
         visible={this.state.isDirectionDialogShowing}
       />
     );
@@ -87,8 +73,9 @@ class JoinDrinkUp extends Component {
   render() {
     return (
       <AppContainer
-        title="Join DrinkUp"
-        renderLeftButton={NavItems.backButton}
+        title={this.getTitle()}
+        renderLeftButton={NavItems.backButton(this.props.navigation)}
+        renderRightButton={this.getRightNavBarButton()}
       >
         <View style={styles.contentContainer}>
           {this.renderScreen()}

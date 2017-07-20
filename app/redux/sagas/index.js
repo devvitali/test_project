@@ -6,7 +6,6 @@ import { DrinkupTypes } from '../drinkup';
 import { AuthTypes } from '../auth';
 import { LocationTypes } from '../location';
 import { StartupTypes } from '../startup';
-import { OpenScreenTypes } from '../openScreen';
 
 /* ------------- Sagas ------------- */
 import {
@@ -20,12 +19,11 @@ import {
   uploadProfilePhoto,
 } from './auth';
 
-import { getDrinkup, getBar, startDrinkUp } from './drinkup';
+import { getDrinkup, getBar, startDrinkUp, leaveDrinkUp } from './drinkup';
 import { getBars, addBar } from './bar';
 import { startBackgroundGeolocation, startBackgroundGeolocationWatchers } from './location';
 import { getAlerts } from './alert';
 import { startup } from './startup';
-import { openScreen } from './openScreen';
 
 /* ------------- API ------------- */
 // The API we use is only used from Sagas, so we create it here and pass along
@@ -53,7 +51,7 @@ export default function* root() {
     takeLatest(DrinkupTypes.BAR_REQUEST, getBar),
     takeLatest(DrinkupTypes.DRINKUP_REQUEST, getDrinkup),
     takeLatest(DrinkupTypes.START_DRINKUP, startDrinkUp),
-    takeLatest(OpenScreenTypes.OPEN_SCREEN, openScreen),
+    takeLatest(DrinkupTypes.LEAVE_DRINKUP, leaveDrinkUp),
     takeLatest(AlertTypes.ALERTS_REQUEST, getAlerts),
   ]);
 }

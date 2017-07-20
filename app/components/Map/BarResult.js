@@ -63,8 +63,6 @@ const BarResult = (props) => {
   if (activeDrinkUp) {
     buttonStyles.push(styles.btnActiveDrinkUp);
   }
-  console.show(name, props);
-
   return (
     <TouchableOpacity activeOpacity={0.7} style={buttonStyles} onPress={onPress}>
       <View style={styles.container}>

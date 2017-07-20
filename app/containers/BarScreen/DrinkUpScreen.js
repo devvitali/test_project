@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { View } from 'react-native';
 import { connect } from 'react-redux';
 import AppContainer from '../AppContainer';
-import { NavItems, DirectionsDialog } from '../../components';
+import { NavItems, DirectionDialog } from '../../components';
 import styles from './styles';
 import DrinkUpLobby from './DrinkUpLobbyScreen';
 import ItsJustMe from './ItsJustMeScreen';
@@ -52,11 +52,11 @@ class DrinkUp extends Component {
     if (this.props.users && Object.keys(this.props.users).length > 1) {
       return <DrinkUpLobby />;
     }
-    return <ItsJustMe />;
+    return <ItsJustMe navigation={this.props.navigation} />;
   }
   renderDirectionDialog() {
     return (
-      <DirectionsDialog
+      <DirectionDialog
         bar={this.props.bar}
         onClose={this.onCloseDirectionDialog}
         onGoogleMapsPress={this.onCloseDirectionDialog}

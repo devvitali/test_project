@@ -24,12 +24,7 @@ export default class DirectionsDialogWrapper extends Component {
 
     if (!this.props.visible && newProps.visible) {
       this.setState({ visible: true });
-    }
-
-    if (Platform.OS === 'ios') {
       this.checkForGoogleMaps();
-    } else {
-      this.openGoogleMaps();
     }
   }
 
@@ -52,8 +47,8 @@ export default class DirectionsDialogWrapper extends Component {
         if (isSupported) {
           this.setState({ visible: true });
         } else {
-          this.setState({ visible: false });
           this.openAppleMaps();
+          this.props.onClose();
         }
       });
   }
@@ -61,11 +56,13 @@ export default class DirectionsDialogWrapper extends Component {
   openGoogleMaps = () => {
     const googleMapsURL = this.getGoogleMapsURL();
     Linking.openURL(googleMapsURL);
+    this.props.onClose();
   };
 
   openAppleMaps = () => {
     const appleMapsURL = this.getAppleMapsURL();
     Linking.openURL(appleMapsURL);
+    this.props.onClose();
   };
 
   render() {

@@ -26,13 +26,10 @@ export function* startup(action) {
   try {
     const authData = yield call(initAuth);
     yield put(authActions.signInFulfilled(authData));
-    console.log('startup signInFulfilled', authData);
   } catch (err) {
     try {
-      console.log('startup signIn');
       yield put(authActions.signIn());
     } catch (authErr) {
-      console.log('startup signInFailed');
       yield put(authActions.signInFailed(authErr));
     }
   }

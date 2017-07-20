@@ -41,7 +41,7 @@ export default class SponsoredScreen extends React.Component {
   }
   render() {
     return (
-      <AppContainer renderLeftButton={NavItems.backButton}>
+      <AppContainer renderLeftButton={NavItems.backButton(this.props.navigation)}>
         {this.renderContent()}
       </AppContainer>
     );

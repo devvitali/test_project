@@ -46,7 +46,7 @@ function renderAvatar(props) {
   const { image, name, width, style, disabled } = props;
   return (
     <View style={[{ width }, style]}>
-      {image ? renderImage() : renderIcon()}
+      {image ? renderImage(props) : renderIcon(props)}
       {name && <Text style={[styles.name, disabled && styles.nameDisabled]}>{name}</Text>}
     </View>
   );

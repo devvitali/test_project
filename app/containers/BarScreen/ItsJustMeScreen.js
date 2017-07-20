@@ -2,10 +2,9 @@ import React, { Component } from 'react';
 import { Text, View } from 'react-native';
 import I18n from 'react-native-i18n';
 import { connect } from 'react-redux';
-
+import { NavigationActions } from 'react-navigation';
 import { Button, CheersDialog, AvatarList } from '../../components';
 import { DrinkupActions } from '../../redux';
-import { requestingMember } from '../../fixture/drinkupMembers';
 import Styles from './styles';
 
 class ItsJustMeScreen extends Component {
@@ -17,13 +16,21 @@ class ItsJustMeScreen extends Component {
   }
   componentDidUpdate() {
     if (this.props.joined !== null && !this.props.joined) {
-      this.props.navigation.navigate('DrawerNavigation');
+
+      const resetAction = NavigationActions.reset({
+        index: 0,
+        actions: [NavigationActions.navigate({ routeName: 'DrawerNavigation' })],
+      });
+      this.props.navigation.dispatch(resetAction);
     }
   }
 
   onCloseDialog = () => this.setState({ showDialog: false });
   // this function is only use for demo
-  onDraftLeave = () => this.props.leaveDrinkup(requestingMember);
+  onDraftLeave = () => {
+    const { bar, user, uid } = this.props;
+    this.props.leaveDrinkup(bar, { ...user, uid });
+  };
   render() {
     return (
       <View style={Styles.mainContainer}>
@@ -55,10 +62,12 @@ const mapStateToProps = state => ({
   joined: state.drinkup.joined,
   bar: state.drinkup.bar,
   users: state.drinkup.users,
+  user: state.auth.profile,
+  uid: state.auth.uid,
 });
 
 const mapDispatchToProps = dispatch => ({
-  leaveDrinkup: user => dispatch(DrinkupActions.leaveDrinkup(user)),
+  leaveDrinkup: (bar, user) => dispatch(DrinkupActions.leaveDrinkup(bar, user)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ItsJustMeScreen);

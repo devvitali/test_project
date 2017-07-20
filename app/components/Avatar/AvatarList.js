@@ -4,7 +4,7 @@ import { View, ListView, Dimensions } from 'react-native';
 
 import { Metrics } from '../../themes';
 import styles from './styles';
-import Avatar from '../Avatar';
+import { Avatar } from '../';
 
 const { width } = Dimensions.get('window');
 

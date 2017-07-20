@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
+import { NavigationActions } from 'react-navigation';
 import { User } from '../../firebase/models';
 import { Connect } from '../../redux';
 
@@ -19,7 +20,15 @@ class SplashScreen extends Component {
   }
   navigate(route) {
     if (route !== this.routedScene) {
-      this.props.navigation.navigate(route);
+      if (route === 'DrawerNavigation') {
+        const resetAction = NavigationActions.reset({
+          index: 0,
+          actions: [NavigationActions.navigate({ routeName: 'DrawerNavigation' })],
+        });
+        this.props.navigation.dispatch(resetAction);
+      } else {
+        this.props.navigation.navigate(route);
+      }
     }
     this.routedScene = route;
   }
@@ -31,6 +40,7 @@ class SplashScreen extends Component {
     } else if (!isUserValid && user.onboardingComplete && Object.keys(user).length > 0) {
       this.navigate('EditProfileScreenWithoutSignIn');
     } else if (joined) {
+      this.navigate('DrawerNavigation');
       console.log('goto drinkUp');
     } else if (isUserValid) {
       this.navigate('DrawerNavigation');

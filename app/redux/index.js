@@ -5,7 +5,6 @@ import rootSaga from './sagas';
 
 import { User } from '../firebase/models';
 import AuthActions, { authReducer as auth } from './auth';
-import DrawerActions, { sidebarReducer as drawer } from './sidebar';
 import LocationActions, { locationReducer as location } from './location';
 import AlertActions, { alertReducer as alert } from './alert';
 import DrinkupActions, { drinkupReducer as drinkup } from './drinkup';
@@ -16,7 +15,6 @@ export default () => {
   const rootReducer = combineReducers({
     alert,
     auth,
-    drawer,
     location,
     bar,
     drinkup,
@@ -31,9 +29,6 @@ const mapDispatchToProps = dispatch => ({
     updateProfile: diff => dispatch(AuthActions.updateProfile(diff)),
     uploadProfilePhoto: photo => dispatch(AuthActions.uploadProfilePhoto(photo)),
 
-    openDrawer: () => dispatch(DrawerActions.openDrawer()),
-    closeDrawer: () => dispatch(DrawerActions.closeDrawer()),
-    setActivePage: page => dispatch(DrawerActions.setActivePage(page)),
     startBackgroundGeolocation: () => dispatch(LocationActions.startBackgroundGeolocation()),
   },
 });
@@ -50,7 +45,6 @@ export function Connect(component, mapStateToProps) {
 }
 
 export { AuthActions };
-export { DrawerActions };
 export { AlertActions };
 export { LocationActions };
 export { DrinkupActions };

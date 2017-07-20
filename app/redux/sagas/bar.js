@@ -17,10 +17,10 @@ const MAP_BAR_ACTIONS = {
 function barSubscribe(MapBar, key) {
   return eventChannel(emit => MapBar.subscribe(emit, key));
 }
-
 export function* getBars() {
   try {
     const bars = yield call([Bar, Bar.get]);
+    yield call([Bar, Bar.unsubscribe], null);
     yield call(watch, barSubscribe, Bar, null);
     yield put(BarActions.barsRequestSuccess(bars));
   } catch (error) {

@@ -15,7 +15,9 @@ class NoDrinkUpScreen extends Component {
   }
 
   // this function is only use for demo
-  onDraftJoined = () => this.props.startDrinkup(this.props.bar.id, this.props.user);
+  onDraftJoined = () => {
+    this.props.startDrinkup(this.props.bar.id, { ...this.props.user, uid: this.props.uid });
+  };
   render() {
     const { special } = this.props;
     return (
@@ -52,6 +54,7 @@ const mapStateToProps = state => ({
   joined: state.drinkup.joined,
   bar: state.drinkup.bar,
   user: state.auth.profile,
+  uid: state.auth.uid,
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -25,8 +25,17 @@ const defaultState = {
 };
 /* ------------- Reducers ------------- */
 const request = state => ({ ...state, fetching: true });
-const barsRequestSuccess = (state, { bars }) => ({ ...state, fetching: false, bars: { ...state.bars, ...bars } });
-const barsRequestFailure = (state, { error }) => ({ ...state, bars: null, fetching: false, error });
+const barsRequestSuccess = (state, { bars }) => {
+  const newState = ({ ...state, fetching: false, bars: { ...state.bars, ...bars } });
+  console.log('barsRequestSuccess', newState);
+  return newState;
+}
+const barsRequestFailure = (state, { error }) => {
+  const newState = ({ ...state, bars: null, fetching: false, error });
+  console.log('barsRequestFailure', newState);
+  return newState;
+};
+
 const updateBar = (state, { bar, barId }) => {
   const updatedBar = Object.assign({}, state.bars[barId], bar);
   if (Object.keys(updatedBar).length <= 0) {
@@ -35,11 +44,13 @@ const updateBar = (state, { bar, barId }) => {
     });
   }
 
-  return Object.assign({}, state, {
+  const newState = Object.assign({}, state, {
     bars: Object.assign({}, state.bars, {
       [barId]: Object.assign({}, state.bars[barId], bar),
     }),
   });
+  console.log('updateBar', newState);
+  return newState;
 };
 
 const addBarFailure = (state, { error }) => ({ ...state, fetching: false, error });

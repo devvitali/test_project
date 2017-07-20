@@ -11,7 +11,9 @@ const { Types, Creators } = createActions({
   startDrinkup: ['barId', 'user'],
   startDrinkupSuccessful: ['drinkup'],
   startDrinkupFailure: ['error'],
-  leaveDrinkup: ['user'],
+  leaveDrinkup: ['bar', 'user'],
+  leaveDrinkupSuccessful: ['users'],
+  leaveDrinkupFailure: ['error'],
   clearDrinkupData: [],
   clearDrinkupUsers: [],
 });
@@ -70,13 +72,18 @@ const joinDrinkup = (state, { user }) => ({
   users: ({ ...state.users, newUser: user }),
 });
 
-const leaveDrinkup = state/* , { user } */ => ({
+const leaveDrinkupSuccessful = (state, { users }) => ({
   ...state,
   joined: false,
-  // only for demo draft.
-  users: state.users,
+  fetch: false,
+  users,
 });
 
+const leaveRequestFailure = (state, { error }) => ({
+  ...state,
+  fetching: false,
+  error,
+});
 const clearDrinkupUsers = state => ({ ...state, users: null });
 const clearDrinkupData = () => defaultState;
 
@@ -92,7 +99,9 @@ export const drinkupReducer = createReducer(defaultState, {
   [Types.START_DRINKUP_SUCCESSFUL]: startDrinkupSuccessful,
   [Types.START_DRINKUP_FAILURE]: drinkupRequestFailure,
   [Types.JOIN_DRINKUP]: joinDrinkup,
-  [Types.LEAVE_DRINKUP]: leaveDrinkup,
+  [Types.LEAVE_DRINKUP]: request,
+  [Types.LEAVE_DRINKUP_SUCCESSFUL]: leaveDrinkupSuccessful,
+  [Types.LEAVE_DRINKUP_FAILURE]: leaveRequestFailure,
   [Types.CLEAR_DRINKUP_DATA]: clearDrinkupData,
   [Types.CLEAR_DRINKUP_USERS]: clearDrinkupUsers,
 });
