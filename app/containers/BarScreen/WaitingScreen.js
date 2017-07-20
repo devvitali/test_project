@@ -86,7 +86,7 @@ const mapStateToProps = state => ({
   waitingInvite: state.drinkup.waitingInvite,
   users: state.drinkup.users,
   uid: state.auth.uid,
-  user: state.auth.user,
+  user: state.auth.profile,
   bar: state.drinkup.bar,
 });
 
