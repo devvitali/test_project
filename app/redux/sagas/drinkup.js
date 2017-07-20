@@ -20,7 +20,7 @@ export function* getDrinkup({ drinkupId, userId }) {
   try {
     const drinkup = yield call([DrinkUp, DrinkUp.get], drinkupId);
     const { users } = drinkup;
-    const joined = users[userId] ? true : false;
+    const joined = !!users[userId];
     yield put(DrinkupActions.drinkupRequestSuccessful(drinkup, joined));
   } catch (error) {
     yield put(DrinkupActions.drinkupRequestFailure(error));
@@ -47,7 +47,7 @@ export function* leaveDrinkUp({ bar, user }) {
   try {
     const drinkup = yield call([DrinkUp, DrinkUp.get], bar.currentDrinkUp);
     let users = [...drinkup.users];
-    const joinedUsers = drinkup.joinedUsers ? { ...drinkup.joinedUsers } : {};
+    const leavedUsers = drinkup.leavedUsers ? { ...drinkup.leavedUsers } : {};
     delete users[user.uid];
     let active = true;
     if (users && Object.keys(users).length === 0) {
@@ -55,8 +55,8 @@ export function* leaveDrinkUp({ bar, user }) {
       users = {};
       yield call([Bar, Bar.update], bar.id, { currentDrinkUp: null });
     }
-    joinedUsers[user.uid] = user;
-    yield call([DrinkUp, DrinkUp.update], bar.currentDrinkUp, { users, joinedUsers, active });
+    leavedUsers[user.uid] = user;
+    yield call([DrinkUp, DrinkUp.update], bar.currentDrinkUp, { users, leavedUsers, active });
     yield put(DrinkupActions.leaveDrinkupSuccessful(users));
   } catch (error) {
     yield put(DrinkupActions.leaveDrinkupFailure(error));
