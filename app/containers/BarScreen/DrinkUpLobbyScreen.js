@@ -22,7 +22,6 @@ class DrinkupLobbyScreen extends React.Component {
     this.state = {
       user: null,
       invitedUser: null,
-      showJoinDialog: true,
       showRedeemWarning: false,
       showComposeMessage: false,
       showCheerDialog: true,
@@ -47,7 +46,6 @@ class DrinkupLobbyScreen extends React.Component {
   };
   onCloseJoiningDialog = (invitedUser) => {
     this.setState({
-      showJoinDialog: false,
       showComposeMessage: true,
       invitedUser,
     });
@@ -126,7 +124,7 @@ class DrinkupLobbyScreen extends React.Component {
   }
   renderRequestToJoinDialog() {
     const { waitingUsers } = this.props;
-    if (this.state.showJoinDialog && waitingUsers && Object.keys(waitingUsers).length > 0) {
+    if (waitingUsers && Object.keys(waitingUsers).length > 0) {
       const user = waitingUsers[Object.keys(waitingUsers)[0]];
       const { firstName, distance = 0, photoURL } = user;
       return (
