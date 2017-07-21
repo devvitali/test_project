@@ -15,7 +15,8 @@ class DrinkupLobbyScreen extends React.Component {
     super(props);
     this.state = {
       user: null,
-      joiningUser: requestingMember,
+      invitedUser: null,
+      showJoinDialog: true,
       showRedeemWarning: false,
       showComposeMessage: false,
       composedMessage: '',
@@ -40,9 +41,12 @@ class DrinkupLobbyScreen extends React.Component {
     this.props.leaveDrinkup(requestingMember);
     this.setState({ waiting: false });
   };
-  onCloseJoiningDialog = () => {
-    this.setState({ joiningUser: null });
-    this.setState({ showComposeMessage: true });
+  onCloseJoiningDialog = invitedUser => {
+    this.setState({
+      showJoinDialog: false,
+      showComposeMessage: true,
+      invitedUser,
+    });
   };
 
   onCloseRedeemWarningDialog = () => this.setState({ showRedeemWarning: false });
@@ -69,15 +73,19 @@ class DrinkupLobbyScreen extends React.Component {
     );
   }
   renderComposeMessageDialog() {
-    return (
-      <ComposeMessageDialog
-        message={this.state.composedMessage}
-        messagePlaceholder={`How will ${requestingMember.firstName} find you?`}
-        onChangeMessage={this.onComposedMessageChange}
-        onClose={this.onCloseComposeMessageDialog}
-        visible={this.state.showComposeMessage}
-      />
-    );
+    const { invitedUser, showComposeMessage, composedMessage } = this.state;
+    if (invitedUser && showComposeMessage) {
+      return (
+        <ComposeMessageDialog
+          message={composedMessage}
+          messagePlaceholder={`How will ${invitedUser.firstName} find you?`}
+          onChangeMessage={this.onComposedMessageChange}
+          onClose={this.onCloseComposeMessageDialog}
+          visible={showComposeMessage}
+        />
+      );
+    }
+    return null;
   }
   renderMessageDialog() {
     const { user } = this.state;
@@ -92,14 +100,16 @@ class DrinkupLobbyScreen extends React.Component {
     );
   }
   renderRequestToJoinDialog() {
-    if (this.state.joiningUser) {
-      const { firstName, distance, avatar } = this.state.joiningUser;
+    const { waitingUsers } = this.props;
+    if (this.state.showJoinDialog && waitingUsers && Object.keys(waitingUsers).length > 0) {
+      const user = waitingUsers[Object.keys(waitingUsers)[0]];
+      const { firstName, distance = 0, photoURL } = user;
       return (
         <JoinDialog
-          onClose={this.onCloseJoiningDialog}
+          onClose={() => this.onCloseJoiningDialog(user)}
           visible
           name={firstName}
-          avatarSrc={avatar}
+          avatarSrc={photoURL}
           distance={distance}
         />
       );
@@ -133,6 +143,7 @@ const mapStateToProps = state => ({
   bar: state.drinkup.bar,
   joined: state.drinkup.joined,
   users: state.drinkup.users,
+  waitingUsers: state.drinkup.waitingUsers,
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -23,7 +23,7 @@ export function* getDrinkup({ drinkupId, userId }) {
     const waitingUsers = drinkup.waitingUsers || {};
     const joined = !!users[userId];
     const waitingInvite = !!waitingUsers[userId];
-    yield put(DrinkupActions.drinkupRequestSuccessful(drinkup, joined, waitingInvite));
+    yield put(DrinkupActions.drinkupRequestSuccessful(drinkup, joined, waitingInvite, waitingUsers));
   } catch (error) {
     yield put(DrinkupActions.drinkupRequestFailure(error));
   }
@@ -59,7 +59,7 @@ export function* leaveDrinkUp({ bar, user }) {
     }
     leavedUsers[user.uid] = user;
     yield call([DrinkUp, DrinkUp.update], bar.currentDrinkUp, { users, leavedUsers, active });
-    yield put(DrinkupActions.leaveDrinkupSuccessful(users));
+    yield put(DrinkupActions.leaveDrinkupSuccessful());
   } catch (error) {
     yield put(DrinkupActions.leaveDrinkupFailure(error));
   }

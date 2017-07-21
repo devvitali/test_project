@@ -40,7 +40,7 @@ class SplashScreen extends Component {
     } else if (!isUserValid && user.onboardingComplete && Object.keys(user).length > 0) {
       this.navigate('EditProfileScreenWithoutSignIn');
     } else if (joined) {
-      this.navigate('DrawerNavigation');
+      this.navigate('DrawerNavigation', 'DrinkUpScreen');
       console.log('goto drinkUp');
     } else if (isUserValid) {
       this.navigate('DrawerNavigation');

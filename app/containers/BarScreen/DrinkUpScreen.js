@@ -35,7 +35,7 @@ class DrinkUp extends Component {
   onCloseDirectionDialog = () => this.setState({ isDirectionDialogShowing: false });
   getTitle() {
     if (this.props.bar) {
-      return this.props.bar.title;
+      return this.props.bar.name;
     }
     return 'DrinkUp';
   }
@@ -49,7 +49,7 @@ class DrinkUp extends Component {
     if (!this.props.users) {
       return null;
     }
-    if (this.props.users && Object.keys(this.props.users).length > 1) {
+    if (this.props.users && Object.keys(this.props.users).length > 0) {
       return <DrinkUpLobby />;
     }
     return <ItsJustMe navigation={this.props.navigation} />;

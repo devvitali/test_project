@@ -5,7 +5,7 @@ const { Types, Creators } = createActions({
   barRequestSuccessful: ['bar'],
   barRequestFailure: ['error'],
   drinkupRequest: ['drinkupId', 'userId'],
-  drinkupRequestSuccessful: ['drinkup', 'joined', 'waitingInvite'],
+  drinkupRequestSuccessful: ['drinkup', 'joined', 'waitingInvite', 'waitingUsers'],
   drinkupRequestFailure: ['error'],
   sendRequestDrinkup: ['bar', 'user'],
   sendRequestDrinkupSuccessful: [],
@@ -17,7 +17,7 @@ const { Types, Creators } = createActions({
   startDrinkupSuccessful: ['drinkup'],
   startDrinkupFailure: ['error'],
   leaveDrinkup: ['bar', 'user'],
-  leaveDrinkupSuccessful: ['users'],
+  leaveDrinkupSuccessful: [''],
   leaveDrinkupFailure: ['error'],
   clearDrinkupData: [],
   clearDrinkupUsers: [],
@@ -33,6 +33,7 @@ const defaultState = {
   bar: null,
   users: null,
   fetching: false,
+  waitingUsers: null,
 };
 
 /* ------------- Reducers ------------- */
@@ -56,12 +57,13 @@ const barRequestFailure = (state, { error }) => ({
   error,
 });
 
-const drinkupRequestSuccessful = (state, { drinkup: { users }, joined, waitingInvite }) => ({
+const drinkupRequestSuccessful = (state, { drinkup: { users }, joined, waitingInvite, waitingUsers }) => ({
   ...state,
   fetching: false,
   users,
   joined,
   waitingInvite,
+  waitingUsers,
 });
 
 const startDrinkupSuccessful = (state, { drinkup: { users } }) => ({
@@ -79,12 +81,13 @@ const drinkupRequestFailure = (state, { error }) => ({
 });
 
 const sendRequestDrinkupSuccessful = state => ({ ...state, waitingInvite: true });
-const cancelRequestDrinkupSuccessful = state => ({ ...state, waitingInvite: false });
-const leaveDrinkupSuccessful = (state, { users }) => ({
+const cancelRequestDrinkupSuccessful = state => ({ ...state, waitingInvite: false, users: null, waitingUsers: null });
+const leaveDrinkupSuccessful = state => ({
   ...state,
   joined: false,
   fetch: false,
-  users,
+  users: null,
+  waitingUsers: null,
 });
 
 const clearDrinkupUsers = state => ({ ...state, users: null });
