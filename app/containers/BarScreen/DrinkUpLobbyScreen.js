@@ -4,7 +4,14 @@ import I18n from 'react-native-i18n';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import {
-  Button, Dialog, AlkoSpecialWarningDialog, JoinDialog, ComposeMessageDialog, Banner, AvatarList,
+  Button,
+  Dialog,
+  AlkoSpecialWarningDialog,
+  JoinDialog,
+  ComposeMessageDialog,
+  Banner,
+  AvatarList,
+  CheersDialog,
 } from '../../components';
 import { DrinkupActions } from '../../redux';
 import styles from './styles';
@@ -18,6 +25,7 @@ class DrinkupLobbyScreen extends React.Component {
       showJoinDialog: true,
       showRedeemWarning: false,
       showComposeMessage: false,
+      showCheerDialog: true,
       composedMessage: '',
     };
   }
@@ -89,15 +97,30 @@ class DrinkupLobbyScreen extends React.Component {
     }
     return null;
   }
-  renderMessageDialog() {
+  renderCheerDialog() {
     const { uid, users } = this.props;
     if (users[uid] && users[uid].invitedBy && !users[uid].invitationChecked) {
       return (
-        <Dialog closeButton closeOnBackdropPress onClose={this.onCloseMessage} visible>
-          <Text style={styles.name}>{users[uid].invitedBy} {I18n.t('Drinkup_Says')}</Text>
-          <Text style={styles.message}>{users[uid].message}</Text>
-        </Dialog>
+        <CheersDialog
+          onClose={() => this.setState({ showCheerDialog: false })}
+          visible={this.state.showCheerDialog}
+        />
       );
+    }
+    return null;
+  }
+  renderMessageDialog() {
+    const { uid, users } = this.props;
+    if (users[uid]) {
+      const { invitedBy, invitationChecked, message } = users[uid];
+      if (invitedBy && !invitationChecked && !this.state.showCheerDialog) {
+        return (
+          <Dialog closeButton closeOnBackdropPress onClose={this.onCloseMessage} visible>
+            <Text style={styles.name}>{invitedBy} {I18n.t('Drinkup_Says')}</Text>
+            <Text style={styles.message}>{message}</Text>
+          </Dialog>
+        );
+      }
     }
     return null;
   }
@@ -136,6 +159,7 @@ class DrinkupLobbyScreen extends React.Component {
         {this.renderRequestToJoinDialog()}
         {this.renderRedeemWarningDialog()}
         {this.renderComposeMessageDialog()}
+        {this.renderCheerDialog()}
       </View>
     );
   }
