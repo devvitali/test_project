@@ -5,7 +5,7 @@ import { watch } from '../../utils/sagaUtils';
 import DrinkupActions from '../drinkup';
 import { Bar, DrinkUp } from '../../firebase/models';
 
-const DRINKUP_USER_PROPERTIES = ['photoURL', 'firstName', 'icon', 'message'];
+const DRINKUP_USER_PROPERTIES = ['photoURL', 'firstName', 'icon', 'message', 'invitedBy'];
 function drinkupSubscribe(Drinkup, key) {
   return eventChannel(emit => Drinkup.subscribe(emit, key));
 }
