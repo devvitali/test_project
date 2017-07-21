@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Text, View } from 'react-native';
 import I18n from 'react-native-i18n';
 import { connect } from 'react-redux';
-import { NavigationActions } from 'react-navigation';
 import { Button, CheersDialog, AvatarList } from '../../components';
 import { DrinkupActions } from '../../redux';
 import Styles from './styles';
@@ -13,16 +12,6 @@ class ItsJustMeScreen extends Component {
     this.state = {
       showDialog: true,
     };
-  }
-  componentDidUpdate() {
-    if (this.props.joined !== null && !this.props.joined) {
-
-      const resetAction = NavigationActions.reset({
-        index: 0,
-        actions: [NavigationActions.navigate({ routeName: 'DrawerNavigation' })],
-      });
-      this.props.navigation.dispatch(resetAction);
-    }
   }
 
   onCloseDialog = () => this.setState({ showDialog: false });
@@ -59,7 +48,6 @@ class ItsJustMeScreen extends Component {
 }
 
 const mapStateToProps = state => ({
-  joined: state.drinkup.joined,
   bar: state.drinkup.bar,
   users: state.drinkup.users,
   user: state.auth.profile,

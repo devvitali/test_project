@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { View } from 'react-native';
+import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
 import AppContainer from '../AppContainer';
 import { NavItems, DirectionDialog } from '../../components';
@@ -28,6 +29,16 @@ class DrinkUp extends Component {
       }
     }
   }
+
+  componentDidUpdate() {
+    if (this.props.joined !== null && !this.props.joined) {
+      const resetAction = NavigationActions.reset({
+        index: 0,
+        actions: [NavigationActions.navigate({ routeName: 'DrawerNavigation' })],
+      });
+      this.props.navigation.dispatch(resetAction);
+    }
+  }
   componentWillUnmount() {
     this.props.clearDrinkupUsers();
   }
@@ -50,7 +61,7 @@ class DrinkUp extends Component {
       return null;
     }
     if (this.props.users && Object.keys(this.props.users).length > 0) {
-      return <DrinkUpLobby />;
+      return <DrinkUpLobby navigation={this.props.navigation} />;
     }
     return <ItsJustMe navigation={this.props.navigation} />;
   }
@@ -85,6 +96,7 @@ class DrinkUp extends Component {
 const mapStateToProps = state => ({
   users: state.drinkup.users,
   bar: state.drinkup.bar,
+  joined: state.drinkup.joined,
 });
 
 //eslint-disable-next-line

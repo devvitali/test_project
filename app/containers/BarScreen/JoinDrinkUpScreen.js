@@ -43,6 +43,7 @@ class JoinDrinkUp extends Component {
   }
   renderScreen() {
     if (this.props.bar) {
+      console.log('renderScreen this.props.bar', this.props.bar);
       if (this.props.bar.currentDrinkUp) {
         return <WaitingScreen navigation={this.props.navigation} />;
       }

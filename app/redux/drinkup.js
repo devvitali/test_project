@@ -4,6 +4,7 @@ const { Types, Creators } = createActions({
   barRequest: ['barId'],
   barRequestSuccessful: ['bar'],
   barRequestFailure: ['error'],
+  updateDrinkupSuccess: ['drinkup'],
   drinkupRequest: ['drinkupId', 'userId'],
   drinkupRequestSuccessful: ['drinkup', 'joined', 'waitingInvite', 'waitingUsers'],
   drinkupRequestFailure: ['error'],
@@ -14,7 +15,7 @@ const { Types, Creators } = createActions({
   cancelRequestDrinkupSuccessful: [],
   cancelRequestDrinkupFailure: ['error'],
   startDrinkup: ['barId', 'user'],
-  startDrinkupSuccessful: ['drinkup'],
+  startDrinkupSuccessful: ['drinkup', 'bar'],
   startDrinkupFailure: ['error'],
   leaveDrinkup: ['bar', 'user'],
   leaveDrinkupSuccessful: [''],
@@ -56,7 +57,18 @@ const barRequestFailure = (state, { error }) => ({
   bar: null,
   error,
 });
-
+const updateDrinkupSuccess = (state, { drinkup }) => {
+  console.log('updateDrinkupSuccess', drinkup);
+  const bar = state.bar;
+  const updatedDrinkup = drinkup[bar.currentDrinkUp];
+  if (updatedDrinkup) {
+    const newState = { ...state };
+    newState.users = updatedDrinkup.users;
+    newState.waitingUsers = updatedDrinkup.waitingUsers;
+    return newState;
+  }
+  return state;
+};
 const drinkupRequestSuccessful = (state, { drinkup: { users }, joined, waitingInvite, waitingUsers }) => ({
   ...state,
   fetching: false,
@@ -66,10 +78,12 @@ const drinkupRequestSuccessful = (state, { drinkup: { users }, joined, waitingIn
   waitingUsers,
 });
 
-const startDrinkupSuccessful = (state, { drinkup: { users } }) => ({
+const startDrinkupSuccessful = (state, { drinkup: { users }, bar }) => ({
   ...state,
+  bar,
   joined: true,
   fetching: false,
+  waitingUsers: {},
   users,
 });
 
@@ -99,6 +113,7 @@ export const drinkupReducer = createReducer(defaultState, {
   [Types.BAR_REQUEST_SUCCESSFUL]: barRequestSuccessful,
   [Types.BAR_REQUEST_FAILURE]: barRequestFailure,
   [Types.DRINKUP_REQUEST]: request,
+  [Types.UPDATE_DRINKUP_SUCCESS]: updateDrinkupSuccess,
   [Types.DRINKUP_REQUEST_SUCCESSFUL]: drinkupRequestSuccessful,
   [Types.DRINKUP_REQUEST_FAILURE]: drinkupRequestFailure,
   [Types.START_DRINKUP]: request,

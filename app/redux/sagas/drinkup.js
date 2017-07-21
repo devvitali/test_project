@@ -1,11 +1,14 @@
 import { put, call } from 'redux-saga/effects';
+import { eventChannel } from 'redux-saga';
 import { pick } from 'lodash';
-
+import { watch } from '../../utils/sagaUtils';
 import DrinkupActions from '../drinkup';
 import { Bar, DrinkUp } from '../../firebase/models';
 
 const DRINKUP_USER_PROPERTIES = ['photoURL', 'firstName', 'icon'];
-
+function drinkupSubscribe(Drinkup, key) {
+  return eventChannel(emit => Drinkup.subscribe(emit, key));
+}
 export function* getBar({ barId }) {
   try {
     const drinkupBar = yield call([Bar, Bar.get], barId);
@@ -24,7 +27,10 @@ export function* getDrinkup({ drinkupId, userId }) {
     const joined = !!users[userId];
     const waitingInvite = !!waitingUsers[userId];
     yield put(DrinkupActions.drinkupRequestSuccessful(drinkup, joined, waitingInvite, waitingUsers));
+    yield call([DrinkUp, DrinkUp.unsubscribe], null);
+    yield call(watch, drinkupSubscribe, DrinkUp, null);
   } catch (error) {
+    console.log('err', error);
     yield put(DrinkupActions.drinkupRequestFailure(error));
   }
 }
@@ -39,7 +45,9 @@ export function* startDrinkUp({ barId, user }) {
     const drinkupRef = yield call([DrinkUp, DrinkUp.push], drinkup);
     const drinkupSnap = yield call([drinkupRef, drinkupRef.once], 'value');
     yield call([Bar, Bar.update], barId, { currentDrinkUp: drinkupSnap.key });
-    yield put(DrinkupActions.startDrinkupSuccessful(drinkupSnap.val()));
+    const bar = yield call([Bar, Bar.get], barId);
+    console.log('startDrinkUp', drinkupSnap.val(), bar);
+    yield put(DrinkupActions.startDrinkupSuccessful(drinkupSnap.val(), bar));
   } catch (error) {
     yield put(DrinkupActions.drinkupRequestFailure(error));
   }

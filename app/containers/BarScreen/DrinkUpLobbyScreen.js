@@ -7,7 +7,6 @@ import {
   Button, Dialog, AlkoSpecialWarningDialog, JoinDialog, ComposeMessageDialog, Banner, AvatarList,
 } from '../../components';
 import { DrinkupActions } from '../../redux';
-import { requestingMember } from '../../fixture/drinkupMembers';
 import styles from './styles';
 
 class DrinkupLobbyScreen extends React.Component {
@@ -22,11 +21,6 @@ class DrinkupLobbyScreen extends React.Component {
       composedMessage: '',
     };
   }
-  componentDidUpdate() {
-    if (!this.props.joined) {
-      // NavigationActions.map();
-    }
-  }
   onShowMessage = user => this.setState({ user });
   onCloseMessage = () => this.setState({ user: null });
   onRedeem = () => {
@@ -38,10 +32,10 @@ class DrinkupLobbyScreen extends React.Component {
     }
   };
   onLeave = () => {
-    this.props.leaveDrinkup(requestingMember);
-    this.setState({ waiting: false });
+    const { bar, user, uid } = this.props;
+    this.props.leaveDrinkup(bar, { ...user, uid });
   };
-  onCloseJoiningDialog = invitedUser => {
+  onCloseJoiningDialog = (invitedUser) => {
     this.setState({
       showJoinDialog: false,
       showComposeMessage: true,
@@ -50,7 +44,11 @@ class DrinkupLobbyScreen extends React.Component {
   };
 
   onCloseRedeemWarningDialog = () => this.setState({ showRedeemWarning: false });
-  onCloseComposeMessageDialog = () => this.setState({ showComposeMessage: false });
+  onCloseComposeMessageDialog = () => {
+    const { composedMessage, invitedUser } = this.state;
+    this.sendDrinkupInvitation(invitedUser, composedMessage);
+    this.setState({ showComposeMessage: false, invitedUser: null });
+  };
   onAcceptRedeemWarning = () => {
     this.setState({ showRedeemWarning: false });
     this.redeem();
@@ -141,13 +139,14 @@ class DrinkupLobbyScreen extends React.Component {
 
 const mapStateToProps = state => ({
   bar: state.drinkup.bar,
-  joined: state.drinkup.joined,
   users: state.drinkup.users,
   waitingUsers: state.drinkup.waitingUsers,
+  user: state.auth.profile,
+  uid: state.auth.uid,
 });
 
 const mapDispatchToProps = dispatch => ({
-  leaveDrinkup: user => dispatch(DrinkupActions.leaveDrinkup(user)),
+  leaveDrinkup: (bar, user) => dispatch(DrinkupActions.leaveDrinkup(bar, user)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(DrinkupLobbyScreen);

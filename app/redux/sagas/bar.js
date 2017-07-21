@@ -20,9 +20,9 @@ function barSubscribe(MapBar, key) {
 export function* getBars() {
   try {
     const bars = yield call([Bar, Bar.get]);
+    yield put(BarActions.barsRequestSuccess(bars));
     yield call([Bar, Bar.unsubscribe], null);
     yield call(watch, barSubscribe, Bar, null);
-    yield put(BarActions.barsRequestSuccess(bars));
   } catch (error) {
     yield put(BarActions.barsRequestFailure(error));
   }
