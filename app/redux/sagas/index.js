@@ -20,7 +20,13 @@ import {
 } from './auth';
 
 import {
-  getDrinkup, getBar, startDrinkUp, leaveDrinkUp, sendRequestDrinkUp, cancelRequestDrinkUp
+  getDrinkup,
+  getBar,
+  startDrinkUp,
+  leaveDrinkUp,
+  sendRequestDrinkUp,
+  cancelRequestDrinkUp,
+  sendDrinkupInvitation,
 } from './drinkup';
 import { getBars, addBar } from './bar';
 import { startBackgroundGeolocation, startBackgroundGeolocationWatchers } from './location';
@@ -54,6 +60,7 @@ export default function* root() {
     takeLatest(DrinkupTypes.DRINKUP_REQUEST, getDrinkup),
     takeLatest(DrinkupTypes.START_DRINKUP, startDrinkUp),
     takeLatest(DrinkupTypes.LEAVE_DRINKUP, leaveDrinkUp),
+    takeLatest(DrinkupTypes.SEND_DRINKUP_INVITATION, sendDrinkupInvitation),
     takeLatest(DrinkupTypes.SEND_REQUEST_DRINKUP, sendRequestDrinkUp),
     takeLatest(DrinkupTypes.CANCEL_REQUEST_DRINKUP, cancelRequestDrinkUp),
     takeLatest(AlertTypes.ALERTS_REQUEST, getAlerts),

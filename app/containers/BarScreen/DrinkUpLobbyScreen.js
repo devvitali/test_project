@@ -46,8 +46,9 @@ class DrinkupLobbyScreen extends React.Component {
   onCloseRedeemWarningDialog = () => this.setState({ showRedeemWarning: false });
   onCloseComposeMessageDialog = () => {
     const { composedMessage, invitedUser } = this.state;
-    this.sendDrinkupInvitation(invitedUser, composedMessage);
     this.setState({ showComposeMessage: false, invitedUser: null });
+    invitedUser.message = composedMessage;
+    this.props.sendDrinkupInvitation(this.props.bar, invitedUser);
   };
   onAcceptRedeemWarning = () => {
     this.setState({ showRedeemWarning: false });
@@ -147,6 +148,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   leaveDrinkup: (bar, user) => dispatch(DrinkupActions.leaveDrinkup(bar, user)),
+  sendDrinkupInvitation: (bar, user, message) => dispatch(DrinkupActions.sendDrinkupInvitation(bar, user, message)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(DrinkupLobbyScreen);

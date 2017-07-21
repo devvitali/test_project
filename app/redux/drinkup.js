@@ -20,6 +20,9 @@ const { Types, Creators } = createActions({
   leaveDrinkup: ['bar', 'user'],
   leaveDrinkupSuccessful: [''],
   leaveDrinkupFailure: ['error'],
+  sendDrinkupInvitation: ['bar', 'user', 'message'],
+  sendDrinkupInvitationSuccessful: ['users', 'waitingUsers'],
+  sendDrinkupInvitationFailure: ['error'],
   clearDrinkupData: [],
   clearDrinkupUsers: [],
 });
@@ -77,7 +80,6 @@ const drinkupRequestSuccessful = (state, { drinkup: { users }, joined, waitingIn
   waitingInvite,
   waitingUsers,
 });
-
 const startDrinkupSuccessful = (state, { drinkup: { users }, bar }) => ({
   ...state,
   bar,
@@ -103,7 +105,11 @@ const leaveDrinkupSuccessful = state => ({
   users: null,
   waitingUsers: null,
 });
-
+const sendDrinkupInvitationSucessful = (state, { users, waitingUsers }) => ({
+  ...state,
+  users,
+  waitingUsers,
+});
 const clearDrinkupUsers = state => ({ ...state, users: null });
 const clearDrinkupData = () => defaultState;
 
@@ -128,6 +134,9 @@ export const drinkupReducer = createReducer(defaultState, {
   [Types.LEAVE_DRINKUP]: request,
   [Types.LEAVE_DRINKUP_SUCCESSFUL]: leaveDrinkupSuccessful,
   [Types.LEAVE_DRINKUP_FAILURE]: requestFailure,
+  [Types.SEND_DRINKUP_INVITATION]: request,
+  [Types.SEND_DRINKUP_INVITATION_SUCCESSFUL]: sendDrinkupInvitationSucessful,
+  [Types.SEND_DRINKUP_INVITATION_FAILURE]: requestFailure,
   [Types.CLEAR_DRINKUP_DATA]: clearDrinkupData,
   [Types.CLEAR_DRINKUP_USERS]: clearDrinkupUsers,
 });

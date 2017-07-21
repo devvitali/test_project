@@ -48,7 +48,6 @@ class WaitingScreen extends Component {
   }
 
   // this function is only use for demo
-  onDraftJoined = () => this.props.joinDrinkup(requestingMember);
   onSendRequestDrinkup = () => {
     const { user, uid, bar } = this.props;
     const currentUser = { ...user, uid };
