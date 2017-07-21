@@ -47,6 +47,7 @@ class DrinkupLobbyScreen extends React.Component {
   onCloseComposeMessageDialog = () => {
     const { composedMessage, invitedUser } = this.state;
     this.setState({ showComposeMessage: false, invitedUser: null });
+    invitedUser.from = this.props.user.firstName;
     invitedUser.message = composedMessage;
     this.props.sendDrinkupInvitation(this.props.bar, invitedUser);
   };
@@ -87,16 +88,15 @@ class DrinkupLobbyScreen extends React.Component {
     return null;
   }
   renderMessageDialog() {
-    const { user } = this.state;
-    if (!user) {
-      return null;
+    const { uid, users } = this.props;
+    if (users[uid] && users[uid].from) {
+      return (
+        <Dialog closeButton closeOnBackdropPress onClose={this.onCloseMessage} visible>
+          <Text style={styles.name}>{users[uid].from} {I18n.t('Drinkup_Says')}</Text>
+          <Text style={styles.message}>{users[uid].message}</Text>
+        </Dialog>
+      );
     }
-    return (
-      <Dialog closeButton closeOnBackdropPress onClose={this.onCloseMessage} visible>
-        <Text style={styles.name}>{user.firstName} {I18n.t('Drinkup_Says')}</Text>
-        <Text style={styles.message}>{user.message}</Text>
-      </Dialog>
-    );
   }
   renderRequestToJoinDialog() {
     const { waitingUsers } = this.props;
