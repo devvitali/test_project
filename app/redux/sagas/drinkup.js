@@ -26,7 +26,7 @@ export function* getDrinkup({ drinkupId, userId }) {
     const waitingUsers = drinkup.waitingUsers || {};
     const joined = !!users[userId];
     const waitingInvite = !!waitingUsers[userId];
-    yield put(DrinkupActions.drinkupRequestSuccessful(drinkup, joined, waitingInvite, waitingUsers));
+    yield put(DrinkupActions.drinkupRequestSuccessful(drinkup, joined, waitingInvite, waitingUsers, userId));
     yield call([DrinkUp, DrinkUp.unsubscribe], null);
     yield call(watch, drinkupSubscribe, DrinkUp, null);
   } catch (error) {
@@ -56,7 +56,7 @@ export function* startDrinkUp({ barId, user }) {
 export function* leaveDrinkUp({ bar, user }) {
   try {
     const drinkup = yield call([DrinkUp, DrinkUp.get], bar.currentDrinkUp);
-    let users = [...drinkup.users];
+    let users = { ...drinkup.users };
     const leavedUsers = drinkup.leavedUsers ? { ...drinkup.leavedUsers } : {};
     delete users[user.uid];
     let active = true;

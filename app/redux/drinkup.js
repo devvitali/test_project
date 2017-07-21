@@ -6,7 +6,7 @@ const { Types, Creators } = createActions({
   barRequestFailure: ['error'],
   updateDrinkupSuccess: ['drinkup'],
   drinkupRequest: ['drinkupId', 'userId'],
-  drinkupRequestSuccessful: ['drinkup', 'joined', 'waitingInvite', 'waitingUsers'],
+  drinkupRequestSuccessful: ['drinkup', 'joined', 'waitingInvite', 'waitingUsers', 'userId'],
   drinkupRequestFailure: ['error'],
   sendRequestDrinkup: ['bar', 'user'],
   sendRequestDrinkupSuccessful: [],
@@ -38,6 +38,7 @@ const defaultState = {
   users: null,
   fetching: false,
   waitingUsers: null,
+  userId: null,
 };
 
 /* ------------- Reducers ------------- */
@@ -68,17 +69,22 @@ const updateDrinkupSuccess = (state, { drinkup }) => {
     const newState = { ...state };
     newState.users = updatedDrinkup.users;
     newState.waitingUsers = updatedDrinkup.waitingUsers;
+    if (newState.users[newState.userId]) {
+      newState.waitingInvite = false;
+      newState.joined = true;
+    }
     return newState;
   }
   return state;
 };
-const drinkupRequestSuccessful = (state, { drinkup: { users }, joined, waitingInvite, waitingUsers }) => ({
+const drinkupRequestSuccessful = (state, { drinkup: { users }, joined, waitingInvite, waitingUsers, userId }) => ({
   ...state,
   fetching: false,
   users,
   joined,
   waitingInvite,
   waitingUsers,
+  userId,
 });
 const startDrinkupSuccessful = (state, { drinkup: { users }, bar }) => ({
   ...state,
