@@ -55,7 +55,9 @@ class WaitingScreen extends Component {
     this.props.sendRequestDrinkup(bar, currentUser);
   };
   onCancelRequest = () => {
-
+    const { user, uid, bar } = this.props;
+    const currentUser = { ...user, uid };
+    this.props.cancelRequestDrinkup(bar, currentUser);
   };
   render() {
     const { bar: { currentSpecial }, users, waitingInvite } = this.props;
@@ -95,6 +97,7 @@ const mapDispatchToProps = dispatch => ({
   getBar: barId => dispatch(DrinkupActions.barRequest(barId)),
   getDrinkup: (drinkupId, userId) => dispatch(DrinkupActions.drinkupRequest(drinkupId, userId)),
   sendRequestDrinkup: (bar, user) => dispatch(DrinkupActions.sendRequestDrinkup(bar, user)),
+  cancelRequestDrinkup: (bar, user) => dispatch(DrinkupActions.cancelRequestDrinkup(bar, user)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(WaitingScreen);
