@@ -5,7 +5,7 @@ import { watch } from '../../utils/sagaUtils';
 import DrinkupActions from '../drinkup';
 import { Bar, DrinkUp } from '../../firebase/models';
 
-const DRINKUP_USER_PROPERTIES = ['photoURL', 'firstName', 'icon', 'message', 'invitedBy'];
+const DRINKUP_USER_PROPERTIES = ['photoURL', 'firstName', 'icon', 'message', 'invitedBy', 'invitationChecked'];
 function drinkupSubscribe(Drinkup, key) {
   return eventChannel(emit => Drinkup.subscribe(emit, key));
 }
@@ -104,6 +104,18 @@ export function* sendDrinkupInvitation({ bar, user }) {
     users[user.uid] = pick(user, DRINKUP_USER_PROPERTIES);
     yield call([DrinkUp, DrinkUp.update], bar.currentDrinkUp, { waitingUsers, users });
     yield put(DrinkupActions.sendDrinkupInvitationSucessful(users, waitingUsers));
+  } catch (err) {
+    yield put(DrinkupActions.sendDrinkupInvitationFailure(err));
+  }
+}
+export function* acceptDrinkupInvitation({ bar, uid }) {
+  try {
+    const drinkup = yield call([DrinkUp, DrinkUp.get], bar.currentDrinkUp);
+    const users = drinkup.users ? { ...drinkup.users } : {};
+    if (users[uid]) {
+      users[uid].invitationChecked = true;
+    }
+    yield call([DrinkUp, DrinkUp.update], bar.currentDrinkUp, { users });
   } catch (err) {
     yield put(DrinkupActions.sendDrinkupInvitationFailure(err));
   }

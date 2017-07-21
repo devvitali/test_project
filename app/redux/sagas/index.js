@@ -27,6 +27,7 @@ import {
   sendRequestDrinkUp,
   cancelRequestDrinkUp,
   sendDrinkupInvitation,
+  acceptDrinkupInvitation,
 } from './drinkup';
 import { getBars, addBar } from './bar';
 import { startBackgroundGeolocation, startBackgroundGeolocationWatchers } from './location';
@@ -63,6 +64,7 @@ export default function* root() {
     takeLatest(DrinkupTypes.SEND_DRINKUP_INVITATION, sendDrinkupInvitation),
     takeLatest(DrinkupTypes.SEND_REQUEST_DRINKUP, sendRequestDrinkUp),
     takeLatest(DrinkupTypes.CANCEL_REQUEST_DRINKUP, cancelRequestDrinkUp),
+    takeLatest(DrinkupTypes.ACCEPT_DRINKUP_INVITATION, acceptDrinkupInvitation),
     takeLatest(AlertTypes.ALERTS_REQUEST, getAlerts),
   ]);
 }

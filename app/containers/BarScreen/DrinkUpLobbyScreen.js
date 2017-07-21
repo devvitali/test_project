@@ -21,8 +21,10 @@ class DrinkupLobbyScreen extends React.Component {
       composedMessage: '',
     };
   }
-  onShowMessage = user => this.setState({ user });
-  onCloseMessage = () => this.setState({ user: null });
+  onCloseMessage = () => {
+    const { bar, uid } = this.props;
+    this.props.acceptInvitation(bar, uid);
+  };
   onRedeem = () => {
     const firstTime = true;
     if (firstTime) {
@@ -89,7 +91,7 @@ class DrinkupLobbyScreen extends React.Component {
   }
   renderMessageDialog() {
     const { uid, users } = this.props;
-    if (users[uid] && users[uid].invitedBy) {
+    if (users[uid] && users[uid].invitedBy && !users[uid].invitationChecked) {
       return (
         <Dialog closeButton closeOnBackdropPress onClose={this.onCloseMessage} visible>
           <Text style={styles.name}>{users[uid].invitedBy} {I18n.t('Drinkup_Says')}</Text>
@@ -150,6 +152,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   leaveDrinkup: (bar, user) => dispatch(DrinkupActions.leaveDrinkup(bar, user)),
   sendDrinkupInvitation: (bar, user, message) => dispatch(DrinkupActions.sendDrinkupInvitation(bar, user, message)),
+  acceptInvitation: (bar, uid) => dispatch(DrinkupActions.acceptDrinkupInvitation(bar, uid)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(DrinkupLobbyScreen);
