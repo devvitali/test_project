@@ -64,12 +64,14 @@ const barRequestFailure = (state, { error }) => ({
 });
 const updateDrinkupSuccess = (state, { drinkup }) => {
   console.log('updateDrinkupSuccess', drinkup);
-  const bar = state.bar;
-  const updatedDrinkup = drinkup[bar.currentDrinkUp];
-  if (updatedDrinkup) {
+  if (drinkup) {
     const newState = { ...state };
-    newState.users = updatedDrinkup.users;
-    newState.waitingUsers = updatedDrinkup.waitingUsers;
+    if (drinkup.users) {
+      newState.users = drinkup.users;
+    }
+    if (drinkup.waitingUsers) {
+      newState.users = drinkup.waitingUsers;
+    }
     if (newState.users[newState.userId]) {
       newState.waitingInvite = false;
       newState.joined = true;
