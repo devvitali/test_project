@@ -8,6 +8,7 @@ export const removeEmpty = (markers: Array<Object>) => {
 export const calculateRegion = (locations: Array<Object>, options: Object) => {
   const latPadding = options && options.latPadding ? options.latPadding : 0.1;
   const longPadding = options && options.longPadding ? options.longPadding : 0.1;
+  console.log('calculateRegion', locations);
   const mapLocations = removeEmpty(locations);
   // Only do calculations if there are locations
   if (mapLocations.length > 0) {

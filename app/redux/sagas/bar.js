@@ -21,8 +21,8 @@ export function* getBars() {
   try {
     const bars = yield call([Bar, Bar.get]);
     yield put(BarActions.barsRequestSuccess(bars));
-    yield call([Bar, Bar.unsubscribe], null);
-    yield call(watch, barSubscribe, Bar, null);
+    // yield call([Bar, Bar.unsubscribe], null);
+    // yield call(watch, barSubscribe, Bar, null);
   } catch (error) {
     yield put(BarActions.barsRequestFailure(error));
   }

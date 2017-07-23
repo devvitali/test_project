@@ -19,6 +19,22 @@ const METRES_TO_MILES_FACTOR = 0.000621371192237;
 const SCROLL_FREE_TIME = 10000;
 const ANIMATE_TO_REGION_TIME = 1000;
 
+const locations = [{
+  key: '-KhJS0f_1mrexDl-2ae_',
+  location: [40.01916, -102.2753],
+}, {
+  key: '-KhJS0f_1mrexDl-75h_',
+  location: [21.2827, -157.82944],
+}, {
+  key: '-KhJS0fbYAg0gyyPl3HR',
+  location: [40.00988827, -105.278250],
+}, {
+  key: '-KhJS0fchOJrfMcr4oPa',
+  location: [40.0176427, -105.2807],
+}, {
+  key: '-KhJS0fdfTVS_ZOmOtIt',
+  location: [39.984320, -105.2493],
+}]
 class MapScreen extends Component {
 
   constructor(props) {
@@ -30,18 +46,29 @@ class MapScreen extends Component {
       isGooglePlayServicesAvailable: true,
       event: null,
     };
+    console.log('MapScreen barLocations geoQuery', props.region);
+
     this.geoQuery = geoFire('barLocations')
       .query({
         center: props.region ? [props.region.latitude, props.region.longitude] : [50, -50],
-        radius: 1,
+        radius: 100,
       });
+    // locations.map(item => {
+    //   geoFire('barLocations').set(item.key, item.location).then(() => {
+    //     console.log('Provided key has been added to GeoFire');
+    //   });
+    // })
 
-    this.onBarEntered = this.geoQuery.on('key_entered', (barId) => {
+    this.geoQuery.on('ready', () => {
+      console.log(`center : ${this.geoQuery.center()}`);
+    });
+
+    this.geoQuery.on('key_entered', (barId) => {
       console.log('key_entered', barId);
       this.props.addBar(barId);
     });
 
-    this.onBarExited = this.geoQuery.on('key_exited', (barId) => {
+    this.geoQuery.on('key_exited', (barId) => {
       console.log('key_exited', barId);
       this.props.removeBar(barId);
     });
@@ -49,7 +76,6 @@ class MapScreen extends Component {
 
   componentDidMount() {
     this.props.clearBars();
-    this.props.getBars();
     if (GoogleAPIAvailability) {
       GoogleAPIAvailability.checkGooglePlayServices((result) => {
         this.setState({ isGooglePlayServicesAvailable: result === 'success' });
@@ -79,6 +105,7 @@ class MapScreen extends Component {
   }
 
   onRegionChange = (newRegion) => {
+    console.log('onRegionChange', newRegion, this.props.region);
     this.geoQuery.updateCriteria({
       center: [newRegion.latitude, newRegion.longitude],
       radius: 1,
