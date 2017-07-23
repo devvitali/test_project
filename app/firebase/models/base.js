@@ -101,12 +101,11 @@ export default class Base {
 
   subscribe(emit, key) {
     if (this.unsubscribers[key]) return false;
-    // console.log('subscribe', key, emit);
+    console.log('subscribe', key, emit);
     let initialized = false;
 
     if (this.actions.onLoad) {
       this.dbRef(key).once('value', (snapshot) => {
-        // console.log('subscribe value', snapshot);
         if (!key) {
           emit(this.actions.onLoad(snapshot.val()));
         } else {
@@ -114,6 +113,16 @@ export default class Base {
         }
         // TODO: Avoid using setTimeout
         setTimeout(() => initialized = true, 1000);
+      });
+    }
+    if (this.actions.onUpdate) {
+      this.dbRef(key).on('value', (snapshot) => {
+        console.log('update value', snapshot);
+        if (!key) {
+          emit(this.actions.onUpdate(snapshot.val()));
+        } else {
+          emit(this.actions.onUpdate(snapshot.val(), snapshot.key));
+        }
       });
     }
 

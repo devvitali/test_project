@@ -66,12 +66,8 @@ const updateDrinkupSuccess = (state, { drinkup }) => {
   console.log('updateDrinkupSuccess', drinkup);
   if (drinkup) {
     const newState = { ...state };
-    if (drinkup.users) {
-      newState.users = drinkup.users;
-    }
-    if (drinkup.waitingUsers) {
-      newState.users = drinkup.waitingUsers;
-    }
+    newState.users = drinkup.users || {};
+    newState.waitingUsers = drinkup.waitingUsers || {};
     if (newState.users[newState.userId]) {
       newState.waitingInvite = false;
       newState.joined = true;
