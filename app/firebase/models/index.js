@@ -21,8 +21,7 @@ const barActions = {
 };
 
 const drinkupActions = {
-  onChange: drinkupsActions.updateDrinkupSuccess,
-  onAdd: barsActions.updateDrinkupSuccess,
+  onLoad: drinkupsActions.updateDrinkupSuccess,
 };
 
 export const UserFactory = (actions = userActions) => new UserModel(firebaseDb, actions);
