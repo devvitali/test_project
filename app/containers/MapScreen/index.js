@@ -51,7 +51,7 @@ class MapScreen extends Component {
     this.geoQuery = geoFire('barLocations')
       .query({
         center: props.region ? [props.region.latitude, props.region.longitude] : [50, -50],
-        radius: 100,
+        radius: 10,
       });
     // locations.map(item => {
     //   geoFire('barLocations').set(item.key, item.location).then(() => {
@@ -63,9 +63,9 @@ class MapScreen extends Component {
       console.log(`center : ${this.geoQuery.center()}`);
     });
 
-    this.geoQuery.on('key_entered', (barId) => {
-      console.log('key_entered', barId);
-      this.props.addBar(barId);
+    this.geoQuery.on('key_entered', (barId, location) => {
+      console.log('key_entered', barId, location);
+      this.props.addBar(barId, location);
     });
 
     this.geoQuery.on('key_exited', (barId) => {
@@ -175,6 +175,7 @@ class MapScreen extends Component {
       activeDrinkUp: Boolean(currentDrinkUp),
       activeSpecial: Boolean(currentSpecial),
       key: id,
+      distance: '',
       onPress: () => this.props.setDrinkupBar(Object.assign({}, bar, { id })),
     };
 
@@ -184,10 +185,10 @@ class MapScreen extends Component {
         latitude,
         longitude,
       };
-      const distance = getDistance(start, address, accuracy);
-      props.distance = `${(distance * METRES_TO_MILES_FACTOR).toFixed(2)}mi`;
-    } else {
-      props.distance = '';
+      if (address.latitude) {
+        const distance = getDistance(start, address, accuracy);
+        props.distance = `${(distance * METRES_TO_MILES_FACTOR).toFixed(2)}mi`;
+      }
     }
 
     return <BarResult {...props} />;
@@ -278,7 +279,7 @@ const mapDispatchToProps = dispatch => ({
   startBackgroundGeolocation: () => dispatch(LocationActions.startBackgroundGeolocation()),
   getBars: () => dispatch(BarActions.barsRequest()),
   clearBars: () => dispatch(BarActions.clearBars()),
-  addBar: barId => dispatch(BarActions.addBar(barId)),
+  addBar: (barId, location) => dispatch(BarActions.addBar(barId, location)),
   removeBar: barId => dispatch(BarActions.removeBar(barId)),
   markAlertAsRead: alert => dispatch(AlertActions.markAlertAsRead(alert)),
   setDrinkupBar: bar => dispatch(DrinkupActions.barRequestSuccessful(bar)),

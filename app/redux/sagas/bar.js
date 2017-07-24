@@ -1,11 +1,9 @@
 import { put, call } from 'redux-saga/effects';
 import { eventChannel } from 'redux-saga';
 
-import BarActions from '../bar';
+import BarActions, { BAR_CACHE } from '../bar';
 import { Bar, BarFactory } from '../../firebase/models';
 import { watch } from '../../utils/sagaUtils';
-
-const BAR_CACHE = {};
 
 const MAP_BAR_ACTIONS = {
   onAdd: BarActions.updateBar,
@@ -28,12 +26,14 @@ export function* getBars() {
   }
 }
 
-export function* addBar({ barId }) {
+export function* addBar({ barId, location }) {
   try {
     const MapBar = BarFactory(MAP_BAR_ACTIONS);
     let bar = BAR_CACHE[barId];
     if (!bar) {
       bar = yield call([Bar, Bar.get], barId);
+      bar.address.latitude = location[0];
+      bar.address.longitude = location[1];
       BAR_CACHE[barId] = bar;
     }
 

@@ -46,6 +46,7 @@ const getBackgroundLocationState = () => new Promise((resolve) => {
 });
 
 export function* startBackgroundGeolocationWatchers() {
+  console.log('startBackgroundGeolocationWatchers');
   yield all([
     // This event fires when movement states changes (stationary->moving; moving->stationary)
     call(watch, watchBgGeolocationEvent, 'motionchange', LocationActions.onMotionChange),
@@ -62,6 +63,7 @@ export function* startBackgroundGeolocationWatchers() {
 
 export function* startBackgroundGeolocation({ geolocationConfig = bgGeolocationConfig }) {
   try {
+    console.log('startBackgroundGeolocation');
     let bgLocationState = yield call(getBackgroundLocationState, geolocationConfig);
 
     if (!bgLocationState) {

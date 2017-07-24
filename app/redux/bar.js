@@ -1,12 +1,14 @@
 import { createReducer, createActions } from 'reduxsauce';
 import { omit } from 'lodash';
+
+export const BAR_CACHE = {};
 /* ------------- Types and Action Creators ------------- */
 
 const { Types, Creators } = createActions({
   barsRequest: [],
   barsRequestSuccess: ['bars'],
   barsRequestFailure: ['error'],
-  addBar: ['barId'],
+  addBar: ['barId', 'location'],
   addBarSuccess: ['bar', 'barId'],
   addBarFailure: ['error'],
   updateBar: ['bar', 'barId'],
@@ -37,6 +39,10 @@ const barsRequestFailure = (state, { error }) => {
 };
 
 const updateBar = (state, { bar, barId }) => {
+  if (BAR_CACHE[barId]) {
+    bar.address.latitude = BAR_CACHE[barId].address.latitude;
+    bar.address.longitude = BAR_CACHE[barId].address.longitude;
+  }
   const updatedBar = Object.assign({}, state.bars[barId], bar);
   if (Object.keys(updatedBar).length <= 0) {
     return Object.assign({}, state, {

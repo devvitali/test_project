@@ -45,6 +45,7 @@
 		81B0A341DEF94FECB41B2A01 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F968FA80BA9B4B78925B47A6 /* FontAwesome.ttf */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		8386AA8696BF4688827AFACF /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C77B1CD2519E422EB47105FA /* Ionicons.ttf */; };
+		85219BDA1F25C66300247D70 /* Location.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 85219BD91F25C66300247D70 /* Location.gpx */; };
 		85C18D9F1F19236E0006F46F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 85C18D9E1F19236E0006F46F /* GoogleService-Info.plist */; };
 		85C18E351F1A2CF60006F46F /* TSLocationManager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85C18E341F1A2CF60006F46F /* TSLocationManager.framework */; };
 		85C18ED31F1A2E5E0006F46F /* TSBackgroundFetch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85C18ED21F1A2E5E0006F46F /* TSBackgroundFetch.framework */; };
@@ -486,6 +487,7 @@
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		805CE7A932444DF9BC9809FF /* libRNVectorIcons.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNVectorIcons.a; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
+		85219BD91F25C66300247D70 /* Location.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Location.gpx; sourceTree = "<group>"; };
 		85C18D9E1F19236E0006F46F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		85C18E0A1F1A2C790006F46F /* TSLocationManager.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TSLocationManager.framework; path = "../node_modules/react-native-background-geolocation/ios/RNBackgroundGeolocation/TSLocationManager.framework"; sourceTree = "<group>"; };
 		85C18E341F1A2CF60006F46F /* TSLocationManager.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TSLocationManager.framework; sourceTree = "<group>"; };
@@ -776,6 +778,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				85219BD91F25C66300247D70 /* Location.gpx */,
 				85C18ED21F1A2E5E0006F46F /* TSBackgroundFetch.framework */,
 				85C18E341F1A2CF60006F46F /* TSLocationManager.framework */,
 				13B07FAE1A68108700A75B9A /* ALKO */,
@@ -1524,6 +1527,7 @@
 			files = (
 				85C18F611F1A4F880006F46F /* alko.ttf in Resources */,
 				85C18F621F1A4F880006F46F /* Montserrat-Regular.ttf in Resources */,
+				85219BDA1F25C66300247D70 /* Location.gpx in Resources */,
 				85C18D9F1F19236E0006F46F /* GoogleService-Info.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
