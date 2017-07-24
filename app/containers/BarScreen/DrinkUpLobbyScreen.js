@@ -112,6 +112,10 @@ class DrinkupLobbyScreen extends React.Component {
     if (users[uid]) {
       const { invitedBy, invitationChecked, message } = users[uid];
       if (invitedBy && !invitationChecked && !this.state.showCheerDialog) {
+        if (invitedBy === 'self') {
+          setTimeout(this.onCloseMessage, 100);
+          return null;
+        }
         return (
           <Dialog closeButton closeOnBackdropPress onClose={this.onCloseMessage} visible>
             <Text style={styles.name}>{invitedBy} {I18n.t('Drinkup_Says')}</Text>

@@ -39,7 +39,7 @@ const barsRequestFailure = (state, { error }) => {
 };
 
 const updateBar = (state, { bar, barId }) => {
-  if (BAR_CACHE[barId]) {
+  if (BAR_CACHE[barId] && bar.address) {
     bar.address.latitude = BAR_CACHE[barId].address.latitude;
     bar.address.longitude = BAR_CACHE[barId].address.longitude;
   }

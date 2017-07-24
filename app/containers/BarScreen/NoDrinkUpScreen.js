@@ -10,13 +10,15 @@ class NoDrinkUpScreen extends Component {
 
   componentDidUpdate() {
     if (this.props.joined) {
-      this.props.navigation.navigate('DrinkUpScreen');
+      debugger;
+      this.props.navigation.navigate('DrinkUpScreen', { barId: this.props.bar.id });
     }
   }
 
   // this function is only use for demo
   onDraftJoined = () => {
-    this.props.startDrinkup(this.props.bar.id, { ...this.props.user, uid: this.props.uid });
+    const { bar, uid, user, startDrinkup } = this.props;
+    startDrinkup(bar.id, { ...user, uid, invitedBy: 'self' });
   };
   render() {
     const { special } = this.props;

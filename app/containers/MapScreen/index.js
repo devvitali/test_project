@@ -76,6 +76,10 @@ class MapScreen extends Component {
 
   componentDidMount() {
     this.props.clearBars();
+    this.geoQuery.updateCriteria({
+      center: [this.props.region.latitude, this.props.region.longitude],
+      radius: 1,
+    });
     if (GoogleAPIAvailability) {
       GoogleAPIAvailability.checkGooglePlayServices((result) => {
         this.setState({ isGooglePlayServicesAvailable: result === 'success' });
@@ -105,7 +109,6 @@ class MapScreen extends Component {
   }
 
   onRegionChange = (newRegion) => {
-    console.log('onRegionChange', newRegion, this.props.region);
     this.geoQuery.updateCriteria({
       center: [newRegion.latitude, newRegion.longitude],
       radius: 1,

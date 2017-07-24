@@ -22,7 +22,7 @@ export function* getBar({ barId }) {
 export function* getDrinkup({ drinkupId, userId }) {
   try {
     const drinkup = yield call([DrinkUp, DrinkUp.get], drinkupId);
-    const { users } = drinkup;
+    const users = drinkup.users || {};
     const waitingUsers = drinkup.waitingUsers || {};
     const joined = !!users[userId];
     const waitingInvite = !!waitingUsers[userId];
@@ -46,6 +46,7 @@ export function* startDrinkUp({ barId, user }) {
     const drinkupSnap = yield call([drinkupRef, drinkupRef.once], 'value');
     yield call([Bar, Bar.update], barId, { currentDrinkUp: drinkupSnap.key });
     const bar = yield call([Bar, Bar.get], barId);
+    bar.id = barId;
     console.log('startDrinkUp', drinkupSnap.val(), bar);
     yield put(DrinkupActions.startDrinkupSuccessful(drinkupSnap.val(), bar));
   } catch (error) {
@@ -56,7 +57,7 @@ export function* startDrinkUp({ barId, user }) {
 export function* leaveDrinkUp({ bar, user }) {
   try {
     const drinkup = yield call([DrinkUp, DrinkUp.get], bar.currentDrinkUp);
-    let users = { ...drinkup.users };
+    let users = drinkup.users ? { ...drinkup.users } : {};
     const leavedUsers = drinkup.leavedUsers ? { ...drinkup.leavedUsers } : {};
     delete users[user.uid];
     let active = true;

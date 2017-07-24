@@ -63,7 +63,6 @@ const barRequestFailure = (state, { error }) => ({
   error,
 });
 const updateDrinkupSuccess = (state, { drinkup }) => {
-  console.log('updateDrinkupSuccess', drinkup);
   if (drinkup) {
     const newState = { ...state };
     newState.users = drinkup.users || {};

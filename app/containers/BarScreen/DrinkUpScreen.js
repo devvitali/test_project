@@ -7,7 +7,6 @@ import AppContainer from '../AppContainer';
 import { NavItems, DirectionDialog } from '../../components';
 import styles from './styles';
 import DrinkUpLobby from './DrinkUpLobbyScreen';
-import ItsJustMe from './ItsJustMeScreen';
 import { DrinkupActions } from '../../redux';
 
 class DrinkUp extends Component {
@@ -21,13 +20,14 @@ class DrinkUp extends Component {
     };
   }
   componentDidMount() {
+    let barId = this.props.barId;
     if (this.props.bar) {
-      const barId = this.props.barId ? this.props.barId : this.props.bar.id;
-      this.props.getBar(barId);
+      barId = this.props.bar.id;
       if (!this.props.users) {
         this.props.getUsers(this.props.bar.currentDrinkUp);
       }
     }
+    this.props.getBar(barId);
   }
 
   componentDidUpdate() {
@@ -57,13 +57,10 @@ class DrinkUp extends Component {
     return null;
   }
   renderScreen() {
-    if (!this.props.users) {
-      return null;
-    }
     if (this.props.users && Object.keys(this.props.users).length > 0) {
       return <DrinkUpLobby navigation={this.props.navigation} />;
     }
-    return <ItsJustMe navigation={this.props.navigation} />;
+    return null;
   }
   renderDirectionDialog() {
     return (
