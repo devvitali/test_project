@@ -41,7 +41,11 @@ function compareBars(bar1, bar2) {
 const updateBar = (state, { bar, key }) => {
   if (!compareBars(state.bars[key], bar)) {
     const newState = { ...state, bars: { ...state.bars } };
-    newState.bars[key].name = bar.name;
+    if (!newState.bars[key]) {
+      newState.bars[key] = bar;
+    } else {
+      newState.bars[key].name = bar.name;
+    }
     return newState;
   }
   return state;

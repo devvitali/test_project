@@ -4,11 +4,11 @@ import { eventChannel } from 'redux-saga';
 import BarActions  from '../bar';
 import { Bar, BarFactory } from '../../firebase/models';
 import { watch } from '../../utils/sagaUtils';
-
 const MAP_BAR_ACTIONS = {
   onUpdate: BarActions.updateBar,
 };
 
+const MapBar = BarFactory(MAP_BAR_ACTIONS);
 function barSubscribe(MapBar, keys) {
   return eventChannel(emit => MapBar.subscribeMultiple(emit, keys));
 }
@@ -25,7 +25,6 @@ export function* getBars() {
 
 export function* updateMapBar({ bars }) {
   try {
-    const MapBar = BarFactory(MAP_BAR_ACTIONS);
     const addedBarsId = Object.keys(bars).filter(key => bars[key].type === 'add');
     const removedBarsId = Object.keys(bars).filter(key => bars[key].type !== 'add');
     const addedBars = yield call([Bar, Bar.gets], addedBarsId, true);
