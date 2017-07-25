@@ -101,7 +101,16 @@ export default class Base {
       });
     });
   }
-
+  subscribeMultiple(emit, keys) {
+    const unSubscribers = keys.forEach(key => this.subscribe(emit, key));
+    return () => {
+      unSubscribers.forEach((unSubscriber) => {
+        if (unSubscriber) {
+          unSubscriber();
+        }
+      });
+    };
+  }
   subscribe(emit, key) {
     if (this.unsubscribers[key]) return false;
     let initialized = false;
@@ -164,7 +173,9 @@ export default class Base {
     this._unsubscribers[key] = () => this.dbRef(key).off();
     return this.unsubscribers[key];
   }
-
+  unsubscribeKeys(keys) {
+    return keys.map(key => this.unsubscribe(key));
+  }
   unsubscribe(key) {
     if (this.unsubscribers[key]) {
       this.unsubscribers[key]();

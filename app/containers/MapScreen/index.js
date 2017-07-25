@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import MapView from 'react-native-maps';
 import { getDistance } from 'geolib';
 import I18n from 'react-native-i18n';
-import { map } from 'lodash';
+import { map, isEqual } from 'lodash';
 import AppContainer from '../AppContainer';
 import { NavItems, MapCallout, BarResult, Button, Banner, IconAlko } from '../../components';
 import { AlertActions, BarActions, DrinkupActions, LocationActions } from '../../redux';
@@ -26,6 +26,7 @@ class MapScreen extends Component {
       showUserLocation: true,
       isGooglePlayServicesAvailable: true,
       event: null,
+      region: props.region,
     };
     this.barLocations = {};
     this.addBarInterval = setInterval(() => {
@@ -39,18 +40,12 @@ class MapScreen extends Component {
     this.geoQuery = geoFire('barLocations')
       .query({
         center: props.region ? [props.region.latitude, props.region.longitude] : [50, -50],
-        radius: 10,
+        radius: 1,
       });
 
-    this.geoQuery.on('ready', () => {
-      console.log(`center : ${this.geoQuery.center()}`);
-    });
-
     this.geoQuery.on('key_entered', (barId, location) => {
-      // console.log('key_entered', barId, location);
       this.barLocations[barId] = { type: 'add', barId, location };
     });
-
     this.geoQuery.on('key_exited', (barId) => {
       this.barLocations[barId] = { type: 'remove', barId };
     });
@@ -60,7 +55,7 @@ class MapScreen extends Component {
     this.props.clearBars();
     this.geoQuery.updateCriteria({
       center: [this.props.region.latitude, this.props.region.longitude],
-      radius: 100,
+      radius: 1,
     });
     if (GoogleAPIAvailability) {
       GoogleAPIAvailability.checkGooglePlayServices((result) => {
@@ -68,7 +63,11 @@ class MapScreen extends Component {
       });
     }
   }
-
+  componentWillReceiveProps(newProps) {
+    if (!isEqual(newProps.region, this.props.region)) {
+      this.setState({ region: newProps.region });
+    }
+  }
   componentDidUpdate(prevProps) {
     if (this.props.drinkupBar && prevProps.drinkupBar !== this.props.drinkupBar) {
       this.props.navigation.navigate('JoinDrinkUpScreen', { barId: this.props.drinkupBar.id });
@@ -81,10 +80,20 @@ class MapScreen extends Component {
     this.geoQuery.cancel();
   }
 
-  onRegionChange = (newRegion) => {
+  onRegionChange = (region) => {
+    this.setState({ region });
+    const start = {
+      latitude: region.latitude - (region.latitudeDelta / 2),
+      longitude: region.longitude - (region.longitudeDelta / 2),
+    };
+    const end = {
+      latitude: region.latitude + (region.latitudeDelta / 2),
+      longitude: region.longitude + (region.longitudeDelta / 2),
+    };
+    const distance = getDistance(start, end) * 0.0004;
     this.geoQuery.updateCriteria({
-      center: [newRegion.latitude, newRegion.longitude],
-      radius: 100,
+      center: [region.latitude, region.longitude],
+      radius: distance,
     });
   };
 
@@ -197,6 +206,7 @@ class MapScreen extends Component {
       <MapView
         style={Styles.map}
         initialRegion={this.props.region}
+        region={this.state.region}
         onRegionChangeComplete={this.onRegionChange}
         showsUserLocation={this.state.showUserLocation}
         ref={ref => this.map = ref}
@@ -231,7 +241,7 @@ class MapScreen extends Component {
 }
 
 const mapStateToProps = ({ location, bar, drinkup, alert, auth }) => ({
-  region: { ...location.coords, longitudeDelta: 0.16, latitudeDelta: 0.08 },
+  region: { ...location.coords, longitudeDelta: 0.08, latitudeDelta: 0.04 },
   bars: location.coords && Bar.constructor.getBarsSortedByDistance(location.coords, bar.bars),
   alerts: alert.alerts,
   profile: auth.profile,

@@ -31,18 +31,16 @@ const barsRequestSuccess = (state, { bars }) => {
   return newState;
 };
 function compareBars(bar1, bar2) {
-  if (!bar1 || !bar1.address) {
+  if (!bar1) {
     return false;
   }
   return (
-    bar1.address.address === bar2.address.address &&
     bar1.name === bar2.name
   );
 }
 const updateBar = (state, { bar, key }) => {
   if (!compareBars(state.bars[key], bar)) {
     const newState = { ...state, bars: { ...state.bars } };
-    newState.bars[key].address.address = bar.address.address;
     newState.bars[key].name = bar.name;
     return newState;
   }

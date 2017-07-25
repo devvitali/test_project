@@ -10,10 +10,7 @@ const MAP_BAR_ACTIONS = {
 };
 
 function barSubscribe(MapBar, keys) {
-  return eventChannel((emit) => {
-    const ret = keys.map(key => MapBar.subscribe(emit, key));
-    return ret[0];
-  });
+  return eventChannel(emit => MapBar.subscribeMultiple(emit, keys));
 }
 export function* getBars() {
   try {
@@ -31,7 +28,6 @@ export function* updateMapBar({ bars }) {
     const MapBar = BarFactory(MAP_BAR_ACTIONS);
     const addedBarsId = Object.keys(bars).filter(key => bars[key].type === 'add');
     const removedBarsId = Object.keys(bars).filter(key => bars[key].type !== 'add');
-    Object.keys(bars).map(key => call([MapBar, MapBar.unsubscribe], key));
     const addedBars = yield call([Bar, Bar.gets], addedBarsId, true);
     if (addedBars.length > 0) {
       addedBars.forEach((addedBar) => {
@@ -40,6 +36,7 @@ export function* updateMapBar({ bars }) {
       });
     }
     yield put(BarActions.updateMapBarSuccess(addedBars, removedBarsId));
+    yield call([MapBar, MapBar.unsubscribeKeys], Object.keys(bars));
     yield call(watch, barSubscribe, MapBar, addedBarsId);
   } catch (error) {
     console.log('updateMapBarFailure err', error);

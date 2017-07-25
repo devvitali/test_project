@@ -1,10 +1,8 @@
 import R from 'ramda';
 
 export const removeEmpty = (markers: Array<Object>) => {
-  const filteredMarkers = R.filter(item => item && item.latitude && item.longitude, markers);
-  return filteredMarkers;
+  return R.filter(item => item && item.latitude && item.longitude, markers);
 };
-
 export const calculateRegion = (locations: Array<Object>, options: Object) => {
   const latPadding = options && options.latPadding ? options.latPadding : 0.1;
   const longPadding = options && options.longPadding ? options.longPadding : 0.1;
