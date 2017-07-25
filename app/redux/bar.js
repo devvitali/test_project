@@ -1,13 +1,12 @@
 import { createReducer, createActions } from 'reduxsauce';
 import { omit } from 'lodash';
 
-export const BAR_CACHE = {};
 /* ------------- Types and Action Creators ------------- */
-
 const { Types, Creators } = createActions({
   barsRequest: [],
   barsRequestSuccess: ['bars'],
   barsRequestFailure: ['error'],
+  updateBar: ['bar', 'key'],
   updateMapBar: ['bars'],
   updateMapBarFailure: ['error'],
   updateMapBarSuccess: ['addedBars', 'removedBars'],
@@ -30,7 +29,25 @@ const barsRequestSuccess = (state, { bars }) => {
   const newState = ({ ...state, fetching: false, bars: { ...state.bars, ...bars } });
   console.log('barsRequestSuccess', newState);
   return newState;
+};
+function compareBars(bar1, bar2) {
+  if (!bar1 || !bar1.address) {
+    return false;
+  }
+  return (
+    bar1.address.address === bar2.address.address &&
+    bar1.name === bar2.name
+  );
 }
+const updateBar = (state, { bar, key }) => {
+  if (!compareBars(state.bars[key], bar)) {
+    const newState = { ...state, bars: { ...state.bars } };
+    newState.bars[key].address.address = bar.address.address;
+    newState.bars[key].name = bar.name;
+    return newState;
+  }
+  return state;
+};
 const barsRequestFailure = (state, { error }) => {
   const newState = ({ ...state, bars: null, fetching: false, error });
   console.log('barsRequestFailure', newState);
@@ -60,6 +77,7 @@ const removeBarProperty = (state, { name, barId }) => {
 /* ------------- Hookup Reducers To Types ------------- */
 export const barReducer = createReducer(defaultState, {
   [Types.BARS_REQUEST]: request,
+  [Types.UPDATE_BAR]: updateBar,
   [Types.BARS_REQUEST_SUCCESS]: barsRequestSuccess,
   [Types.BARS_REQUEST_FAILURE]: barsRequestFailure,
   [Types.UPDATE_MAP_BAR]: request,

@@ -1,19 +1,19 @@
 import { put, call } from 'redux-saga/effects';
 import { eventChannel } from 'redux-saga';
 
-import BarActions, { BAR_CACHE } from '../bar';
+import BarActions  from '../bar';
 import { Bar, BarFactory } from '../../firebase/models';
 import { watch } from '../../utils/sagaUtils';
 
 const MAP_BAR_ACTIONS = {
-  onAdd: BarActions.updateBar,
-  onChange: BarActions.updateBar,
-  onLoad: BarActions.addBarSuccess,
-  onRemove: BarActions.removeBarProperty,
+  onUpdate: BarActions.updateBar,
 };
 
-function barSubscribe(MapBar, key) {
-  return eventChannel(emit => MapBar.subscribe(emit, key));
+function barSubscribe(MapBar, keys) {
+  return eventChannel((emit) => {
+    const ret = keys.map(key => MapBar.subscribe(emit, key));
+    return ret[0];
+  });
 }
 export function* getBars() {
   try {
@@ -28,9 +28,10 @@ export function* getBars() {
 
 export function* updateMapBar({ bars }) {
   try {
+    const MapBar = BarFactory(MAP_BAR_ACTIONS);
     const addedBarsId = Object.keys(bars).filter(key => bars[key].type === 'add');
     const removedBarsId = Object.keys(bars).filter(key => bars[key].type !== 'add');
-    Object.keys(bars).map(key => call([Bar, Bar.unsubscribe], key));
+    Object.keys(bars).map(key => call([MapBar, MapBar.unsubscribe], key));
     const addedBars = yield call([Bar, Bar.gets], addedBarsId, true);
     if (addedBars.length > 0) {
       addedBars.forEach((addedBar) => {
@@ -38,8 +39,8 @@ export function* updateMapBar({ bars }) {
         addedBar.address.longitude = bars[addedBar.id].location[1];
       });
     }
-    addedBarsId.map(key => call(watch, barSubscribe, Bar, key));
     yield put(BarActions.updateMapBarSuccess(addedBars, removedBarsId));
+    yield call(watch, barSubscribe, MapBar, addedBarsId);
   } catch (error) {
     console.log('updateMapBarFailure err', error);
     yield put(BarActions.updateMapBarFailure(error));

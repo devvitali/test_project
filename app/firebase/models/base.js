@@ -104,7 +104,6 @@ export default class Base {
 
   subscribe(emit, key) {
     if (this.unsubscribers[key]) return false;
-    console.log('subscribe', key, emit);
     let initialized = false;
 
     if (this.actions.onLoad) {
@@ -120,7 +119,6 @@ export default class Base {
     }
     if (this.actions.onUpdate) {
       this.dbRef(key).on('value', (snapshot) => {
-        console.log('update value', snapshot);
         if (!key) {
           emit(this.actions.onUpdate(snapshot.val()));
         } else {
