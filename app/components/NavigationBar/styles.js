@@ -1,6 +1,5 @@
 import { Platform } from 'react-native';
-
-import { Colors, Metrics, Fonts } from '../../themes/';
+import { Colors, Metrics, Fonts } from '../../themes';
 
 const navButton = {
   backgroundColor: Colors.transparent,

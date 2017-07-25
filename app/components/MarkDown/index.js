@@ -5,7 +5,6 @@ import { findIndex, map, slice } from 'lodash';
 
 export function parseFile(file) {
   const lines = file.split(/\n/);
-
   const metadata = {};
   const index = findIndex(lines, (line) => {
     if (line === '') {

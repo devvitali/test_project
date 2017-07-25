@@ -16,17 +16,7 @@ class DrawBar extends Component {
     },
   }
 
-  componentDidMount() {
-    // BackAndroid.addEventListener('hardwareBackPress', () => {
-    //   if (this.context.drawer.props.open) {
-    //     this.toggleDrawer();
-    //     return true;
-    //   }
-    //   return false;
-    // });
-  }
   onLogout = () => {
-    console.log('onLogout');
     this.props.actions.signOut(this.props.navigation);
   };
 
@@ -39,13 +29,11 @@ class DrawBar extends Component {
           <View style={styles.header}>
             <View style={styles.avatarContainer}>
               {profile.photoURL ?
-                <Image source={{ uri: profile.photoURL }} style={styles.avatar}/> :
+                <Image source={{ uri: profile.photoURL }} style={styles.avatar} /> :
                 <Image source={avatar} style={styles.avatar} />
               }
             </View>
-            <Text style={styles.name}>
-              {profile.firstName}
-            </Text>
+            <Text style={styles.name}>{profile.firstName}</Text>
           </View>
           <ScrollView style={styles.contentContainer}>
             {joined ? (

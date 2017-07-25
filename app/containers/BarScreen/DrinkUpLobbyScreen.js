@@ -25,12 +25,14 @@ class DrinkupLobbyScreen extends React.Component {
       showRedeemWarning: false,
       showComposeMessage: false,
       showCheerDialog: true,
+      showMessageDialog: true,
       composedMessage: '',
     };
   }
   onCloseMessage = () => {
-    const { bar, uid } = this.props;
-    this.props.acceptInvitation(bar, uid);
+    const { bar, uid, acceptDrinkupInvitation } = this.props;
+    this.setState({ showMessageDialog: false });
+    acceptDrinkupInvitation(bar, uid);
   };
   onRedeem = () => {
     const firstTime = true;
@@ -41,17 +43,12 @@ class DrinkupLobbyScreen extends React.Component {
     }
   };
   onLeave = () => {
-    const { bar, user, uid } = this.props;
-    this.props.leaveDrinkup(bar, { ...user, uid });
+    const { bar, user, uid, leaveDrinkup } = this.props;
+    leaveDrinkup(bar, { ...user, uid });
   };
-  onCloseJoiningDialog = (invitedUser) => {
-    this.setState({
-      showComposeMessage: true,
-      invitedUser,
-    });
-  };
-
+  onCloseJoiningDialog = invitedUser => this.setState({ showComposeMessage: true, invitedUser });
   onCloseRedeemWarningDialog = () => this.setState({ showRedeemWarning: false });
+  onComposedMessageChange = composedMessage => this.setState({ composedMessage });
   onCloseComposeMessageDialog = () => {
     const { composedMessage, invitedUser } = this.state;
     this.setState({ showComposeMessage: false, invitedUser: null });
@@ -63,7 +60,6 @@ class DrinkupLobbyScreen extends React.Component {
     this.setState({ showRedeemWarning: false });
     this.redeem();
   };
-  onComposedMessageChange = composedMessage => this.setState({ composedMessage });
   redeem() {
     this.props.navigation.navigate('Redeem2For1Screen', {
       bar: this.props.bar.name,
@@ -97,10 +93,10 @@ class DrinkupLobbyScreen extends React.Component {
   }
   renderCheerDialog() {
     const { uid, users } = this.props;
-    if (users[uid] && users[uid].invitedBy && !users[uid].invitationChecked) {
+    if (users[uid] && users[uid].invitedBy && !users[uid].messagesRead) {
       return (
         <CheersDialog
-          onClose={() => this.setState({ showCheerDialog: false })}
+          onClose={() => this.setState({ showCheerDialog: false, showMessageDialog: true })}
           visible={this.state.showCheerDialog}
         />
       );
@@ -110,8 +106,9 @@ class DrinkupLobbyScreen extends React.Component {
   renderMessageDialog() {
     const { uid, users } = this.props;
     if (users[uid]) {
-      const { invitedBy, invitationChecked, message } = users[uid];
-      if (invitedBy && !invitationChecked && !this.state.showCheerDialog) {
+      const { invitedBy, messagesRead, message } = users[uid];
+      const { showMessageDialog, showCheerDialog } = this.state;
+      if (invitedBy && !messagesRead && !showCheerDialog && showMessageDialog) {
         if (invitedBy === 'self') {
           setTimeout(this.onCloseMessage, 100);
           return null;
@@ -178,7 +175,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   leaveDrinkup: (bar, user) => dispatch(DrinkupActions.leaveDrinkup(bar, user)),
   sendDrinkupInvitation: (bar, user, message) => dispatch(DrinkupActions.sendDrinkupInvitation(bar, user, message)),
-  acceptInvitation: (bar, uid) => dispatch(DrinkupActions.acceptDrinkupInvitation(bar, uid)),
+  acceptDrinkupInvitation: (bar, uid) => dispatch(DrinkupActions.acceptDrinkupInvitation(bar, uid)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(DrinkupLobbyScreen);

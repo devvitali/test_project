@@ -4,7 +4,6 @@ import { TouchableOpacity, Text } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import IconFontAwesome from 'react-native-vector-icons/FontAwesome';
 import IconMaterial from 'react-native-vector-icons/MaterialIcons';
-
 import IconAlko from '../IconAlko';
 import styles from './styles';
 import { applyComponentTheme } from '../../utils/common';
@@ -27,23 +26,20 @@ function getIconFamilyComponent(iconFamily) {
   }
   return Icon;
 }
-const Banner = () => {
-  const theme = BannerTheme[this.props.theme];
+const Banner = (props) => {
+  const theme = BannerTheme[props.theme];
   const {
     style, gradientColors, onPress, textStyle, iconColor, iconSize, iconName,
-  } = applyComponentTheme(theme, this.props);
-  const Icon = getIconFamilyComponent(this.props.iconFamily);
-
+  } = applyComponentTheme(theme, props);
+  const Icon = getIconFamilyComponent(props.iconFamily);
   return (
     <LinearGradient
       colors={gradientColors}
-      style={[
-        styles.btn,
-        style,
-      ]}>
+      style={[styles.btn, style]}
+    >
       <TouchableOpacity activeOpacity={0.7} style={styles.body} onPress={onPress}>
         <Icon style={styles.icon} name={iconName} size={iconSize} color={iconColor} />
-        <Text style={[styles.bodyText, textStyle]}>{this.props.text}</Text>
+        <Text style={[styles.bodyText, textStyle]}>{props.text}</Text>
       </TouchableOpacity>
     </LinearGradient>
   );

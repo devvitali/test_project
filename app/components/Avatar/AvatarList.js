@@ -8,13 +8,12 @@ import { Avatar } from '../';
 
 const { width } = Dimensions.get('window');
 
-export const AvatarList = ({ users, columns, columnPadding, style, iconOnly }) => {
+export const AvatarList = ({ users, columns, columnPadding, style, iconOnly, onShowMessage }) => {
   const avatarWidth = ((width - (Metrics.doubleBaseMargin * 2)) / columns) - (columnPadding * 2);
   const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
   if (!users) {
     return null;
   }
-
   return (
     <ListView
       enableEmptySections
@@ -28,9 +27,9 @@ export const AvatarList = ({ users, columns, columnPadding, style, iconOnly }) =
               width={avatarWidth}
               height={avatarWidth - 15}
               name={user.firstName}
-              // message={user.message}
-              // messagesRead={user.messagesRead}
-              onPress={user.message ? this.onShowMessage : null}
+              message={user.message}
+              messagesRead={user.messagesRead}
+              onPress={user.message && onShowMessage}
               disabled={!user.arrived_at}
             />
           ) : (

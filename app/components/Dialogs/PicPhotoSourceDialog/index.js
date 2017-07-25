@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
 });
 
 const PicPhotoSourceDialog = ({ onClose, visible, onUsePhotosPress, onUseCameraPress }) => (
-  <Dialog closeButton closeOnBackdropPress onClose={this.props.onClose} visible={visible}>
+  <Dialog closeButton closeOnBackdropPress onClose={onClose} visible={visible}>
     <Button
       text={I18n.t('Pic_UsePhotos')}
       style={styles.firstButton}

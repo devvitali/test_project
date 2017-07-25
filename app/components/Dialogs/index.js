@@ -1,11 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  Modal,
-  View,
-  TouchableHighlight,
-  TouchableOpacity,
-} from 'react-native';
+import { Modal, View, TouchableHighlight, TouchableOpacity } from 'react-native';
 
 import IconFontAwesome from 'react-native-vector-icons/FontAwesome';
 import Styles from './styles';
@@ -36,13 +31,8 @@ const Dialog = props => (
         <View />
       </TouchableHighlight>
       <View style={Styles.dialogContainer}>
-        <View style={[Styles.contentContainer, props.dialogStyle]}>
-          {props.children}
-        </View>
-        {
-          props.closeButton &&
-          renderCloseButton(props.onClose)
-        }
+        <View style={[Styles.contentContainer, props.dialogStyle]}>{props.children}</View>
+        {props.closeButton && renderCloseButton(props.onClose)}
       </View>
       <View style={Styles.subcontentContainer}>
         {props.subcontent}
