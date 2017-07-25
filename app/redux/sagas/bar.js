@@ -25,18 +25,18 @@ export function* getBars() {
 
 export function* updateMapBar({ bars }) {
   try {
-    const addedBarsId = Object.keys(bars).filter(key => bars[key].type === 'add');
-    const removedBarsId = Object.keys(bars).filter(key => bars[key].type !== 'add');
-    const addedBars = yield call([Bar, Bar.gets], addedBarsId, true);
-    if (addedBars.length > 0) {
-      addedBars.forEach((addedBar) => {
-        addedBar.address.latitude = bars[addedBar.id].location[0];
-        addedBar.address.longitude = bars[addedBar.id].location[1];
+    const updateBarIds = Object.keys(bars);
+    const updatedBars = yield call([Bar, Bar.gets], updateBarIds, true);
+    if (updatedBars.length > 0) {
+      updatedBars.forEach((item) => {
+        const updatedBar = item;
+        updatedBar.address.latitude = bars[updatedBar.id].latitude;
+        updatedBar.address.longitude = bars[updatedBar.id].longitude;
       });
     }
-    yield put(BarActions.updateMapBarSuccess(addedBars, removedBarsId));
-    yield call([MapBar, MapBar.unsubscribeKeys], Object.keys(bars));
-    yield call(watch, barSubscribe, MapBar, addedBarsId);
+    yield put(BarActions.updateMapBarSuccess(updatedBars));
+    // yield call([MapBar, MapBar.unsubscribeKeys], Object.keys(bars));
+    // yield call(watch, barSubscribe, MapBar, addedBarsId);
   } catch (error) {
     console.log('updateMapBarFailure err', error);
     yield put(BarActions.updateMapBarFailure(error));

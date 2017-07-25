@@ -9,7 +9,7 @@ const { Types, Creators } = createActions({
   updateBar: ['bar', 'key'],
   updateMapBar: ['bars'],
   updateMapBarFailure: ['error'],
-  updateMapBarSuccess: ['addedBars', 'removedBars'],
+  updateMapBarSuccess: ['bars'],
   removeBar: ['barId'],
   removeBarProperty: ['value', 'name', 'barId'],
   clearBars: [],
@@ -55,13 +55,7 @@ const barsRequestFailure = (state, { error }) => {
   console.log('barsRequestFailure', newState);
   return newState;
 };
-const updateMapBarSuccess = (state, { addedBars, removedBars }) => {
-  const newState = { ...state, bars: { ...state.bars } };
-  addedBars.forEach(addedBar => newState.bars[addedBar.id] = addedBar);
-  removedBars.forEach(removedBarId => delete newState.bars[removedBarId]);
-  return newState;
-};
-
+const updateMapBarSuccess = (state, { bars }) => ({ ...state, bars });
 const updateMapBarFailure = (state, { error }) => ({ ...state, fetching: false, error });
 const removeBar = (state, { barId }) => ({ ...state, bars: omit(state.bars, barId) });
 const clearBars = state => ({ ...state, bars: {} });

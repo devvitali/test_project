@@ -47,4 +47,28 @@ export default StyleSheet.create({
   noMapButton: {
     height: 32,
   },
+  locationButtonContainer: {
+    position: 'absolute',
+    backgroundColor: Colors.brand.gray,
+    right: 5,
+    bottom: 5,
+  },
+  labelGoBoulder: {
+    fontFamily: Fonts.type.primary,
+    fontSize: Fonts.size.small,
+    marginVertical: Metrics.baseMargin,
+    paddingHorizontal: Metrics.doubleBaseMargin,
+  },
+  clusterContainer: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 7,
+  },
+  labelClusterCount: {
+    fontFamily: Fonts.type.primary,
+    color: Colors.brand.black,
+    textAlign: 'center',
+    fontSize: Fonts.size.small,
+  },
 });

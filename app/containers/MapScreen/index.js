@@ -1,21 +1,26 @@
 import React, { Component } from 'react';
-import { View, ScrollView, Image, Platform, Text } from 'react-native';
+import { View, ScrollView, Image, Platform, Text, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import MapView from 'react-native-maps';
 import { getDistance } from 'geolib';
 import I18n from 'react-native-i18n';
-import { map, isEqual } from 'lodash';
+import { map } from 'lodash';
 import AppContainer from '../AppContainer';
 import { NavItems, MapCallout, BarResult, Button, Banner, IconAlko } from '../../components';
 import { AlertActions, BarActions, DrinkupActions, LocationActions } from '../../redux';
 import { geoFire } from '../../firebase';
 import { Bar } from '../../firebase/models';
+import { getClusters } from '../../utils/clustering';
 import { Colors, Images } from '../../themes';
 import Styles from './styles';
 
 const GoogleAPIAvailability = Platform.OS === 'android' ? require('react-native-google-api-availability-bridge') : null;
 const METRES_TO_MILES_FACTOR = 0.000621371192237;
 
+const boulderPosition = {
+  latitude: 40.0822214,
+  longitude: -105.14,
+};
 class MapScreen extends Component {
 
   constructor(props) {
@@ -26,17 +31,12 @@ class MapScreen extends Component {
       showUserLocation: true,
       isGooglePlayServicesAvailable: true,
       event: null,
-      region: props.region,
+      showBackBoulder: false,
+      clusterMarkers: [],
     };
+    this.mapZoom = 15;
     this.barLocations = {};
-    this.addBarInterval = setInterval(() => {
-      if (Object.keys(this.barLocations).length > 0) {
-        const data = { ...this.barLocations };
-        this.barLocations = [];
-        console.log('data', data);
-        this.props.updateMapBar(data);
-      }
-    }, 300);
+    this.addBarInterval = setInterval(this.onUpdateMapBars, 300);
     this.geoQuery = geoFire('barLocations')
       .query({
         center: props.region ? [props.region.latitude, props.region.longitude] : [50, -50],
@@ -44,10 +44,12 @@ class MapScreen extends Component {
       });
 
     this.geoQuery.on('key_entered', (barId, location) => {
-      this.barLocations[barId] = { type: 'add', barId, location };
+      this.updatedBarLocations = true;
+      this.barLocations[barId] = { barId, location };
     });
     this.geoQuery.on('key_exited', (barId) => {
-      this.barLocations[barId] = { type: 'remove', barId };
+      this.updatedBarLocations = true;
+      delete this.barLocations[barId];
     });
   }
 
@@ -63,11 +65,6 @@ class MapScreen extends Component {
       });
     }
   }
-  componentWillReceiveProps(newProps) {
-    if (!isEqual(newProps.region, this.props.region)) {
-      this.setState({ region: newProps.region });
-    }
-  }
   componentDidUpdate(prevProps) {
     if (this.props.drinkupBar && prevProps.drinkupBar !== this.props.drinkupBar) {
       this.props.navigation.navigate('JoinDrinkUpScreen', { barId: this.props.drinkupBar.id });
@@ -79,22 +76,65 @@ class MapScreen extends Component {
     this.props.clearBars();
     this.geoQuery.cancel();
   }
-
+  onUpdateMapBars = () => {
+    if (this.updatedBarLocations) {
+      if (Object.keys(this.barLocations).length > 0) {
+        const data = { ...this.barLocations };
+        const clusters = getClusters(data, this.mapZoom);
+        const clusterMarkers = [];
+        const updatedBars = [];
+        clusters.forEach(({ properties, geometry }) => {
+          const latitude = geometry.coordinates[1];
+          const longitude = geometry.coordinates[0];
+          if (properties.cluster) {
+            clusterMarkers.push({
+              count: properties.point_count,
+              latitude,
+              longitude,
+            });
+          } else {
+            updatedBars[properties.barId] = {
+              latitude,
+              longitude,
+            };
+          }
+        });
+        this.setState({ clusterMarkers });
+        this.props.updateMapBar(updatedBars);
+      }
+    }
+    this.updatedBarLocations = false;
+  };
+  onBackBoulder = (longitudeDelta = 0.16, latitudeDelta = 0.08) => {
+    this.map.animateToRegion({ ...boulderPosition, longitudeDelta, latitudeDelta }, 1000);
+  };
   onRegionChange = (region) => {
-    this.setState({ region });
-    const start = {
-      latitude: region.latitude - (region.latitudeDelta / 2),
-      longitude: region.longitude - (region.longitudeDelta / 2),
-    };
-    const end = {
-      latitude: region.latitude + (region.latitudeDelta / 2),
-      longitude: region.longitude + (region.longitudeDelta / 2),
-    };
-    const distance = getDistance(start, end) * 0.0004;
-    this.geoQuery.updateCriteria({
-      center: [region.latitude, region.longitude],
-      radius: distance,
-    });
+    if (region.longitudeDelta < 2 && region.latitudeDelta < 1) {
+      this.mapZoom = Math.round(Math.log(360 / region.longitudeDelta) / Math.LN2);
+      const start = {
+        latitude: region.latitude - (region.latitudeDelta / 2),
+        longitude: region.longitude - (region.longitudeDelta / 2),
+      };
+      const end = {
+        latitude: region.latitude + (region.latitudeDelta / 2),
+        longitude: region.longitude + (region.longitudeDelta / 2),
+      };
+      let distance = getDistance(start, end) * 0.0004;
+      this.geoQuery.updateCriteria({
+        center: [region.latitude, region.longitude],
+        radius: distance,
+      });
+      distance = getDistance(boulderPosition, region) * 0.001;
+      if (distance > 10) {
+        this.setState({ showBackBoulder: true });
+      } else {
+        this.setState({ showBackBoulder: false });
+      }
+      this.updatedBarLocations = true;
+      this.onUpdateMapBars();
+    } else {
+      this.onBackBoulder(1.6, 0.8);
+    }
   };
 
   handleEventPress(bar) {
@@ -185,7 +225,17 @@ class MapScreen extends Component {
     }
     return map(this.props.bars, (bar, id) => this.renderBarMarker(bar, id));
   }
-
+  renderClusterMarkers() {
+    return this.state.clusterMarkers.map((marker, id) => (
+      <MapView.Marker key={id} coordinate={marker}>
+        <Image source={Images.cluster} />
+        <View style={Styles.clusterContainer}>
+          <Text style={Styles.labelClusterCount}>{marker.count}</Text>
+        </View>
+        <MapCallout location={marker} onPress={this.calloutPress} />
+      </MapView.Marker>
+    ));
+  }
   renderMap() {
     if (!this.state.isGooglePlayServicesAvailable) {
       return (
@@ -206,12 +256,12 @@ class MapScreen extends Component {
       <MapView
         style={Styles.map}
         initialRegion={this.props.region}
-        region={this.state.region}
         onRegionChangeComplete={this.onRegionChange}
         showsUserLocation={this.state.showUserLocation}
         ref={ref => this.map = ref}
       >
         {this.renderBarMarkers()}
+        {this.renderClusterMarkers()}
       </MapView>
     );
   }
@@ -229,6 +279,14 @@ class MapScreen extends Component {
             <View style={Styles.bannerContainer}>
               {this.renderAlert()}
             </View>
+            {this.state.showBackBoulder &&
+            <TouchableOpacity
+              style={Styles.locationButtonContainer}
+              onPress={() => this.onBackBoulder()}
+            >
+              <Text style={Styles.labelGoBoulder}>Back to Boulder</Text>
+            </TouchableOpacity>
+            }
           </View>
 
           <ScrollView style={Styles.barListContainer}>
