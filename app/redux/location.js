@@ -51,7 +51,8 @@ const stopBackgroundGeolocationSuccess = (state, { geolocationEnabled }) => ({
 const onLocationChange = (state, { location }) => ({
   ...state,
   activity: location.activity.type,
-  coords: location.coords,
+  // coords: location.coords,
+  coords: { latitude: 39.9616, longitude: -105.51025 },
   isMoving: location.is_moving,
   lastLocationTimestamp: location.timestamp,
   error: null,
@@ -64,7 +65,8 @@ const onProviderChange = (state, { provider }) => ({ ...state, provider, error: 
 const onMotionChange = (state, { motion }) => ({
   ...state,
   activity: motion.location.activity.type,
-  coords: motion.location.coords,
+  // coords: motion.location.coords,
+  coords: { latitude: 39.9616, longitude: -105.51025 },
   isMoving: motion.isMoving,
   lastLocationTimestamp: motion.location.timestamp,
   error: null,

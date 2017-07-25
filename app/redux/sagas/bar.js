@@ -26,23 +26,22 @@ export function* getBars() {
   }
 }
 
-export function* addBar({ barId, location }) {
+export function* updateMapBar({ bars }) {
   try {
-    const MapBar = BarFactory(MAP_BAR_ACTIONS);
-    let bar = BAR_CACHE[barId];
-    if (!bar) {
-      bar = yield call([Bar, Bar.get], barId);
-      bar.address.latitude = location[0];
-      bar.address.longitude = location[1];
-      BAR_CACHE[barId] = bar;
+    const addedBarsId = Object.keys(bars).filter(key => bars[key].type === 'add');
+    const removedBarsId = Object.keys(bars).filter(key => bars[key].type !== 'add');
+    Object.keys(bars).map(key => call([Bar, Bar.unsubscribe], key));
+    const addedBars = yield call([Bar, Bar.gets], addedBarsId, true);
+    if (addedBars.length > 0) {
+      addedBars.forEach((addedBar) => {
+        addedBar.address.latitude = bars[addedBar.id].location[0];
+        addedBar.address.longitude = bars[addedBar.id].location[1];
+      });
     }
-
-    if (Object.keys(bar).length > 0) {
-      yield call([MapBar, MapBar.unsubscribe], barId);
-      yield call(watch, barSubscribe, MapBar, barId);
-    }
-
+    addedBarsId.map(key => call(watch, barSubscribe, Bar, key));
+    yield put(BarActions.updateMapBarSuccess(addedBars, removedBarsId));
   } catch (error) {
-    yield put(BarActions.addBarFailure(error));
+    console.log('updateMapBarFailure err', error);
+    yield put(BarActions.updateMapBarFailure(error));
   }
 }

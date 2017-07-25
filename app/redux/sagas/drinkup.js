@@ -5,7 +5,7 @@ import { watch } from '../../utils/sagaUtils';
 import DrinkupActions from '../drinkup';
 import { Bar, DrinkUp } from '../../firebase/models';
 
-const DRINKUP_USER_PROPERTIES = ['photoURL', 'firstName', 'icon', 'message', 'invitedBy', 'invitationChecked'];
+const DRINKUP_USER_PROPERTIES = ['photoURL', 'firstName', 'icon', 'message', 'invitedBy', 'messagesRead'];
 function drinkupSubscribe(Drinkup, key) {
   return eventChannel(emit => Drinkup.subscribe(emit, key));
 }
@@ -115,7 +115,7 @@ export function* acceptDrinkupInvitation({ bar, uid }) {
     const drinkup = yield call([DrinkUp, DrinkUp.get], bar.currentDrinkUp);
     const users = drinkup.users ? { ...drinkup.users } : {};
     if (users[uid]) {
-      users[uid].invitationChecked = true;
+      users[uid].messagesRead = true;
     }
     yield call([DrinkUp, DrinkUp.update], bar.currentDrinkUp, { users });
   } catch (err) {

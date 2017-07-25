@@ -29,7 +29,7 @@ import {
   sendDrinkupInvitation,
   acceptDrinkupInvitation,
 } from './drinkup';
-import { getBars, addBar } from './bar';
+import { getBars, updateMapBar } from './bar';
 import { startBackgroundGeolocation, startBackgroundGeolocationWatchers } from './location';
 import { getAlerts } from './alert';
 import { startup } from './startup';
@@ -55,7 +55,7 @@ export default function* root() {
     takeEvery(AuthTypes.UPDATE_PROFILE, updateProfile),
     takeLatest(LocationTypes.START_BACKGROUND_GEOLOCATION, startBackgroundGeolocation),
     takeLatest(LocationTypes.START_BACKGROUND_GEOLOCATION_SUCCESS, startBackgroundGeolocationWatchers),
-    takeEvery(BarTypes.ADD_BAR, addBar),
+    takeEvery(BarTypes.UPDATE_MAP_BAR, updateMapBar),
     takeLatest(BarTypes.BARS_REQUEST, getBars),
     takeLatest(DrinkupTypes.BAR_REQUEST, getBar),
     takeLatest(DrinkupTypes.DRINKUP_REQUEST, getDrinkup),

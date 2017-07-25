@@ -8,10 +8,9 @@ const { Types, Creators } = createActions({
   barsRequest: [],
   barsRequestSuccess: ['bars'],
   barsRequestFailure: ['error'],
-  addBar: ['barId', 'location'],
-  addBarSuccess: ['bar', 'barId'],
-  addBarFailure: ['error'],
-  updateBar: ['bar', 'barId'],
+  updateMapBar: ['bars'],
+  updateMapBarFailure: ['error'],
+  updateMapBarSuccess: ['addedBars', 'removedBars'],
   removeBar: ['barId'],
   removeBarProperty: ['value', 'name', 'barId'],
   clearBars: [],
@@ -37,29 +36,14 @@ const barsRequestFailure = (state, { error }) => {
   console.log('barsRequestFailure', newState);
   return newState;
 };
-
-const updateBar = (state, { bar, barId }) => {
-  if (BAR_CACHE[barId] && bar.address) {
-    bar.address.latitude = BAR_CACHE[barId].address.latitude;
-    bar.address.longitude = BAR_CACHE[barId].address.longitude;
-  }
-  const updatedBar = Object.assign({}, state.bars[barId], bar);
-  if (Object.keys(updatedBar).length <= 0) {
-    return Object.assign({}, state, {
-      bars: omit(state.bars, barId),
-    });
-  }
-
-  const newState = Object.assign({}, state, {
-    bars: Object.assign({}, state.bars, {
-      [barId]: Object.assign({}, state.bars[barId], bar),
-    }),
-  });
-  console.log('updateBar', newState);
+const updateMapBarSuccess = (state, { addedBars, removedBars }) => {
+  const newState = { ...state, bars: { ...state.bars } };
+  addedBars.forEach(addedBar => newState.bars[addedBar.id] = addedBar);
+  removedBars.forEach(removedBarId => delete newState.bars[removedBarId]);
   return newState;
 };
 
-const addBarFailure = (state, { error }) => ({ ...state, fetching: false, error });
+const updateMapBarFailure = (state, { error }) => ({ ...state, fetching: false, error });
 const removeBar = (state, { barId }) => ({ ...state, bars: omit(state.bars, barId) });
 const clearBars = state => ({ ...state, bars: {} });
 const removeBarProperty = (state, { name, barId }) => {
@@ -78,10 +62,9 @@ export const barReducer = createReducer(defaultState, {
   [Types.BARS_REQUEST]: request,
   [Types.BARS_REQUEST_SUCCESS]: barsRequestSuccess,
   [Types.BARS_REQUEST_FAILURE]: barsRequestFailure,
-  [Types.ADD_BAR]: request,
-  [Types.ADD_BAR_SUCCESS]: updateBar,
-  [Types.ADD_BAR_FAILURE]: addBarFailure,
-  [Types.UPDATE_BAR]: updateBar,
+  [Types.UPDATE_MAP_BAR]: request,
+  [Types.UPDATE_MAP_BAR_SUCCESS]: updateMapBarSuccess,
+  [Types.UPDATE_MAP_BAR_FAILURE]: updateMapBarFailure,
   [Types.REMOVE_BAR]: removeBar,
   [Types.REMOVE_BAR_PROPERTY]: removeBarProperty,
   [Types.CLEAR_BARS]: clearBars,

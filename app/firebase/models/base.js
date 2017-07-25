@@ -75,6 +75,9 @@ export default class Base {
     });
   }
 
+  gets(keys, appendKey) {
+    return Promise.all(keys.map(key => this.get(key, appendKey)));
+  }
   set(key, value: Object) {
     return this.dbRef(key).set(value);
   }

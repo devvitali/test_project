@@ -11,30 +11,11 @@ import { AlertActions, BarActions, DrinkupActions, LocationActions } from '../..
 import { geoFire } from '../../firebase';
 import { Bar } from '../../firebase/models';
 import { Colors, Images } from '../../themes';
-import { calculateRegion } from '../../utils/mapUtils';
 import Styles from './styles';
 
 const GoogleAPIAvailability = Platform.OS === 'android' ? require('react-native-google-api-availability-bridge') : null;
 const METRES_TO_MILES_FACTOR = 0.000621371192237;
-const SCROLL_FREE_TIME = 10000;
-const ANIMATE_TO_REGION_TIME = 1000;
 
-const locations = [{
-  key: '-KhJS0f_1mrexDl-2ae_',
-  location: [40.01916, -102.2753],
-}, {
-  key: '-KhJS0f_1mrexDl-75h_',
-  location: [21.2827, -157.82944],
-}, {
-  key: '-KhJS0fbYAg0gyyPl3HR',
-  location: [40.00988827, -105.278250],
-}, {
-  key: '-KhJS0fchOJrfMcr4oPa',
-  location: [40.0176427, -105.2807],
-}, {
-  key: '-KhJS0fdfTVS_ZOmOtIt',
-  location: [39.984320, -105.2493],
-}]
 class MapScreen extends Component {
 
   constructor(props) {
@@ -46,31 +27,32 @@ class MapScreen extends Component {
       isGooglePlayServicesAvailable: true,
       event: null,
     };
-    console.log('MapScreen barLocations geoQuery', props.region);
-
+    this.barLocations = {};
+    this.addBarInterval = setInterval(() => {
+      if (Object.keys(this.barLocations).length > 0) {
+        const data = { ...this.barLocations };
+        this.barLocations = [];
+        console.log('data', data);
+        this.props.updateMapBar(data);
+      }
+    }, 300);
     this.geoQuery = geoFire('barLocations')
       .query({
         center: props.region ? [props.region.latitude, props.region.longitude] : [50, -50],
         radius: 10,
       });
-    // locations.map(item => {
-    //   geoFire('barLocations').set(item.key, item.location).then(() => {
-    //     console.log('Provided key has been added to GeoFire');
-    //   });
-    // })
 
     this.geoQuery.on('ready', () => {
       console.log(`center : ${this.geoQuery.center()}`);
     });
 
     this.geoQuery.on('key_entered', (barId, location) => {
-      console.log('key_entered', barId, location);
-      this.props.addBar(barId, location);
+      // console.log('key_entered', barId, location);
+      this.barLocations[barId] = { type: 'add', barId, location };
     });
 
     this.geoQuery.on('key_exited', (barId) => {
-      console.log('key_exited', barId);
-      this.props.removeBar(barId);
+      this.barLocations[barId] = { type: 'remove', barId };
     });
   }
 
@@ -78,23 +60,13 @@ class MapScreen extends Component {
     this.props.clearBars();
     this.geoQuery.updateCriteria({
       center: [this.props.region.latitude, this.props.region.longitude],
-      radius: 1,
+      radius: 100,
     });
     if (GoogleAPIAvailability) {
       GoogleAPIAvailability.checkGooglePlayServices((result) => {
         this.setState({ isGooglePlayServicesAvailable: result === 'success' });
       });
     }
-  }
-
-  componentWillReceiveProps(newProps) {
-    // if (this.map && this.state.followUserOnMap) {
-    //   this.setState({ animatingToRegion: true }, () => {
-    //     this.map.animateToRegion(calculateRegion([newProps.location], { latPadding: 0.016, longPadding: 0.008 }), ANIMATE_TO_REGION_TIME);
-    //     setTimeout(() => this.setState({ animatingToRegion: false }), ANIMATE_TO_REGION_TIME + 500);
-    //   });
-    // }
-
   }
 
   componentDidUpdate(prevProps) {
@@ -104,6 +76,7 @@ class MapScreen extends Component {
   }
 
   componentWillUnmount() {
+    clearInterval(this.addBarInterval);
     this.props.clearBars();
     this.geoQuery.cancel();
   }
@@ -111,15 +84,8 @@ class MapScreen extends Component {
   onRegionChange = (newRegion) => {
     this.geoQuery.updateCriteria({
       center: [newRegion.latitude, newRegion.longitude],
-      radius: 1,
+      radius: 100,
     });
-
-    // if (!this.state.animatingToRegion) {
-    //   this.setState({ followUserOnMap: false });
-    //   setTimeout(() => {
-    //     this.setState({ followUserOnMap: true });
-    //   }, SCROLL_FREE_TIME);
-    // }
   };
 
   handleEventPress(bar) {
@@ -175,11 +141,11 @@ class MapScreen extends Component {
 
     const props = {
       name,
-      activeDrinkUp: Boolean(currentDrinkUp),
-      activeSpecial: Boolean(currentSpecial),
+      activeDrinkUp: !!currentDrinkUp,
+      activeSpecial: !!currentSpecial,
       key: id,
       distance: '',
-      onPress: () => this.props.setDrinkupBar(Object.assign({}, bar, { id })),
+      onPress: () => this.props.setDrinkupBar({ ...bar, id }),
     };
 
     if (this.props.location && address) {
@@ -208,9 +174,7 @@ class MapScreen extends Component {
     if (!this.props.bars) {
       return null;
     }
-    return (
-      map(this.props.bars, (bar, id) => this.renderBarMarker(bar, id))
-    );
+    return map(this.props.bars, (bar, id) => this.renderBarMarker(bar, id));
   }
 
   renderMap() {
@@ -223,7 +187,7 @@ class MapScreen extends Component {
             theme="dark"
             style={Styles.noMapButton}
             text={'Update'}
-            onPress={() => GoogleAPIAvailability.openGooglePlayUpdate()}
+            onPress={GoogleAPIAvailability.openGooglePlayUpdate}
           />
         </View>
       );
@@ -235,7 +199,7 @@ class MapScreen extends Component {
         initialRegion={this.props.region}
         onRegionChangeComplete={this.onRegionChange}
         showsUserLocation={this.state.showUserLocation}
-        ref={(ref) => { this.map = ref; }}
+        ref={ref => this.map = ref}
       >
         {this.renderBarMarkers()}
       </MapView>
@@ -266,24 +230,21 @@ class MapScreen extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  region: state.location.coords && calculateRegion([state.location.coords], { latPadding: 0.016, longPadding: 0.008 }),
-  bars: state.location.coords && Bar.constructor.getBarsSortedByDistance(state.location.coords, state.bar.bars),
-  orgBars: state.bar.bars,
-  alerts: state.alert.alerts,
-  profile: state.auth.profile,
-  location: state.location.coords,
-  drinkupBar: state.drinkup.bar,
+const mapStateToProps = ({ location, bar, drinkup, alert, auth }) => ({
+  region: { ...location.coords, longitudeDelta: 0.16, latitudeDelta: 0.08 },
+  bars: location.coords && Bar.constructor.getBarsSortedByDistance(location.coords, bar.bars),
+  alerts: alert.alerts,
+  profile: auth.profile,
+  location: location.coords,
+  drinkupBar: drinkup.bar,
 });
 
 //eslint-disable-next-line
 const mapDispatchToProps = dispatch => ({
   getAlerts: () => dispatch(AlertActions.alertsRequest()),
   startBackgroundGeolocation: () => dispatch(LocationActions.startBackgroundGeolocation()),
-  getBars: () => dispatch(BarActions.barsRequest()),
   clearBars: () => dispatch(BarActions.clearBars()),
-  addBar: (barId, location) => dispatch(BarActions.addBar(barId, location)),
-  removeBar: barId => dispatch(BarActions.removeBar(barId)),
+  updateMapBar: bars => dispatch(BarActions.updateMapBar(bars)),
   markAlertAsRead: alert => dispatch(AlertActions.markAlertAsRead(alert)),
   setDrinkupBar: bar => dispatch(DrinkupActions.barRequestSuccessful(bar)),
 });

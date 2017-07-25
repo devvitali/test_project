@@ -28,10 +28,7 @@ export default class Bar extends Base {
     if (!asc) {
       barDistancePairs.reverse();
     }
-
-    const sortedBars = _.mapValues(_.fromPairs(barDistancePairs), (bar, id) => bars[id]);
-    return sortedBars;
-
+    return _.mapValues(_.fromPairs(barDistancePairs), (bar, id) => bars[id]);
   }
 
 }
