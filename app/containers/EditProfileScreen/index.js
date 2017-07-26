@@ -5,7 +5,7 @@ import { debounce, map } from 'lodash';
 import AppContainer from '../AppContainer';
 import { Connect } from '../../redux';
 import { Button, PicPhotoSourceDialog, NavItems } from '../../components';
-import { openCamera, openPicker } from '../../utils/photoUtils';
+import { openPicker } from '../../utils/photoUtils';
 import { Colors, DrinkIcons } from '../../themes';
 import { User } from '../../firebase/models';
 import Styles from './styles';

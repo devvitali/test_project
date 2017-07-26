@@ -39,7 +39,7 @@ class MapScreen extends Component {
     this.addBarInterval = setInterval(this.onUpdateMapBars, 300);
     this.geoQuery = geoFire('barLocations')
       .query({
-        center: props.region ? [props.region.latitude, props.region.longitude] : [50, -50],
+        center: props.region.latitude ? [props.region.latitude, props.region.longitude] : [50, -50],
         radius: 1,
       });
 
@@ -54,9 +54,10 @@ class MapScreen extends Component {
   }
 
   componentDidMount() {
-    this.props.clearBars();
+    const { region, clearBars } = this.props;
+    clearBars();
     this.geoQuery.updateCriteria({
-      center: [this.props.region.latitude, this.props.region.longitude],
+      center: region.latitude ? [region.latitude, region.longitude] : [50, -50],
       radius: 1,
     });
     if (GoogleAPIAvailability) {

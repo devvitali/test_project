@@ -21,4 +21,4 @@ export default props => (
       <Button text={I18n.t('Introduction_next')} onPress={() => navigateStep2(props)} />
     </View>
   </View>
-)
+);

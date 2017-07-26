@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Linking, Platform } from 'react-native';
+import { Linking } from 'react-native';
 import { DirectionsDialog } from './DirectionsDialog';
 
 export default class DirectionsDialogWrapper extends Component {

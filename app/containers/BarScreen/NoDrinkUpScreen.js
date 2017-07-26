@@ -10,7 +10,6 @@ class NoDrinkUpScreen extends Component {
 
   componentDidUpdate() {
     if (this.props.joined) {
-      debugger;
       this.props.navigation.navigate('DrinkUpScreen', { barId: this.props.bar.id });
     }
   }

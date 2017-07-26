@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { ScrollView, Image, View, Text, TouchableOpacity } from 'react-native';
 import I18n from 'react-native-i18n';
+import config from '../../config/appConfig';
 import AppContainer from '../AppContainer';
 import { Connect } from '../../redux';
 import { DrawerButton } from '../../components';
@@ -85,7 +86,7 @@ class DrawBar extends Component {
           </ScrollView>
           <View style={styles.footer}>
             <TouchableOpacity onPress={this.onLogout}>
-              <Text style={styles.copyright}>© 2017 ALKO</Text>
+              <Text style={styles.copyright}>© 2017 ALKO {config.codePushVersion}</Text>
             </TouchableOpacity>
           </View>
         </View>

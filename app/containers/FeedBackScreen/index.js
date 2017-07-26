@@ -15,7 +15,7 @@ export default class FeedbackScreen extends Component {
     };
   }
 
-  updateFeedback = (feedback) => this.setState({ feedback });
+  updateFeedback = feedback => this.setState({ feedback });
   doSubmitFeedback = () => {
     const data = {
       feedback: this.state.feedback,

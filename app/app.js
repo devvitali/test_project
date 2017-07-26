@@ -2,6 +2,7 @@
 
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
+import codePush from 'react-native-code-push';
 // import FCM, { FCMEvent } from 'react-native-fcm';
 import './i18n'; // keep before root container
 import createStore from './redux';
@@ -33,7 +34,10 @@ class App extends Component {
     //     important: true,
     //   });
     // });
-
+    codePush.sync({
+      updateDialog: true,
+      installMode: codePush.InstallMode.IMMEDIATE,
+    });
   }
 
   componentWillUnmount() {
@@ -49,5 +53,5 @@ class App extends Component {
     );
   }
 }
-
-export default App;
+const codePushOptions = { checkFrequency: codePush.CheckFrequency.MANUAL };
+export default codePush(codePushOptions)(App);
