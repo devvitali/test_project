@@ -13,6 +13,7 @@ import { Bar } from '../../firebase/models';
 import { getClusters } from '../../utils/clustering';
 import { Colors, Images } from '../../themes';
 import Styles from './styles';
+import mapStyle from './mapStyle';
 
 const GoogleAPIAvailability = Platform.OS === 'android' ? require('react-native-google-api-availability-bridge') : null;
 const METRES_TO_MILES_FACTOR = 0.000621371192237;
@@ -256,6 +257,7 @@ class MapScreen extends Component {
     return (
       <MapView
         style={Styles.map}
+        customMapStyle={mapStyle}
         initialRegion={this.props.region}
         onRegionChangeComplete={this.onRegionChange}
         showsUserLocation={this.state.showUserLocation}
@@ -285,7 +287,7 @@ class MapScreen extends Component {
               style={Styles.locationButtonContainer}
               onPress={() => this.onBackBoulder()}
             >
-              <Text style={Styles.labelGoBoulder}>Back to Boulder</Text>
+              <Image source={Images.locationBack} style={Styles.imgLocationBack} />
             </TouchableOpacity>
             }
           </View>

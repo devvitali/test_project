@@ -8,6 +8,7 @@ import Instabug from 'instabug-reactnative';
 import './i18n'; // keep before root container
 import createStore from './redux';
 import applyConfigSettings from './config';
+import { trackEvent } from './utils/googleAnalytics';
 import RootContainer from './router/RootContainer';
 
 // Apply config overrides
@@ -40,6 +41,7 @@ class App extends Component {
       installMode: codePush.InstallMode.IMMEDIATE,
     });
     Instabug.startWithToken('20b5579b22c3616afeeed631ace29330', Instabug.invocationEvent.shake);
+    trackEvent('test', 'testevent');
   }
 
   componentWillUnmount() {

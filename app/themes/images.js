@@ -21,7 +21,7 @@ import tumbler from '../images/drinkIcons/tumbler.png';
 import wineGlass from '../images/drinkIcons/wine-glass.png';
 import margarita from '../images/drinkIcons/margarita.png';
 import cluster from '../images/icons/icon-cluster.png';
-
+import locationBack from '../images/icons/icon_back.png';
 export const DrinkIcons = {
   beer,
   martini,
@@ -43,6 +43,7 @@ export default {
   mug,
   mugSeal,
   cluster,
+  locationBack,
   pin,
   pinMug,
   pinMugSeal,

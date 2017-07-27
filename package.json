@@ -42,6 +42,7 @@
 		"react-native-fcm": "^7.1.0",
 		"react-native-fetch-blob": "^0.10.6",
 		"react-native-firestack": "tzusman/react-native-firestack",
+		"react-native-google-analytics-bridge": "^5.2.1",
 		"react-native-google-api-availability-bridge": "^1.2.0",
 		"react-native-i18n": "^2.0.2",
 		"react-native-image-crop-picker": "^0.14.1",

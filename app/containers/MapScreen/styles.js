@@ -49,15 +49,12 @@ export default StyleSheet.create({
   },
   locationButtonContainer: {
     position: 'absolute',
-    backgroundColor: Colors.brand.gray,
     right: 5,
     bottom: 5,
   },
-  labelGoBoulder: {
-    fontFamily: Fonts.type.primary,
-    fontSize: Fonts.size.small,
-    marginVertical: Metrics.baseMargin,
-    paddingHorizontal: Metrics.doubleBaseMargin,
+  imgLocationBack: {
+    width: 32,
+    height: 32,
   },
   clusterContainer: {
     position: 'absolute',
