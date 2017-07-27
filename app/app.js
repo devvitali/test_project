@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import codePush from 'react-native-code-push';
+import Instabug from 'instabug-reactnative';
 // import FCM, { FCMEvent } from 'react-native-fcm';
 import './i18n'; // keep before root container
 import createStore from './redux';
@@ -38,6 +39,7 @@ class App extends Component {
       updateDialog: true,
       installMode: codePush.InstallMode.IMMEDIATE,
     });
+    Instabug.startWithToken('20b5579b22c3616afeeed631ace29330', Instabug.invocationEvent.shake);
   }
 
   componentWillUnmount() {
