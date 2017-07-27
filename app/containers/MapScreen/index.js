@@ -36,6 +36,7 @@ class MapScreen extends Component {
       clusterMarkers: [],
     };
     this.mapZoom = 15;
+    this.currentRegion = null;
     this.barLocations = {};
     this.addBarInterval = setInterval(this.onUpdateMapBars, 300);
     this.geoQuery = geoFire('barLocations')
@@ -108,9 +109,17 @@ class MapScreen extends Component {
     this.updatedBarLocations = false;
   };
   onBackBoulder = (longitudeDelta = 0.16, latitudeDelta = 0.08) => {
-    this.map.animateToRegion({ ...boulderPosition, longitudeDelta, latitudeDelta }, 1000);
+    this.currentRegion = { ...boulderPosition, longitudeDelta, latitudeDelta };
+    this.map.animateToRegion(this.currentRegion, 1000);
+  };
+  onCluserMarkerPressed = ({ latitude, longitude }) => {
+    const longitudeDelta = this.currentRegion.longitudeDelta / 2;
+    const latitudeDelta = this.currentRegion.latitudeDelta / 2;
+    const region = { latitude, longitude, latitudeDelta, longitudeDelta };
+    this.map.animateToRegion(region, 1000);
   };
   onRegionChange = (region) => {
+    this.currentRegion = region;
     if (region.longitudeDelta < 2 && region.latitudeDelta < 1) {
       this.mapZoom = Math.round(Math.log(360 / region.longitudeDelta) / Math.LN2);
       const start = {
@@ -180,9 +189,12 @@ class MapScreen extends Component {
     }
 
     return (
-      <MapView.Marker key={id} coordinate={{ latitude: address.latitude, longitude: address.longitude }}>
+      <MapView.Marker
+        key={id}
+        onPress={() => this.props.setDrinkupBar({ ...bar, id })}
+        coordinate={{ latitude: address.latitude, longitude: address.longitude }}
+      >
         <Image source={image} />
-        <MapCallout location={address} onPress={this.calloutPress} />
       </MapView.Marker>
     );
   }
@@ -229,12 +241,11 @@ class MapScreen extends Component {
   }
   renderClusterMarkers() {
     return this.state.clusterMarkers.map((marker, id) => (
-      <MapView.Marker key={id} coordinate={marker}>
+      <MapView.Marker key={id} coordinate={marker} onPress={() => this.onCluserMarkerPressed(marker)}>
         <Image source={Images.cluster} />
         <View style={Styles.clusterContainer}>
           <Text style={Styles.labelClusterCount}>{marker.count}</Text>
         </View>
-        <MapCallout location={marker} onPress={this.calloutPress} />
       </MapView.Marker>
     ));
   }
