@@ -1,0 +1,2 @@
+git push --no-verify
+code-push release-react ALKO ios
