@@ -17,7 +17,7 @@ class NoDrinkUpScreen extends Component {
   // this function is only use for demo
   onDraftJoined = () => {
     const { bar, uid, user, startDrinkup } = this.props;
-    startDrinkup(bar.id, { ...user, uid, invitedBy: 'self' });
+    startDrinkup(bar.id, { ...user, uid });
   };
   render() {
     const { special } = this.props;
