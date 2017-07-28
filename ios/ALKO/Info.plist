@@ -21,7 +21,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>4</string>
+	<string>5</string>
 	<key>CodePushDeploymentKey</key>
 	<string>$(CODEPUSH_KEY)</string>
 	<key>LSRequiresIPhoneOS</key>
@@ -47,6 +47,8 @@
 	<string>to find nearby bars</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Location when in usage</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>to use Microphone</string>
 	<key>NSMotionUsageDescription</key>
 	<string>Motion</string>
 	<key>NSPhotoLibraryUsageDescription</key>

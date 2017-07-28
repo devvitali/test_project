@@ -13,7 +13,6 @@
 		00C302E91ABCBA2D00DB3ED1 /* libRCTNetwork.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302DC1ABCB9D200DB3ED1 /* libRCTNetwork.a */; };
 		00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302E41ABCB9EE00DB3ED1 /* libRCTVibration.a */; };
 		00E356F31AD99517003FC87E /* ALKOTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* ALKOTests.m */; };
-		0CD1143704934A40FD00E7EF /* Pods_ALKO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 407C7F3551BC7CD888A8FAA0 /* Pods_ALKO.framework */; };
 		133E29F31AD74F7200F7D852 /* libRCTLinking.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 78C398B91ACF4ADC00677621 /* libRCTLinking.a */; };
 		139105C61AF99C1200B5F7CC /* libRCTSettings.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 139105C11AF99BAD00B5F7CC /* libRCTSettings.a */; };
 		139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 139FDEF41B06529B00C62182 /* libRCTWebSocket.a */; };
@@ -39,7 +38,6 @@
 		2DCD954D1E0B4F2C00145EB5 /* ALKOTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* ALKOTests.m */; };
 		42CA08859E0A4DD791045726 /* libRCTGoogleAnalyticsBridge.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B0DB25044FA6422CB4ED7E33 /* libRCTGoogleAnalyticsBridge.a */; };
 		45289F7D49BE46FFB6E6859E /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 51941527E3DC465B8A79B176 /* EvilIcons.ttf */; };
-		4D81A8E520A340E0B745A1F2 /* TSBackgroundFetch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF0ED991A3384145877B6B85 /* TSBackgroundFetch.framework */; };
 		4FEF786E337D4FD0B5B0CBD7 /* libRNFetchBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D5E66B7EECD41059D2FD5BB /* libRNFetchBlob.a */; };
 		5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
 		61578BC1573540D19A924E9B /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 33AA16BCA94548399AC77F08 /* Zocial.ttf */; };
@@ -52,7 +50,6 @@
 		85147A471F28B8690045DC05 /* libCodePush.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 85147A111F28B85E0045DC05 /* libCodePush.a */; };
 		85147A491F28B87C0045DC05 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 85147A481F28B87C0045DC05 /* libz.tbd */; };
 		85219BDA1F25C66300247D70 /* Location.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 85219BD91F25C66300247D70 /* Location.gpx */; };
-		852870081F290D1E002A2D7C /* Pods_ALKO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 852870071F290D1E002A2D7C /* Pods_ALKO.framework */; };
 		85C18D9F1F19236E0006F46F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 85C18D9E1F19236E0006F46F /* GoogleService-Info.plist */; };
 		85C18E351F1A2CF60006F46F /* TSLocationManager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85C18E341F1A2CF60006F46F /* TSLocationManager.framework */; };
 		85C18ED31F1A2E5E0006F46F /* TSBackgroundFetch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85C18ED21F1A2E5E0006F46F /* TSBackgroundFetch.framework */; };
@@ -66,6 +63,7 @@
 		9C40DED7CA384BA1818117B7 /* libAirMaps.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DF7A069E1C014FEAB3000670 /* libAirMaps.a */; };
 		9E559864E7594BB1A1962991 /* libRNFIRMessaging.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FA39254392F40BB83789926 /* libRNFIRMessaging.a */; };
 		A518115D4E09414F8AF68C7B /* libRNI18n.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C6B3CF384BFB42D98C45F76B /* libRNI18n.a */; };
+		A8DD409E3BC770B4F7B4F8F3 /* libPods-ALKO.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DCFCFEA3A6BB913FD6FB7940 /* libPods-ALKO.a */; };
 		AD094FC4481340078EE553C9 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6703D6199D3E4543AB55C75F /* SystemConfiguration.framework */; };
 		ADDFD0F832774D85BC9D1FA5 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2F141765242C45B4A292A7BF /* MaterialIcons.ttf */; };
 		B2AC86A6DDD54FE1A1EBB559 /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 516895C283C44C82A102996D /* MaterialCommunityIcons.ttf */; };
@@ -511,7 +509,6 @@
 		399DF59933E64D68A7D3BAFD /* RNI18n.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNI18n.xcodeproj; path = "../node_modules/react-native-i18n/ios/RNI18n.xcodeproj"; sourceTree = "<group>"; };
 		3AA2AFB276B14BCC9C6E1DE4 /* RNBackgroundGeolocation.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNBackgroundGeolocation.xcodeproj; path = "../node_modules/react-native-background-geolocation/ios/RNBackgroundGeolocation.xcodeproj"; sourceTree = "<group>"; };
 		3FA39254392F40BB83789926 /* libRNFIRMessaging.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNFIRMessaging.a; sourceTree = "<group>"; };
-		407C7F3551BC7CD888A8FAA0 /* Pods_ALKO.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ALKO.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		516895C283C44C82A102996D /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
 		51941527E3DC465B8A79B176 /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
 		54F0B9F47AAA43AE85295767 /* RNInstabug.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNInstabug.xcodeproj; path = "../node_modules/instabug-reactnative/ios/RNInstabug.xcodeproj"; sourceTree = "<group>"; };
@@ -532,7 +529,6 @@
 		85147A691F28C9510045DC05 /* QBImagePicker.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QBImagePicker.framework; path = "../node_modules/react-native-image-crop-picker/ios/ImageCropPickerSDK/QBImagePicker.framework"; sourceTree = "<group>"; };
 		85147A6A1F28C9510045DC05 /* RSKImageCropper.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RSKImageCropper.framework; path = "../node_modules/react-native-image-crop-picker/ios/ImageCropPickerSDK/RSKImageCropper.framework"; sourceTree = "<group>"; };
 		85219BD91F25C66300247D70 /* Location.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Location.gpx; sourceTree = "<group>"; };
-		852870071F290D1E002A2D7C /* Pods_ALKO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Pods_ALKO.framework; path = "Pods/../build/Debug-iphoneos/Pods_ALKO.framework"; sourceTree = "<group>"; };
 		852870091F2912F5002A2D7C /* ALKO.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = ALKO.entitlements; path = ALKO/ALKO.entitlements; sourceTree = "<group>"; };
 		85C18D9E1F19236E0006F46F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		85C18E0A1F1A2C790006F46F /* TSLocationManager.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TSLocationManager.framework; path = "../node_modules/react-native-background-geolocation/ios/RNBackgroundGeolocation/TSLocationManager.framework"; sourceTree = "<group>"; };
@@ -553,11 +549,11 @@
 		B0DB25044FA6422CB4ED7E33 /* libRCTGoogleAnalyticsBridge.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRCTGoogleAnalyticsBridge.a; sourceTree = "<group>"; };
 		C6B3CF384BFB42D98C45F76B /* libRNI18n.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNI18n.a; sourceTree = "<group>"; };
 		C77B1CD2519E422EB47105FA /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
-		CF0ED991A3384145877B6B85 /* TSBackgroundFetch.framework */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = wrapper.framework; name = TSBackgroundFetch.framework; path = "../node_modules/react-native-background-fetch/ios/RNBackgroundFetch/TSBackgroundFetch.framework"; sourceTree = SDKROOT; };
 		D1BBEF4D13AF4C3D9AE1DA76 /* RNBackgroundFetch+AppDelegate.m */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.objc; name = "RNBackgroundFetch+AppDelegate.m"; path = "../node_modules/react-native-background-fetch/ios/RNBackgroundFetch/RNBackgroundFetch+AppDelegate.m"; sourceTree = "<group>"; };
 		D2ECC00840EE4CC28EB8EDA6 /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
 		D815F7F462B74E18A8B3CE14 /* libRNBackgroundFetch.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNBackgroundFetch.a; sourceTree = "<group>"; };
 		DAFFC1FB4A72E550F6E19496 /* Pods-ALKO.staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ALKO.staging.xcconfig"; path = "Pods/Target Support Files/Pods-ALKO/Pods-ALKO.staging.xcconfig"; sourceTree = "<group>"; };
+		DCFCFEA3A6BB913FD6FB7940 /* libPods-ALKO.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ALKO.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DF7A069E1C014FEAB3000670 /* libAirMaps.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libAirMaps.a; sourceTree = "<group>"; };
 		E0BC4A8B25DB4E5ABF4B5005 /* libsqlite3.0.tbd */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
 		E190DEE73A1040C58E558D61 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
@@ -580,7 +576,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				852870081F290D1E002A2D7C /* Pods_ALKO.framework in Frameworks */,
 				85147A491F28B87C0045DC05 /* libz.tbd in Frameworks */,
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
 				5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */,
@@ -610,12 +605,11 @@
 				A518115D4E09414F8AF68C7B /* libRNI18n.a in Frameworks */,
 				EA3C1ABA79E54FC7A0BBECA3 /* libBVLinearGradient.a in Frameworks */,
 				1E72A1C578704EE38FC05E97 /* libRNInstabug.a in Frameworks */,
-				0CD1143704934A40FD00E7EF /* Pods_ALKO.framework in Frameworks */,
-				4D81A8E520A340E0B745A1F2 /* TSBackgroundFetch.framework in Frameworks */,
 				42CA08859E0A4DD791045726 /* libRCTGoogleAnalyticsBridge.a in Frameworks */,
 				FB10C681E7D74D8AAFD977AA /* CoreData.framework in Frameworks */,
 				AD094FC4481340078EE553C9 /* SystemConfiguration.framework in Frameworks */,
 				FA34F660C1024C6EA8108F0D /* libsqlite3.0.tbd in Frameworks */,
+				A8DD409E3BC770B4F7B4F8F3 /* libPods-ALKO.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -830,17 +824,15 @@
 		8358517D72CD41B83E2B8BA7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				852870071F290D1E002A2D7C /* Pods_ALKO.framework */,
 				85147A691F28C9510045DC05 /* QBImagePicker.framework */,
 				85147A6A1F28C9510045DC05 /* RSKImageCropper.framework */,
 				85147A481F28B87C0045DC05 /* libz.tbd */,
 				85C18E0A1F1A2C790006F46F /* TSLocationManager.framework */,
 				B0A06B0C251042FA9306C80F /* libsqlite3.tbd */,
-				407C7F3551BC7CD888A8FAA0 /* Pods_ALKO.framework */,
-				CF0ED991A3384145877B6B85 /* TSBackgroundFetch.framework */,
 				7498C946F8CB4AB0B1963168 /* CoreData.framework */,
 				6703D6199D3E4543AB55C75F /* SystemConfiguration.framework */,
 				E0BC4A8B25DB4E5ABF4B5005 /* libsqlite3.0.tbd */,
+				DCFCFEA3A6BB913FD6FB7940 /* libPods-ALKO.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1116,6 +1108,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
+						DevelopmentTeam = HV9UL6SJC7;
 						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
