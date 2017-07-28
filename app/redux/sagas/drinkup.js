@@ -3,7 +3,7 @@ import { eventChannel } from 'redux-saga';
 import { pick } from 'lodash';
 import { watch } from '../../utils/sagaUtils';
 import DrinkupActions from '../drinkup';
-import { Bar, DrinkUp } from '../../firebase/models';
+import { Bar, DrinkUp, Notification } from '../../firebase/models';
 
 const DRINKUP_USER_PROPERTIES = ['photoURL', 'firstName', 'icon', 'message', 'invitedBy', 'messagesRead', 'fcmToken'];
 function drinkupSubscribe(Drinkup, key) {
@@ -80,6 +80,13 @@ export function* sendRequestDrinkUp({ bar, user }) {
     const waitingUsers = drinkup.waitingUsers ? { ...drinkup.waitingUsers } : {};
     waitingUsers[user.uid] = user;
     yield call([DrinkUp, DrinkUp.update], bar.currentDrinkUp, { waitingUsers });
+
+    const notification = {
+      type: 'JOIN_DRINKUP_REQUEST',
+      drinkupId: bar.currentDrinkUp,
+      user,
+    };
+    yield call([Notification, Notification.push], notification);
     yield put(DrinkupActions.sendRequestDrinkupSuccessful());
   } catch (err) {
     yield put(DrinkupActions.sendRequestDrinkupFailure(err));

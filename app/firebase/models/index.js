@@ -2,6 +2,7 @@ import { firebaseDb } from '../';
 import UserModel from './user';
 import BarModel from './bar';
 import DrinkUpModel from './drinkup';
+import NotificationModel from './notification';
 import authActions from '../../redux/auth';
 import barsActions from '../../redux/bar';
 import drinkupsActions from '../../redux/drinkup';
@@ -31,3 +32,4 @@ export const DrinkUpFactory = (actions = drinkupActions) => new DrinkUpModel(fir
 export const User = new UserModel(firebaseDb, userActions);
 export const Bar = new BarModel(firebaseDb, barActions);
 export const DrinkUp = new DrinkUpModel(firebaseDb, drinkupActions);
+export const Notification = new NotificationModel(firebaseDb);
