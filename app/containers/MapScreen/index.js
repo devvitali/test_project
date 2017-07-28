@@ -187,11 +187,10 @@ class MapScreen extends Component {
     } else {
       image = Images.pin;
     }
-
     return (
       <MapView.Marker
         key={id}
-        onPress={() => this.props.setDrinkupBar({ ...bar, id })}
+        onPress={() => this.props.setDrinkupBar({ ...bar })}
         coordinate={{ latitude: address.latitude, longitude: address.longitude }}
       >
         <Image source={image} />
@@ -208,7 +207,7 @@ class MapScreen extends Component {
       activeSpecial: !!currentSpecial,
       key: id,
       distance: '',
-      onPress: () => this.props.setDrinkupBar({ ...bar, id }),
+      onPress: () => this.props.setDrinkupBar({ ...bar }),
     };
 
     if (this.props.location && address) {

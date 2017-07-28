@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import codePush from 'react-native-code-push';
 import Instabug from 'instabug-reactnative';
-// import FCM, { FCMEvent } from 'react-native-fcm';
+import FCM from 'react-native-fcm';
 import './i18n'; // keep before root container
 import createStore from './redux';
 import applyConfigSettings from './config';
@@ -19,23 +19,7 @@ const store = createStore();
 class App extends Component {
 
   componentDidMount() {
-    // this.notificationListener = FCM.on(FCMEvent.Notification, async (notif) => {
-    //   console.tron.display({
-    //     name: 'NotificationReceived',
-    //     value: { notif },
-    //     important: true,
-    //   });
-    //
-    //   notif.finish();
-    // });
-    //
-    // this.refreshTokenListener = FCM.on(FCMEvent.RefreshToken, (token) => {
-    //   console.tron.display({
-    //     name: 'FCM_TOKEN_REFRESH',
-    //     value: { token },
-    //     important: true,
-    //   });
-    // });
+    FCM.requestPermissions(); // for iOS
     codePush.sync({
       updateDialog: true,
       installMode: codePush.InstallMode.IMMEDIATE,
@@ -43,12 +27,6 @@ class App extends Component {
     Instabug.startWithToken('20b5579b22c3616afeeed631ace29330', Instabug.invocationEvent.shake);
     trackEvent('test', 'testevent');
   }
-
-  componentWillUnmount() {
-    this.notificationListener.remove();
-    this.refreshTokenListener.remove();
-  }
-
   render() {
     return (
       <Provider store={store}>

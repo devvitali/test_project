@@ -9,15 +9,12 @@ class SplashScreen extends Component {
     super(props);
     this.routedScene = '';
   }
-  componentDidMount() {
-    this.props.actions.startBackgroundGeolocation();
-  }
-
   componentDidUpdate() {
     if (this.routedScene === '') {
       this.redirect();
     }
   }
+
   navigate(route) {
     if (route !== this.routedScene) {
       if (route === 'DrawerNavigation') {
