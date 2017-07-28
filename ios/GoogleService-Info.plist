@@ -7,9 +7,9 @@
 	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
 	<string>ca-app-pub-3940256099942544/4411468910</string>
 	<key>CLIENT_ID</key>
-	<string>815962169455-jourr44u8ellm32p46n6ud2taht43h30.apps.googleusercontent.com</string>
+	<string>815962169455-pis44aehjmrg9dpfu715ouu4vj0f87q6.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.815962169455-jourr44u8ellm32p46n6ud2taht43h30</string>
+	<string>com.googleusercontent.apps.815962169455-pis44aehjmrg9dpfu715ouu4vj0f87q6</string>
 	<key>API_KEY</key>
 	<string>AIzaSyAEJLKTgPIzm8IDpJi4aSc64hzwiMAC4x8</string>
 	<key>GCM_SENDER_ID</key>
@@ -17,7 +17,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.tzusman.ALKO</string>
+	<string>com.alko.alko</string>
 	<key>PROJECT_ID</key>
 	<string>alko-f7eb3</string>
 	<key>STORAGE_BUCKET</key>
@@ -33,7 +33,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true/>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:815962169455:ios:5d15e038b9f7cbf9</string>
+	<string>1:815962169455:ios:965584a10f7d2300</string>
 	<key>DATABASE_URL</key>
 	<string>https://alko-f7eb3.firebaseio.com</string>
 </dict>
