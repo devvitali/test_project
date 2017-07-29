@@ -22,6 +22,7 @@ const boulderPosition = {
   latitude: 40.0822214,
   longitude: -105.14,
 };
+const BAR_CACHE = {};
 class MapScreen extends Component {
 
   constructor(props) {
@@ -34,6 +35,8 @@ class MapScreen extends Component {
       event: null,
       showBackBoulder: false,
       clusterMarkers: [],
+      barResultItems: [],
+      markerBarItems: [],
     };
     this.mapZoom = 15;
     this.currentRegion = null;
@@ -81,35 +84,58 @@ class MapScreen extends Component {
   }
   onUpdateMapBars = () => {
     if (this.updatedBarLocations) {
-      if (Object.keys(this.barLocations).length > 0) {
-        const data = { ...this.barLocations };
-        const clusters = getClusters(data, this.mapZoom);
-        const clusterMarkers = [];
-        const updatedBars = [];
-        clusters.forEach(({ properties, geometry }) => {
-          const latitude = geometry.coordinates[1];
-          const longitude = geometry.coordinates[0];
-          if (properties.cluster) {
-            clusterMarkers.push({
-              count: properties.point_count,
-              latitude,
-              longitude,
+      const clusterMarkerItems = { ...this.barLocations };
+      const barIds = Object.keys(clusterMarkerItems);
+      if (barIds.length > 0) {
+        const newBarIds = [];
+        barIds.forEach(id => BAR_CACHE[id] ? '' : newBarIds.push(id));
+        Bar.gets(newBarIds, true)
+          .then((result) => {
+            let barResultItems = [];
+            const markerBarItems = [];
+            result.forEach((_bar) => {
+              const bar = _bar;
+              if (!bar.address) {
+                bar.address = {};
+              }
+              bar.address.latitude = clusterMarkerItems[bar.id].location[0];
+              bar.address.longitude = clusterMarkerItems[bar.id].location[1];
+              barResultItems.push({ ...bar });
+              clusterMarkerItems[bar.id] = { ...clusterMarkerItems[bar.id], ...bar };
+              if (bar.currentDrinkUp || bar.currentSpecial) {
+                markerBarItems.push(clusterMarkerItems[bar.id]);
+                delete clusterMarkerItems[bar.id];
+              }
             });
-          } else {
-            updatedBars[properties.barId] = {
-              latitude,
-              longitude,
-            };
-          }
-        });
-        this.setState({ clusterMarkers });
-        this.props.updateMapBar(updatedBars);
+            const clusters = getClusters(clusterMarkerItems, this.mapZoom);
+            const clusterMarkers = [];
+            clusters.forEach(({ properties, geometry }) => {
+              const latitude = geometry.coordinates[1];
+              const longitude = geometry.coordinates[0];
+              if (properties.cluster) {
+                clusterMarkers.push({
+                  count: properties.point_count,
+                  latitude,
+                  longitude,
+                });
+              } else {
+                markerBarItems.push(clusterMarkerItems[properties.barId]);
+              }
+            });
+            const { location } = this.props;
+            if (location) {
+              barResultItems = Bar.constructor.getBarsSortedByDistance(location, barResultItems);
+            }
+            this.setState({ clusterMarkers, barResultItems, markerBarItems });
+          });
+        // this.props.updateMapBar(updatedBars);
       }
     }
     this.updatedBarLocations = false;
   };
   onBackBoulder = (longitudeDelta = 0.16, latitudeDelta = 0.08) => {
-    this.currentRegion = { ...boulderPosition, longitudeDelta, latitudeDelta };
+    const position = this.props.location ? this.props.location : boulderPosition;
+    this.currentRegion = { ...position, longitudeDelta, latitudeDelta };
     this.map.animateToRegion(this.currentRegion, 10);
   };
   onCluserMarkerPressed = ({ latitude, longitude }) => {
@@ -135,7 +161,8 @@ class MapScreen extends Component {
         center: [region.latitude, region.longitude],
         radius: distance,
       });
-      distance = getDistance(boulderPosition, region) * 0.001;
+      const position = this.props.location ? this.props.location : boulderPosition;
+      distance = getDistance(position, region) * 0.001;
       if (distance > 10) {
         this.setState({ showBackBoulder: true });
       } else {
@@ -144,7 +171,7 @@ class MapScreen extends Component {
       this.updatedBarLocations = true;
       this.onUpdateMapBars();
     } else {
-       this.onBackBoulder(1.2, 0.6);
+      this.onBackBoulder(1.2, 0.6);
     }
   };
 
@@ -226,17 +253,11 @@ class MapScreen extends Component {
   }
 
   renderBarResults() {
-    if (!this.props.bars) {
-      return null;
-    }
-    return map(this.props.bars, (bar, id) => this.renderBarResult(bar, id));
+    return map(this.state.barResultItems, (bar, id) => this.renderBarResult(bar, id));
   }
 
   renderBarMarkers() {
-    if (!this.props.bars) {
-      return null;
-    }
-    return map(this.props.bars, (bar, id) => this.renderBarMarker(bar, id));
+    return map(this.state.markerBarItems, (bar, id) => this.renderBarMarker(bar, id));
   }
   renderClusterMarkers() {
     return this.state.clusterMarkers.map((marker, id) => (

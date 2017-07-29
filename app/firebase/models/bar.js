@@ -17,7 +17,6 @@ export default class Bar extends Base {
 
   static getBarsSortedByDistance(locationCoords, bars, asc = true) {
     const barDistances = {};
-
     _.each(bars, (bar, key) => {
       const { latitude, longitude, accuracy } = locationCoords;
       const start = { latitude, longitude };
@@ -28,7 +27,7 @@ export default class Bar extends Base {
     if (!asc) {
       barDistancePairs.reverse();
     }
-    return _.mapValues(_.fromPairs(barDistancePairs), (bar, id) => bars[id]);
+    return barDistancePairs.map(item => bars[item[0]]);
   }
 
 }
