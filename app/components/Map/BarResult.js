@@ -37,6 +37,9 @@ const styles = StyleSheet.create({
     height: 30,
     marginRight: 10,
   },
+  barName: {
+    flex: 1,
+  },
   btnText: {
     color: Colors.snow,
     fontFamily: Fonts.type.primary,
@@ -68,7 +71,7 @@ const BarResult = (props) => {
       <View style={styles.container}>
         {renderBarIcon(activeDrinkUp, activeSpecial)}
         <View style={styles.infoContainer}>
-          <Text style={[styles.btnText, textStyle]}>{name}</Text>
+          <Text style={[styles.btnText, styles.barName]} numberOfLines={1}>{name}</Text>
           <Text style={[styles.btnText, textStyle]}>{distance}</Text>
         </View>
       </View>

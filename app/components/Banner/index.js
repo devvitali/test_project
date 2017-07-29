@@ -33,10 +33,7 @@ const Banner = (props) => {
   } = applyComponentTheme(theme, props);
   const Icon = getIconFamilyComponent(props.iconFamily);
   return (
-    <LinearGradient
-      colors={gradientColors}
-      style={[styles.btn, style]}
-    >
+    <LinearGradient colors={gradientColors} style={[styles.btn, style]}>
       <TouchableOpacity activeOpacity={0.7} style={styles.body} onPress={onPress}>
         <Icon style={styles.icon} name={iconName} size={iconSize} color={iconColor} />
         <Text style={[styles.bodyText, textStyle]}>{props.text}</Text>

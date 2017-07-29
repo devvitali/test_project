@@ -6,7 +6,7 @@ import { getDistance } from 'geolib';
 import I18n from 'react-native-i18n';
 import { map } from 'lodash';
 import AppContainer from '../AppContainer';
-import { NavItems, MapCallout, BarResult, Button, Banner, IconAlko } from '../../components';
+import { NavItems, BarResult, Button, Banner, IconAlko } from '../../components';
 import { AlertActions, BarActions, DrinkupActions, LocationActions } from '../../redux';
 import { geoFire } from '../../firebase';
 import { Bar } from '../../firebase/models';
@@ -110,7 +110,7 @@ class MapScreen extends Component {
   };
   onBackBoulder = (longitudeDelta = 0.16, latitudeDelta = 0.08) => {
     this.currentRegion = { ...boulderPosition, longitudeDelta, latitudeDelta };
-    this.map.animateToRegion(this.currentRegion, 1000);
+    this.map.animateToRegion(this.currentRegion, 10);
   };
   onCluserMarkerPressed = ({ latitude, longitude }) => {
     const longitudeDelta = this.currentRegion.longitudeDelta / 2;
@@ -120,7 +120,7 @@ class MapScreen extends Component {
   };
   onRegionChange = (region) => {
     this.currentRegion = region;
-    if (region.longitudeDelta < 2 && region.latitudeDelta < 1) {
+    if (region.longitudeDelta < 1.6 && region.latitudeDelta < 0.8) {
       this.mapZoom = Math.round(Math.log(360 / region.longitudeDelta) / Math.LN2);
       const start = {
         latitude: region.latitude - (region.latitudeDelta / 2),
@@ -144,7 +144,7 @@ class MapScreen extends Component {
       this.updatedBarLocations = true;
       this.onUpdateMapBars();
     } else {
-      this.onBackBoulder(1.6, 0.8);
+       this.onBackBoulder(1.2, 0.6);
     }
   };
 

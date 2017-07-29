@@ -16,7 +16,6 @@ export default class Base {
   get unsubscribers() {
     return this._unsubscribers;
   }
-
   get actions() {
     return this._actions;
   }
