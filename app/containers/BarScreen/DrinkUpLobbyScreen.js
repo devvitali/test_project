@@ -46,7 +46,13 @@ class DrinkupLobbyScreen extends React.Component {
     const { bar, user, uid, leaveDrinkup } = this.props;
     leaveDrinkup(bar, { ...user, uid });
   };
-  onCloseJoiningDialog = invitedUser => this.setState({ showComposeMessage: true, invitedUser });
+  onCloseJoiningDialog = (invitedUser) => {
+    this.setState({
+      showComposeMessage: true,
+      showJoinDialog: false,
+      invitedUser,
+    });
+  };
   onCloseRedeemWarningDialog = () => this.setState({ showRedeemWarning: false });
   onComposedMessageChange = composedMessage => this.setState({ composedMessage });
   onCloseComposeMessageDialog = () => {
@@ -122,17 +128,20 @@ class DrinkupLobbyScreen extends React.Component {
   renderRequestToJoinDialog() {
     const { waitingUsers } = this.props;
     if (waitingUsers && Object.keys(waitingUsers).length > 0) {
-      const user = waitingUsers[Object.keys(waitingUsers)[0]];
-      const { firstName, distance = 0, photoURL } = user;
-      return (
-        <JoinDialog
-          onClose={() => this.onCloseJoiningDialog(user)}
-          visible
-          name={firstName}
-          avatarSrc={photoURL}
-          distance={distance}
-        />
-      );
+      if (this.state.showJoinDialog) {
+        const user = waitingUsers[Object.keys(waitingUsers)[0]];
+        const { firstName, distance = 0, photoURL } = user;
+        return (
+          <JoinDialog
+            onClose={() => this.onCloseJoiningDialog(user)}
+            visible
+            name={firstName}
+            avatarSrc={photoURL}
+            distance={distance}
+          />
+        );
+      }
+      setTimeout(() => this.setState({ showJoinDialog: true }), 100);
     }
     return null;
   }

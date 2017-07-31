@@ -56,10 +56,14 @@ export default class Base {
       this.dbRef(key).once('value', (snapshot) => {
         if (key) {
           const result = snapshot.val();
-          if (appendKey) result.id = snapshot.key;
-          this.populateResult(result)
-            .then(resolve)
-            .catch(reject);
+          if (result) {
+            if (appendKey) {
+              result.id = snapshot.key;
+            }
+            this.populateResult(result)
+              .then(resolve)
+              .catch(reject);
+          }
         } else {
           const promises = _.map(snapshot.val(), (value, id) => new Promise(innerResolve =>
             this.populateResult(value)

@@ -134,8 +134,8 @@ class MapScreen extends Component {
     this.updatedBarLocations = false;
   };
   onBackBoulder = (longitudeDelta = 0.16, latitudeDelta = 0.08) => {
-    const position = this.props.location ? this.props.location : boulderPosition;
-    this.currentRegion = { ...position, longitudeDelta, latitudeDelta };
+    // const position = this.props.location ? this.props.location : boulderPosition;
+    this.currentRegion = { ...boulderPosition, longitudeDelta, latitudeDelta };
     this.map.animateToRegion(this.currentRegion, 10);
   };
   onCluserMarkerPressed = ({ latitude, longitude }) => {
