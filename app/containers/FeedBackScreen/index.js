@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Text, TextInput, View } from 'react-native';
+import { Text, TextInput, View, Keyboard } from 'react-native';
+import { connect } from 'react-redux';
 import I18n from 'react-native-i18n';
 import AppContainer from '../AppContainer';
 import { Button, NavItems } from '../../components';
@@ -7,7 +8,7 @@ import Styles from './styles';
 import { firebaseDb } from '../../firebase';
 import { Colors } from '../../themes';
 
-export default class FeedbackScreen extends Component {
+class FeedbackScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -17,9 +18,10 @@ export default class FeedbackScreen extends Component {
 
   updateFeedback = feedback => this.setState({ feedback });
   doSubmitFeedback = () => {
+    Keyboard.dismiss();
     const data = {
       feedback: this.state.feedback,
-      user_id: this.props.auth.uid,
+      user_id: this.props.uid,
     };
     new Promise((resolve, reject) => {
       firebaseDb.ref('/feedback').push(data, error => (
@@ -68,3 +70,7 @@ export default class FeedbackScreen extends Component {
     );
   }
 }
+const mapStateToProps = state => ({
+  uid: state.auth.uid,
+});
+export default connect(mapStateToProps)(FeedbackScreen);

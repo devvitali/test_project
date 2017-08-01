@@ -46,6 +46,7 @@ class EditProfileScreen extends Component {
 
   render() {
     const { user, isProfileComplete, fetching, isUserValid } = this.props;
+    const { routeName } = this.props.navigation.state;
     const { firstName, showPicDialog } = this.state;
     const opacity = fetching ? 0.3 : 1.0;
     const source = user.photoURL ? { uri: user.photoURL } : avatar;
@@ -107,7 +108,7 @@ class EditProfileScreen extends Component {
                 </TouchableOpacity>
               ))}
             </View>
-            {(!user.onboardingComplete) &&
+            {routeName === 'EditProfileScreenWithoutSignIn' &&
             <View style={Styles.footer}>
               <Text style={Styles.incompleteProfileText}>{I18n.t('Profile_IncompleteWarning')}</Text>
               <Button
@@ -118,7 +119,7 @@ class EditProfileScreen extends Component {
               />
             </View>
             }
-            {(user.onboardingComplete && !isProfileComplete) &&
+            {(routeName === 'EditProfileScreen' && !isProfileComplete) &&
             <View style={Styles.footer}>
               <Text style={Styles.incompleteProfileText}>{I18n.t('Profile_IncompleteWarning')}</Text>
             </View>
@@ -141,7 +142,7 @@ class EditProfileScreen extends Component {
 const mapStateToProps = state => ({
   fetching: state.auth.fetching,
   user: state.auth.profile,
-  isProfileComplete: User.constructor.isProfileComplete(state.auth.profile),
+  isProfileComplete: User.constructor.isProfileComplete(state.auth.profile) && !state.auth.fetching,
   isUserValid: User.isUserValid(state.auth.profile),
 });
 

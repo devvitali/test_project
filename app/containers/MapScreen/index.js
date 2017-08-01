@@ -41,7 +41,7 @@ class MapScreen extends Component {
     this.mapZoom = 15;
     this.currentRegion = null;
     this.barLocations = {};
-    this.addBarInterval = setInterval(this.onUpdateMapBars, 300);
+    this.addBarInterval = setInterval(this.onUpdateMapBars, 50);
     this.geoQuery = geoFire('barLocations')
       .query({
         center: props.region.latitude ? [props.region.latitude, props.region.longitude] : [50, -50],
@@ -291,6 +291,7 @@ class MapScreen extends Component {
         provider={PROVIDER_GOOGLE}
         customMapStyle={mapStyle}
         initialRegion={this.props.region}
+        rotateEnabled={false}
         onRegionChangeComplete={this.onRegionChange}
         showsUserLocation={this.state.showUserLocation}
         ref={ref => this.map = ref}
