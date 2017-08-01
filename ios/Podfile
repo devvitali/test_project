@@ -17,4 +17,5 @@ end
   'Instabug',
 ].each do |lib|
   pod lib
+  pod ‘GoogleMaps’
 end

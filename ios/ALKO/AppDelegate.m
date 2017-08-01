@@ -11,6 +11,7 @@
 #if defined(__IPHONE_10_0) && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0
 @import UserNotifications;
 #endif
+@import GoogleMaps;
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 #import <CodePush/CodePush.h>
@@ -29,6 +30,7 @@ NSString *const kGCMMessageIDKey = @"gcm.message_id";
                                                initialProperties:nil
                                                    launchOptions:launchOptions];
   rootView.backgroundColor = [[UIColor alloc] initWithRed:1.0f green:1.0f blue:1.0f alpha:1];
+  [GMSServices provideAPIKey:@"AIzaSyAnQdY1dgtyDDFTGHtpYoqVHQxiVQ0c4xU"];
   [FIRApp configure];
   [FIRMessaging messaging].delegate = self;
   

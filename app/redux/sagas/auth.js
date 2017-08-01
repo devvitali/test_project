@@ -80,6 +80,7 @@ export function* updateProfile({ diff }) {
 
 export function* uploadProfilePhoto({ photo }) {
   try {
+    yield put(authActions.updateProfileFulfilled({ photoURL: photo.path }));
     const authData = yield call([firebaseAuth, firebaseAuth.signInAnonymously]);
     const storageOpts = { contentType: 'image/jpeg', contentEncoding: 'base64' };
     const filename = photo.path.replace(/^.*[\\/]/, '');

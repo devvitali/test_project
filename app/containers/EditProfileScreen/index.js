@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Image, Text, TextInput, TouchableOpacity, View, Keyboard } from 'react-native';
 import I18n from 'react-native-i18n';
 import { debounce, map } from 'lodash';
 import AppContainer from '../AppContainer';
@@ -69,7 +69,7 @@ class EditProfileScreen extends Component {
                 <Text style={Styles.updatePhoto}>{I18n.t('Profile_TapToAddPhoto').toUpperCase()}</Text>
               </TouchableOpacity>
             </View>
-            <View style={Styles.labelContainer}>
+            <View style={[Styles.labelContainer, { borderBottomWidth: 1 }]}>
               <Text style={Styles.label}>{I18n.t('Profile_FirstName')}</Text>
               <TextInput
                 style={Styles.input}
@@ -77,6 +77,7 @@ class EditProfileScreen extends Component {
                 autoCorrect={false}
                 maxLength={15}
                 returnKeyType="done"
+                onSubmitEditing={() => Keyboard.dismiss()}
                 onChange={this.onFirstNameChange}
                 onChangeText={this.saveProfileDelayed}
                 underlineColorAndroid={Colors.transparent}

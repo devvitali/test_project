@@ -1,0 +1,9 @@
+Crash on _lazyCallableModules or regeneratorRuntime.mark not undefined.
+
+watchman watch-del-all
+rm -rf ./node_modules
+rm -rf $TMPDIR/react-*
+npm i babel-preset-react-native@2.0.0 -D -S
+npm install
+npm start -- --reset-cache
+react-native run-ios

@@ -32,7 +32,6 @@ export default StyleSheet.create({
   },
 
   labelContainer: {
-    borderBottomWidth: 1,
     borderBottomColor: Colors.brand.gray,
     borderStyle: 'solid',
     height: 46,

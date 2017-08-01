@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, ScrollView, Image, Platform, Text, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
-import MapView from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import { getDistance } from 'geolib';
 import I18n from 'react-native-i18n';
 import { map } from 'lodash';
@@ -288,6 +288,7 @@ class MapScreen extends Component {
     return (
       <MapView
         style={Styles.map}
+        provider={PROVIDER_GOOGLE}
         customMapStyle={mapStyle}
         initialRegion={this.props.region}
         onRegionChangeComplete={this.onRegionChange}
