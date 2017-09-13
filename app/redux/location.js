@@ -2,12 +2,12 @@ import { createReducer, createActions } from 'reduxsauce';
 
 /* ------------- Types and Action Creators ------------- */
 const { Types, Creators } = createActions({
-  startBackgroundGeolocation: ['geolocationConfig'],
-  startBackgroundGeolocationSuccess: ['geolocationEnabled'],
-  startBackgroundGeolocationFailure: ['error'],
-  stopBackgroundGeolocation: [],
-  stopBackgroundGeolocationSuccess: ['enabled'],
-  stopBackgroundGeolocationFailure: ['error'],
+  startBackgroundGeoLocation: ['geoLocationConfig'],
+  startBackgroundGeoLocationSuccess: ['geoLocationEnabled'],
+  startBackgroundGeoLocationFailure: ['error'],
+  stopBackgroundGeoLocation: [],
+  stopBackgroundGeoLocationSuccess: ['enabled'],
+  stopBackgroundGeoLocationFailure: ['error'],
   onLocationChange: ['location'],
   onLocationError: ['error'],
   onMotionChange: ['motion'],
@@ -20,7 +20,7 @@ export default Creators;
 
 /* ------------- Initial State ------------- */
 const defaultState = {
-  geolocationEnabled: false,
+  geoLocationEnabled: false,
   lastLocationTimestamp: null,
   isMoving: false,
   activity: null,
@@ -34,16 +34,16 @@ const defaultState = {
 
 const request = state => ({ ...state, fetching: true });
 
-const startBackgroundGeolocationSuccess = (state, { geolocationEnabled }) => ({
+const startBackgroundGeoLocationSuccess = (state, { geoLocationEnabled }) => ({
   ...state,
-  geolocationEnabled,
+  geoLocationEnabled,
   error: null,
   fetching: false,
 });
 
-const stopBackgroundGeolocationSuccess = (state, { geolocationEnabled }) => ({
+const stopBackgroundGeoLocationSuccess = (state, { geoLocationEnabled }) => ({
   ...state,
-  geolocationEnabled,
+  geoLocationEnabled,
   error: null,
   fetching: false,
 });
@@ -76,12 +76,12 @@ const failure = (state, { error }) => ({ ...state, fetching: false, coords: null
 
 /* ------------- Hookup Reducers To Types ------------- */
 export const locationReducer = createReducer(defaultState, {
-  [Types.START_BACKGROUND_GEOLOCATION]: request,
-  [Types.START_BACKGROUND_GEOLOCATION_SUCCESS]: startBackgroundGeolocationSuccess,
-  [Types.START_BACKGROUND_GEOLOCATION_FAILURE]: failure,
-  [Types.STOP_BACKGROUND_GEOLOCATION]: request,
-  [Types.STOP_BACKGROUND_GEOLOCATION_SUCCESS]: stopBackgroundGeolocationSuccess,
-  [Types.STOP_BACKGROUND_GEOLOCATION_FAILURE]: failure,
+  [Types.START_BACKGROUND_GEO_LOCATION]: request,
+  [Types.START_BACKGROUND_GEO_LOCATION_SUCCESS]: startBackgroundGeoLocationSuccess,
+  [Types.START_BACKGROUND_GEO_LOCATION_FAILURE]: failure,
+  [Types.STOP_BACKGROUND_GEO_LOCATION]: request,
+  [Types.STOP_BACKGROUND_GEO_LOCATION_SUCCESS]: stopBackgroundGeoLocationSuccess,
+  [Types.STOP_BACKGROUND_GEO_LOCATION_FAILURE]: failure,
   [Types.ON_LOCATION_CHANGE]: onLocationChange,
   [Types.ON_LOCATION_ERROR]: failure,
   [Types.ON_MOTION_CHANGE]: onMotionChange,

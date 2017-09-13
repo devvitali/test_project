@@ -1,28 +1,28 @@
 import { all, call, put } from 'redux-saga/effects';
-import BackgroundGeolocation from 'react-native-background-geolocation';
+import BackgroundGeoLocation from 'react-native-background-geolocation';
 import { eventChannel } from 'redux-saga';
 
 import LocationActions from '../location';
-import bgGeolocationConfig from '../../config/backgroundGeoLocation';
+import bgGeoLocationConfig from '../../config/backgroundGeoLocation';
 import { watch } from '../../utils/sagaUtils';
 
-const watchBgGeolocationEvent = (eventName, action) => eventChannel((emit) => {
+const watchBgGeoLocationEvent = (eventName, action) => eventChannel((emit) => {
   const onResult = res => emit(action(res));
-  BackgroundGeolocation.on(eventName, onResult);
+  BackgroundGeoLocation.on(eventName, onResult);
   const unsubscribe = () => {
-    BackgroundGeolocation.un(eventName);
+    BackgroundGeoLocation.un(eventName);
   };
   return unsubscribe;
 });
 
-const startBgGeolocation = () => new Promise((resolve, reject) => {
-  BackgroundGeolocation.start(resolve, reject);
+const startBgGeoLocation = () => new Promise((resolve, reject) => {
+  BackgroundGeoLocation.start(resolve, reject);
 });
 
-const reconfigureBackgroundGeolocation = config => new Promise((resolve, reject) => {
-  BackgroundGeolocation.setConfig(config, (bgLocationState) => {
+const reconfigureBackgroundGeoLocation = config => new Promise((resolve, reject) => {
+  BackgroundGeoLocation.setConfig(config, (bgLocationState) => {
     if (!bgLocationState.enabled) {
-      startBgGeolocation()
+      startBgGeoLocation()
         .then(resolve)
         .catch(reject);
     } else {
@@ -31,10 +31,10 @@ const reconfigureBackgroundGeolocation = config => new Promise((resolve, reject)
   }, reject);
 });
 
-const configureBackgroundGeolocation = config => new Promise((resolve, reject) => {
-  BackgroundGeolocation.configure(config, (bgLocationState) => {
+const configureBackgroundGeoLocation = config => new Promise((resolve, reject) => {
+  BackgroundGeoLocation.configure(config, (bgLocationState) => {
     if (!bgLocationState.enabled) {
-      startBgGeolocation()
+      startBgGeoLocation()
         .then(resolve)
         .catch(reject);
     }
@@ -42,38 +42,38 @@ const configureBackgroundGeolocation = config => new Promise((resolve, reject) =
 });
 
 const getBackgroundLocationState = () => new Promise((resolve) => {
-  BackgroundGeolocation.getState(resolve);
+  BackgroundGeoLocation.getState(resolve);
 });
 
-export function* startBackgroundGeolocationWatchers() {
-  console.log('startBackgroundGeolocationWatchers');
+export function* startBackgroundGeoLocationWatchers() {
+  console.log('startBackgroundGeoLocationWatchers');
   yield all([
     // This event fires when movement states changes (stationary->moving; moving->stationary)
-    call(watch, watchBgGeolocationEvent, 'motionchange', LocationActions.onMotionChange),
+    call(watch, watchBgGeoLocationEvent, 'motionchange', LocationActions.onMotionChange),
     // This event fires whenever bgGeo receives a location update.
-    call(watch, watchBgGeolocationEvent, 'location', LocationActions.onLocationChange),
+    call(watch, watchBgGeoLocationEvent, 'location', LocationActions.onLocationChange),
     // This event fires whenever bgGeo receives an error
-    // call(watch, watchBgGeolocationEvent, 'error', LocationActions.onLocationError),
+    // call(watch, watchBgGeoLocationEvent, 'error', LocationActions.onLocationError),
     // This event fires when a chnage in motion activity is detected
-    call(watch, watchBgGeolocationEvent, 'activitychange', LocationActions.onActivityChange),
+    call(watch, watchBgGeoLocationEvent, 'activitychange', LocationActions.onActivityChange),
     // This event fires when the user toggles location-services
-    call(watch, watchBgGeolocationEvent, 'providerchange', LocationActions.onProviderChange),
+    call(watch, watchBgGeoLocationEvent, 'providerchange', LocationActions.onProviderChange),
   ]);
 }
 
-export function* startBackgroundGeolocation({ geolocationConfig = bgGeolocationConfig }) {
+export function* startBackgroundGeoLocation({ geoLocationConfig = bgGeoLocationConfig }) {
   try {
-    console.log('startBackgroundGeolocation');
-    let bgLocationState = yield call(getBackgroundLocationState, geolocationConfig);
+    console.log('startBackgroundGeoLocation');
+    let bgLocationState = yield call(getBackgroundLocationState, geoLocationConfig);
 
     if (!bgLocationState) {
-      bgLocationState = yield call(configureBackgroundGeolocation, geolocationConfig);
+      bgLocationState = yield call(configureBackgroundGeoLocation, geoLocationConfig);
     }
 
-    bgLocationState = yield call(reconfigureBackgroundGeolocation, geolocationConfig);
+    bgLocationState = yield call(reconfigureBackgroundGeoLocation, geoLocationConfig);
 
-    yield put(LocationActions.startBackgroundGeolocationSuccess(bgLocationState.enabled));
+    yield put(LocationActions.startBackgroundGeoLocationSuccess(bgLocationState.enabled));
   } catch (error) {
-    yield put(LocationActions.startBackgroundGeolocationFailure(error));
+    yield put(LocationActions.startBackgroundGeoLocationFailure(error));
   }
 }

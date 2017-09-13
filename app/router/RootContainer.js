@@ -16,7 +16,7 @@ class RootContainer extends Component {
       this.props.startup();
     }
 
-    this.props.startBackgroundGeolocation();
+    this.props.startBackgroundGeoLocation();
     FCM.getFCMToken().then((fcmToken) => {
       this.props.updateProfile({ fcmToken });
       // store fcm token in your server
@@ -49,7 +49,7 @@ class RootContainer extends Component {
 const mapDispatchToProps = dispatch => ({
   startup: () => dispatch(StartupActions.startup()),
   updateProfile: diff => dispatch(AuthActions.updateProfile(diff)),
-  startBackgroundGeolocation: () => dispatch(LocationActions.startBackgroundGeolocation()),
+  startBackgroundGeoLocation: () => dispatch(LocationActions.startBackgroundGeoLocation()),
 });
 
 export default connect(null, mapDispatchToProps)(RootContainer);

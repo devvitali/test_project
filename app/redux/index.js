@@ -28,7 +28,7 @@ const mapDispatchToProps = dispatch => ({
     signIn: () => dispatch(AuthActions.signIn()),
     updateProfile: diff => dispatch(AuthActions.updateProfile(diff)),
     uploadProfilePhoto: photo => dispatch(AuthActions.uploadProfilePhoto(photo)),
-    startBackgroundGeolocation: () => dispatch(LocationActions.startBackgroundGeolocation()),
+    startBackgroundGeoLocation: () => dispatch(LocationActions.startBackgroundGeoLocation()),
   },
 });
 

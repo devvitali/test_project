@@ -42,7 +42,7 @@ class MapScreen extends Component {
     this.mapZoom = 15;
     this.currentRegion = null;
     this.barLocations = {};
-    this.addBarInterval = setInterval(this.onUpdateMapBars, 50);
+    this.barInterval = -1;
     this.geoQuery = geoFire('barLocations')
       .query({
         center: props.region.latitude ? [props.region.latitude, props.region.longitude] : [50, -50],
@@ -50,12 +50,16 @@ class MapScreen extends Component {
       });
 
     this.geoQuery.on('key_entered', (barId, location) => {
-      this.updatedBarLocations = true;
       this.barLocations[barId] = { barId, location };
+      if (this.barInterval === -1) {
+        this.barInterval = setTimeout(() => this.onUpdateMapBars, 50);
+      }
     });
     this.geoQuery.on('key_exited', (barId) => {
-      this.updatedBarLocations = true;
       delete this.barLocations[barId];
+      if (this.barInterval === -1) {
+        this.barInterval = setTimeout(() => this.onUpdateMapBars, 50);
+      }
     });
   }
 
@@ -72,6 +76,9 @@ class MapScreen extends Component {
       });
     }
   }
+  componentWillReceiveProps(newProps) {
+    console.log('newProps', newProps);
+  }
   componentDidUpdate(prevProps) {
     if (this.props.drinkupBar && prevProps.drinkupBar !== this.props.drinkupBar) {
       this.props.navigation.navigate('JoinDrinkUpScreen', { barId: this.props.drinkupBar.id });
@@ -79,58 +86,53 @@ class MapScreen extends Component {
   }
 
   componentWillUnmount() {
-    clearInterval(this.addBarInterval);
     this.props.clearBars();
     this.geoQuery.cancel();
   }
   onUpdateMapBars = async () => {
-    if (this.updatedBarLocations) {
-      const clusterMarkerItems = { ...this.barLocations };
-      const barIds = Object.keys(clusterMarkerItems);
-      if (barIds.length > 0) {
-        const newBarIds = [];
-        barIds.forEach(id => BAR_CACHE[id] ? '' : newBarIds.push(id));
-        const result = await Bar.gets(newBarIds, true);
-        let barResultItems = [];
-        const markerBarItems = [];
-        result.forEach((_bar) => {
-          const bar = _bar;
-          if (!bar.address) {
-            bar.address = {};
-          }
-          bar.address.latitude = clusterMarkerItems[bar.id].location[0];
-          bar.address.longitude = clusterMarkerItems[bar.id].location[1];
-          barResultItems.push({ ...bar });
-          clusterMarkerItems[bar.id] = { ...clusterMarkerItems[bar.id], ...bar };
-          if (bar.currentDrinkUp || bar.currentSpecial) {
-            markerBarItems.push(clusterMarkerItems[bar.id]);
-            delete clusterMarkerItems[bar.id];
-          }
-        });
-        const clusters = getClusters(clusterMarkerItems, this.mapZoom);
-        const clusterMarkers = [];
-        clusters.forEach(({ properties, geometry }) => {
-          const latitude = geometry.coordinates[1];
-          const longitude = geometry.coordinates[0];
-          if (properties.cluster) {
-            clusterMarkers.push({
-              count: properties.point_count,
-              latitude,
-              longitude,
-            });
-          } else {
-            markerBarItems.push(clusterMarkerItems[properties.barId]);
-          }
-        });
-        const { location } = this.props;
-        if (location) {
-          barResultItems = Bar.constructor.getBarsSortedByDistance(location, barResultItems);
+    const clusterMarkerItems = { ...this.barLocations };
+    const barIds = Object.keys(clusterMarkerItems);
+    if (barIds.length > 0) {
+      const result = await Bar.gets(barIds, true);
+      let barResultItems = [];
+      const markerBarItems = [];
+      result.forEach((_bar) => {
+        const bar = _bar;
+        if (!bar.address) {
+          bar.address = {};
         }
-        this.setState({ clusterMarkers, barResultItems, markerBarItems });
-        // this.props.updateMapBar(updatedBars);
+        bar.address.latitude = clusterMarkerItems[bar.id].location[0];
+        bar.address.longitude = clusterMarkerItems[bar.id].location[1];
+        barResultItems.push({ ...bar });
+        clusterMarkerItems[bar.id] = { ...clusterMarkerItems[bar.id], ...bar };
+        if (bar.currentDrinkUp || bar.currentSpecial) {
+          markerBarItems.push(clusterMarkerItems[bar.id]);
+          delete clusterMarkerItems[bar.id];
+        }
+      });
+      const clusters = getClusters(clusterMarkerItems, this.mapZoom);
+      const clusterMarkers = [];
+      clusters.forEach(({ properties, geometry }) => {
+        const latitude = geometry.coordinates[1];
+        const longitude = geometry.coordinates[0];
+        if (properties.cluster) {
+          clusterMarkers.push({
+            count: properties.point_count,
+            latitude,
+            longitude,
+          });
+        } else {
+          markerBarItems.push(clusterMarkerItems[properties.barId]);
+        }
+      });
+      const { location } = this.props;
+      if (location) {
+        barResultItems = Bar.constructor.getBarsSortedByDistance(location, barResultItems);
       }
+      this.setState({ clusterMarkers, barResultItems, markerBarItems });
+      // this.props.updateMapBar(updatedBars);
     }
-    this.updatedBarLocations = false;
+    this.barInterval = -1;
   };
   onBackBoulder = (longitudeDelta = 0.16, latitudeDelta = 0.08) => {
     // const position = this.props.location ? this.props.location : boulderPosition;
@@ -310,15 +312,11 @@ class MapScreen extends Component {
               {this.renderAlert()}
             </View>
             {this.state.showBackBoulder &&
-            <TouchableOpacity
-              style={Styles.locationButtonContainer}
-              onPress={() => this.onBackBoulder()}
-            >
+            <TouchableOpacity style={Styles.locationButtonContainer} onPress={this.onBackBoulder}>
               <Image source={Images.locationBack} style={Styles.imgLocationBack} />
             </TouchableOpacity>
             }
           </View>
-
           <ScrollView style={Styles.barListContainer}>
             {this.renderBarResults()}
           </ScrollView>
@@ -339,7 +337,7 @@ const mapStateToProps = ({ location, bar, drinkup, alert, auth }) => ({
 
 //eslint-disable-next-line
 const mapDispatchToProps = dispatch => ({
-  startBackgroundGeolocation: () => dispatch(LocationActions.startBackgroundGeolocation()),
+  startBackgroundGeoLocation: () => dispatch(LocationActions.startBackgroundGeoLocation()),
   clearBars: () => dispatch(BarActions.clearBars()),
   updateMapBar: bars => dispatch(BarActions.updateMapBar(bars)),
   markAlertAsRead: alert => dispatch(AlertActions.markAlertAsRead(alert)),

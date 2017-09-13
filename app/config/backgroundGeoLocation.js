@@ -1,7 +1,7 @@
-import BackgroundGeolocation from 'react-native-background-geolocation';
+import BackgroundGeoLocation from 'react-native-background-geolocation';
 
 export default {
-  // Geolocation Config
+  // GeoLocation Config
   desiredAccuracy: 0,
   stationaryRadius: 25,
   distanceFilter: 10,
@@ -9,7 +9,7 @@ export default {
   stopTimeout: 1,
   // Application config
   debug: false, // <-- enable this hear sounds for background-geolocation life-cycle.
-  logLevel: BackgroundGeolocation.LOG_LEVEL_VERBOSE,
+  logLevel: BackgroundGeoLocation.LOG_LEVEL_VERBOSE,
   stopOnTerminate: false, // <-- Allow the background-service to continue tracking when user closes the app.
   startOnBoot: true, // <-- Auto start tracking when device is powered-up.
   // HTTP / SQLite config
