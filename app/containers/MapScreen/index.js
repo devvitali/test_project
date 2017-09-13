@@ -83,52 +83,50 @@ class MapScreen extends Component {
     this.props.clearBars();
     this.geoQuery.cancel();
   }
-  onUpdateMapBars = () => {
+  onUpdateMapBars = async () => {
     if (this.updatedBarLocations) {
       const clusterMarkerItems = { ...this.barLocations };
       const barIds = Object.keys(clusterMarkerItems);
       if (barIds.length > 0) {
         const newBarIds = [];
         barIds.forEach(id => BAR_CACHE[id] ? '' : newBarIds.push(id));
-        Bar.gets(newBarIds, true)
-          .then((result) => {
-            let barResultItems = [];
-            const markerBarItems = [];
-            result.forEach((_bar) => {
-              const bar = _bar;
-              if (!bar.address) {
-                bar.address = {};
-              }
-              bar.address.latitude = clusterMarkerItems[bar.id].location[0];
-              bar.address.longitude = clusterMarkerItems[bar.id].location[1];
-              barResultItems.push({ ...bar });
-              clusterMarkerItems[bar.id] = { ...clusterMarkerItems[bar.id], ...bar };
-              if (bar.currentDrinkUp || bar.currentSpecial) {
-                markerBarItems.push(clusterMarkerItems[bar.id]);
-                delete clusterMarkerItems[bar.id];
-              }
+        const result = await Bar.gets(newBarIds, true);
+        let barResultItems = [];
+        const markerBarItems = [];
+        result.forEach((_bar) => {
+          const bar = _bar;
+          if (!bar.address) {
+            bar.address = {};
+          }
+          bar.address.latitude = clusterMarkerItems[bar.id].location[0];
+          bar.address.longitude = clusterMarkerItems[bar.id].location[1];
+          barResultItems.push({ ...bar });
+          clusterMarkerItems[bar.id] = { ...clusterMarkerItems[bar.id], ...bar };
+          if (bar.currentDrinkUp || bar.currentSpecial) {
+            markerBarItems.push(clusterMarkerItems[bar.id]);
+            delete clusterMarkerItems[bar.id];
+          }
+        });
+        const clusters = getClusters(clusterMarkerItems, this.mapZoom);
+        const clusterMarkers = [];
+        clusters.forEach(({ properties, geometry }) => {
+          const latitude = geometry.coordinates[1];
+          const longitude = geometry.coordinates[0];
+          if (properties.cluster) {
+            clusterMarkers.push({
+              count: properties.point_count,
+              latitude,
+              longitude,
             });
-            const clusters = getClusters(clusterMarkerItems, this.mapZoom);
-            const clusterMarkers = [];
-            clusters.forEach(({ properties, geometry }) => {
-              const latitude = geometry.coordinates[1];
-              const longitude = geometry.coordinates[0];
-              if (properties.cluster) {
-                clusterMarkers.push({
-                  count: properties.point_count,
-                  latitude,
-                  longitude,
-                });
-              } else {
-                markerBarItems.push(clusterMarkerItems[properties.barId]);
-              }
-            });
-            const { location } = this.props;
-            if (location) {
-              barResultItems = Bar.constructor.getBarsSortedByDistance(location, barResultItems);
-            }
-            this.setState({ clusterMarkers, barResultItems, markerBarItems });
-          });
+          } else {
+            markerBarItems.push(clusterMarkerItems[properties.barId]);
+          }
+        });
+        const { location } = this.props;
+        if (location) {
+          barResultItems = Bar.constructor.getBarsSortedByDistance(location, barResultItems);
+        }
+        this.setState({ clusterMarkers, barResultItems, markerBarItems });
         // this.props.updateMapBar(updatedBars);
       }
     }
