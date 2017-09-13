@@ -271,7 +271,7 @@ class MapScreen extends Component {
             </Text>
           </View>
         </MapView.Marker>
-      )
+      );
     });
   }
   renderMap() {
