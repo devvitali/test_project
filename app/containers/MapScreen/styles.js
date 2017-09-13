@@ -70,6 +70,7 @@ export default StyleSheet.create({
   },
   noBarsContainer: {
     flex: 1,
+    flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'space-between',
     marginVertical: Metrics.doubleBaseMargin,
@@ -81,6 +82,6 @@ export default StyleSheet.create({
     fontSize: Fonts.size.regular,
   },
   buttonLabel: {
-    fontSize: Fonts.size.large,
+    fontSize: Fonts.size.small,
   },
 });

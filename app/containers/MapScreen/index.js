@@ -174,7 +174,9 @@ class MapScreen extends Component {
     const title = bar.name;
     this.props.navigation.navigate('SponsoredScreen', { bar, title });
   }
-
+  navigateFeedBackScreen = () => {
+    this.props.navigation.navigate('FeedBackScreen');
+  };
   renderAlert() {
     const { bar } = this.state;
     if (!bar) {
@@ -261,10 +263,13 @@ class MapScreen extends Component {
         <Text style={styles.noBarLabel}>
           {text}
         </Text>
-        <Button
-          textStyle={styles.buttonLabel}
-          text={'What bars should we add to ALKO?'}
-        />
+        <View style={{ alignSelf: 'stretch', marginHorizontal: 20 }} >
+          <Button
+            onPress={this.navigateFeedBackScreen}
+            textStyle={styles.buttonLabel}
+            text={'What bars should we add to ALKO?'}
+          />
+        </View>
       </View>
     );
   }
