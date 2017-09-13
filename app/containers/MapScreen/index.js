@@ -23,7 +23,6 @@ const boulderPosition = {
   latitude: 40.0822214,
   longitude: -105.14,
 };
-const BAR_CACHE = {};
 class MapScreen extends Component {
 
   constructor(props) {
@@ -39,10 +38,11 @@ class MapScreen extends Component {
       barResultItems: [],
       markerBarItems: [],
     };
-    this.mapZoom = 15;
+    this.criteriaTimeout = -1;
+    this.mapZoom = 12;
     this.currentRegion = null;
     this.barLocations = {};
-    this.barInterval = -1;
+    this.updatedGeoQuery = false;
     this.geoQuery = geoFire('barLocations')
       .query({
         center: props.region.latitude ? [props.region.latitude, props.region.longitude] : [50, -50],
@@ -51,25 +51,17 @@ class MapScreen extends Component {
 
     this.geoQuery.on('key_entered', (barId, location) => {
       this.barLocations[barId] = { barId, location };
-      if (this.barInterval === -1) {
-        this.barInterval = setTimeout(() => this.onUpdateMapBars, 50);
-      }
+      this.onUpdateMapBars();
     });
     this.geoQuery.on('key_exited', (barId) => {
       delete this.barLocations[barId];
-      if (this.barInterval === -1) {
-        this.barInterval = setTimeout(() => this.onUpdateMapBars, 50);
-      }
+      this.onUpdateMapBars();
     });
   }
 
   componentDidMount() {
-    const { region, clearBars } = this.props;
+    const { clearBars } = this.props;
     clearBars();
-    this.geoQuery.updateCriteria({
-      center: region.latitude ? [region.latitude, region.longitude] : [50, -50],
-      radius: 1,
-    });
     if (GoogleAPIAvailability) {
       GoogleAPIAvailability.checkGooglePlayServices((result) => {
         this.setState({ isGooglePlayServicesAvailable: result === 'success' });
@@ -77,7 +69,17 @@ class MapScreen extends Component {
     }
   }
   componentWillReceiveProps(newProps) {
-    console.log('newProps', newProps);
+    if (newProps.location) {
+      if (this.criteriaTimeout === -1) {
+        this.criteriaTimeout = setTimeout(() => {
+          this.geoQuery.updateCriteria({
+            center: [newProps.location.latitude, newProps.location.longitude],
+            radius: 100,
+          });
+          this.criteriaTimeout = -1;
+        }, 1000);
+      }
+    }
   }
   componentDidUpdate(prevProps) {
     if (this.props.drinkupBar && prevProps.drinkupBar !== this.props.drinkupBar) {
@@ -94,6 +96,9 @@ class MapScreen extends Component {
     const barIds = Object.keys(clusterMarkerItems);
     if (barIds.length > 0) {
       const result = await Bar.gets(barIds, true);
+      if (Object.keys(this.barLocations).length !== barIds.length) {
+        return;
+      }
       let barResultItems = [];
       const markerBarItems = [];
       result.forEach((_bar) => {
@@ -132,11 +137,10 @@ class MapScreen extends Component {
       this.setState({ clusterMarkers, barResultItems, markerBarItems });
       // this.props.updateMapBar(updatedBars);
     }
-    this.barInterval = -1;
   };
   onBackBoulder = (longitudeDelta = 0.16, latitudeDelta = 0.08) => {
-    // const position = this.props.location ? this.props.location : boulderPosition;
-    this.currentRegion = { ...boulderPosition, longitudeDelta, latitudeDelta };
+    const position = this.props.location ? this.props.location : boulderPosition;
+    this.currentRegion = { ...position, longitudeDelta, latitudeDelta };
     this.map.animateToRegion(this.currentRegion, 10);
   };
   onClusterMarkerPressed = ({ latitude, longitude }) => {
@@ -147,7 +151,7 @@ class MapScreen extends Component {
   };
   onRegionChange = (region) => {
     this.currentRegion = region;
-    if (region.longitudeDelta < 1.6 && region.latitudeDelta < 0.8) {
+    if (region.longitudeDelta <= 1.6 && region.latitudeDelta <= 0.8) {
       this.mapZoom = calculateZoom(region.longitudeDelta);
       let distance = calculateDistanceByRegion(region);
       this.geoQuery.updateCriteria({
@@ -161,7 +165,6 @@ class MapScreen extends Component {
       } else {
         this.setState({ showBackBoulder: false });
       }
-      this.updatedBarLocations = true;
       this.onUpdateMapBars();
     } else {
       this.onBackBoulder(1.2, 0.6);
@@ -280,7 +283,6 @@ class MapScreen extends Component {
         </View>
       );
     }
-
     return (
       <MapView
         style={Styles.map}
@@ -312,7 +314,7 @@ class MapScreen extends Component {
               {this.renderAlert()}
             </View>
             {this.state.showBackBoulder &&
-            <TouchableOpacity style={Styles.locationButtonContainer} onPress={this.onBackBoulder}>
+            <TouchableOpacity style={Styles.locationButtonContainer} onPress={() => this.onBackBoulder()}>
               <Image source={Images.locationBack} style={Styles.imgLocationBack} />
             </TouchableOpacity>
             }
@@ -327,7 +329,7 @@ class MapScreen extends Component {
 }
 
 const mapStateToProps = ({ location, bar, drinkup, alert, auth }) => ({
-  region: { ...location.coords, longitudeDelta: 0.08, latitudeDelta: 0.04 },
+  region: { ...location.coords, longitudeDelta: 1.2, latitudeDelta: 0.6 },
   bars: location.coords && Bar.constructor.getBarsSortedByDistance(location.coords, bar.bars),
   alerts: alert.alerts,
   profile: auth.profile,

@@ -65,8 +65,8 @@ const onProviderChange = (state, { provider }) => ({ ...state, provider, error: 
 const onMotionChange = (state, { motion }) => ({
   ...state,
   activity: motion.location.activity.type,
-  // coords: motion.location.coords,
-  coords: { latitude: 39.9616, longitude: -105.51025 },
+  coords: motion.location.coords,
+  // coords: { latitude: 39.9616, longitude: -105.51025 },
   isMoving: motion.isMoving,
   lastLocationTimestamp: motion.location.timestamp,
   error: null,
