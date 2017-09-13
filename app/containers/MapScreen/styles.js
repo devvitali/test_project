@@ -68,4 +68,19 @@ export default StyleSheet.create({
     textAlign: 'center',
     fontSize: Fonts.size.medium,
   },
+  noBarsContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginVertical: Metrics.doubleBaseMargin,
+  },
+  noBarLabel: {
+    marginHorizontal: Metrics.doubleBaseMargin,
+    fontFamily: Fonts.type.base,
+    color: Colors.snow,
+    fontSize: Fonts.size.regular,
+  },
+  buttonLabel: {
+    fontSize: Fonts.size.large,
+  },
 });

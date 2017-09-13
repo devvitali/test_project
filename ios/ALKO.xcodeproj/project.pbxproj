@@ -1216,7 +1216,7 @@
 					};
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = HV9UL6SJC7;
-						ProvisioningStyle = Manual;
+						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = true;
@@ -2071,10 +2071,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = ALKO/ALKO.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: ALKO LLC (HV9UL6SJC7)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = HV9UL6SJC7;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -2107,8 +2107,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.alko.alko;
 				PRODUCT_NAME = ALKO;
-				PROVISIONING_PROFILE = "128c24f1-1a52-4665-95b6-cc1ca2c7efb8";
-				PROVISIONING_PROFILE_SPECIFIER = "iOS Distribution";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -2120,9 +2120,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = ALKO/ALKO.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: ALKO LLC (HV9UL6SJC7)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: ALKO LLC (HV9UL6SJC7)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = HV9UL6SJC7;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -2155,8 +2155,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.alko.alko;
 				PRODUCT_NAME = ALKO;
-				PROVISIONING_PROFILE = "128c24f1-1a52-4665-95b6-cc1ca2c7efb8";
-				PROVISIONING_PROFILE_SPECIFIER = "iOS Distribution";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;

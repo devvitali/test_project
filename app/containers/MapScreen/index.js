@@ -42,7 +42,6 @@ class MapScreen extends Component {
     this.mapZoom = 12;
     this.currentRegion = null;
     this.barLocations = {};
-    this.updatedGeoQuery = false;
     this.geoQuery = geoFire('barLocations')
       .query({
         center: props.region.latitude ? [props.region.latitude, props.region.longitude] : [50, -50],
@@ -248,7 +247,26 @@ class MapScreen extends Component {
   }
 
   renderBarResults() {
-    return map(this.state.barResultItems, (bar, id) => this.renderBarResult(bar, id));
+    if (this.state.barResultItems.length > 0) {
+      return (
+        <ScrollView style={styles.barListContainer}>
+          {map(this.state.barResultItems, (bar, id) => this.renderBarResult(bar, id))}
+        </ScrollView>
+      );
+    }
+    const text = 'We haven\'t launced in this area yet :(\n\n' +
+      'Tell us what your favorite bars are in the area and we \'ll add them to ALKO asap';
+    return (
+      <View style={styles.noBarsContainer}>
+        <Text style={styles.noBarLabel}>
+          {text}
+        </Text>
+        <Button
+          textStyle={styles.buttonLabel}
+          text={'What bars should we add to ALKO?'}
+        />
+      </View>
+    );
   }
 
   renderBarMarkers() {
@@ -325,9 +343,7 @@ class MapScreen extends Component {
             </TouchableOpacity>
             }
           </View>
-          <ScrollView style={styles.barListContainer}>
-            {this.renderBarResults()}
-          </ScrollView>
+          {this.renderBarResults()}
         </View>
       </AppContainer>
     );
