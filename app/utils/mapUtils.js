@@ -1,4 +1,5 @@
 import R from 'ramda';
+import { getDistance } from 'geolib';
 
 export const removeEmpty = (markers: Array<Object>) =>
   R.filter(item => item && item.latitude && item.longitude, markers);
@@ -42,4 +43,17 @@ export const calculateRegion = (locations: Array<Object>, options: Object) => {
     };
   }
   return null;
+};
+
+export const calculateZoom = delta => Math.round(Math.log(360 / delta) / Math.LN2);
+export const calculateDistanceByRegion = (region) => {
+  const start = {
+    latitude: region.latitude - (region.latitudeDelta / 2),
+    longitude: region.longitude - (region.longitudeDelta / 2),
+  };
+  const end = {
+    latitude: region.latitude + (region.latitudeDelta / 2),
+    longitude: region.longitude + (region.longitudeDelta / 2),
+  };
+  return getDistance(start, end) * 0.0004;
 };

@@ -12,6 +12,7 @@ import { geoFire } from '../../firebase';
 import { Bar } from '../../firebase/models';
 import { getClusters } from '../../utils/clustering';
 import { Colors, Images } from '../../themes';
+import { calculateZoom, calculateDistanceByRegion } from '../../utils/mapUtils';
 import Styles from './styles';
 import mapStyle from './mapStyle';
 
@@ -138,7 +139,7 @@ class MapScreen extends Component {
     this.currentRegion = { ...boulderPosition, longitudeDelta, latitudeDelta };
     this.map.animateToRegion(this.currentRegion, 10);
   };
-  onCluserMarkerPressed = ({ latitude, longitude }) => {
+  onClusterMarkerPressed = ({ latitude, longitude }) => {
     const longitudeDelta = this.currentRegion.longitudeDelta / 2;
     const latitudeDelta = this.currentRegion.latitudeDelta / 2;
     const region = { latitude, longitude, latitudeDelta, longitudeDelta };
@@ -147,16 +148,8 @@ class MapScreen extends Component {
   onRegionChange = (region) => {
     this.currentRegion = region;
     if (region.longitudeDelta < 1.6 && region.latitudeDelta < 0.8) {
-      this.mapZoom = Math.round(Math.log(360 / region.longitudeDelta) / Math.LN2);
-      const start = {
-        latitude: region.latitude - (region.latitudeDelta / 2),
-        longitude: region.longitude - (region.longitudeDelta / 2),
-      };
-      const end = {
-        latitude: region.latitude + (region.latitudeDelta / 2),
-        longitude: region.longitude + (region.longitudeDelta / 2),
-      };
-      let distance = getDistance(start, end) * 0.0004;
+      this.mapZoom = calculateZoom(region.longitudeDelta);
+      let distance = calculateDistanceByRegion(region);
       this.geoQuery.updateCriteria({
         center: [region.latitude, region.longitude],
         radius: distance,
@@ -196,7 +189,7 @@ class MapScreen extends Component {
     );
   }
 
-  renderBarMarker(bar, id) {
+  renderBarMarker(bar) {
     if (!bar || !this.props.region) {
       return null;
     }
@@ -216,7 +209,7 @@ class MapScreen extends Component {
     }
     return (
       <MapView.Marker
-        key={id}
+        key={bar.barId}
         onPress={() => this.props.setDrinkupBar({ ...bar })}
         coordinate={{ latitude: address.latitude, longitude: address.longitude }}
       >
@@ -227,7 +220,6 @@ class MapScreen extends Component {
 
   renderBarResult(bar, id) {
     const { name, currentDrinkUp, currentSpecial, address } = bar;
-
     const props = {
       name,
       activeDrinkUp: !!currentDrinkUp,
@@ -261,7 +253,11 @@ class MapScreen extends Component {
   }
   renderClusterMarkers() {
     return this.state.clusterMarkers.map((marker, id) => (
-      <MapView.Marker key={id} coordinate={marker} onPress={() => this.onCluserMarkerPressed(marker)}>
+      <MapView.Marker
+        key={`${new Date().getTime()}-${id}`}
+        coordinate={marker}
+        onPress={() => this.onClusterMarkerPressed(marker)}
+      >
         <Image source={Images.cluster} />
         <View style={Styles.clusterContainer}>
           <Text style={Styles.labelClusterCount}>{marker.count}</Text>
@@ -345,7 +341,6 @@ const mapStateToProps = ({ location, bar, drinkup, alert, auth }) => ({
 
 //eslint-disable-next-line
 const mapDispatchToProps = dispatch => ({
-  getAlerts: () => dispatch(AlertActions.alertsRequest()),
   startBackgroundGeolocation: () => dispatch(LocationActions.startBackgroundGeolocation()),
   clearBars: () => dispatch(BarActions.clearBars()),
   updateMapBar: bars => dispatch(BarActions.updateMapBar(bars)),
