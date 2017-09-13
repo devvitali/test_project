@@ -60,12 +60,12 @@ export default StyleSheet.create({
     position: 'absolute',
     left: 0,
     right: 0,
-    top: 7,
+    top: 3,
   },
   labelClusterCount: {
     fontFamily: Fonts.type.primary,
-    color: Colors.brand.black,
+    color: Colors.snow,
     textAlign: 'center',
-    fontSize: Fonts.size.small,
+    fontSize: Fonts.size.medium,
   },
 });

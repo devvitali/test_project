@@ -11,9 +11,9 @@ import { AlertActions, BarActions, DrinkupActions, LocationActions } from '../..
 import { geoFire } from '../../firebase';
 import { Bar } from '../../firebase/models';
 import { getClusters } from '../../utils/clustering';
-import { Colors, Images } from '../../themes';
+import { Colors, Images, Fonts } from '../../themes';
 import { calculateZoom, calculateDistanceByRegion } from '../../utils/mapUtils';
-import Styles from './styles';
+import styles from './styles';
 import mapStyle from './mapStyle';
 
 const GoogleAPIAvailability = Platform.OS === 'android' ? require('react-native-google-api-availability-bridge') : null;
@@ -255,28 +255,34 @@ class MapScreen extends Component {
     return map(this.state.markerBarItems, (bar, id) => this.renderBarMarker(bar, id));
   }
   renderClusterMarkers() {
-    return this.state.clusterMarkers.map((marker, id) => (
-      <MapView.Marker
-        key={`${new Date().getTime()}-${id}`}
-        coordinate={marker}
-        onPress={() => this.onClusterMarkerPressed(marker)}
-      >
-        <Image source={Images.cluster} />
-        <View style={Styles.clusterContainer}>
-          <Text style={Styles.labelClusterCount}>{marker.count}</Text>
-        </View>
-      </MapView.Marker>
-    ));
+    return this.state.clusterMarkers.map((marker, id) => {
+      const fontSize = (Fonts.size.medium - marker.count.length) + 1;
+      return (
+        <MapView.Marker
+          key={`${new Date().getTime()}-${id}`}
+          coordinate={marker}
+          onPress={() => this.onClusterMarkerPressed(marker)}
+        >
+          <Image source={Images.pin} />
+          <View style={styles.clusterContainer}>
+            <Text
+              style={[styles.labelClusterCount, { fontSize }]}
+            >{marker.count}
+            </Text>
+          </View>
+        </MapView.Marker>
+      )
+    });
   }
   renderMap() {
     if (!this.state.isGooglePlayServicesAvailable) {
       return (
-        <View style={Styles.noMapContainer}>
-          <IconAlko name="map" color={Colors.snow} size={48} style={Styles.noMapIcon} />
-          <Text style={Styles.noMapText}>{I18n.t('Map_GoogleMapsNotAvailable')}</Text>
+        <View style={styles.noMapContainer}>
+          <IconAlko name="map" color={Colors.snow} size={48} style={styles.noMapIcon} />
+          <Text style={styles.noMapText}>{I18n.t('Map_GoogleMapsNotAvailable')}</Text>
           <Button
             theme="dark"
-            style={Styles.noMapButton}
+            style={styles.noMapButton}
             text={'Update'}
             onPress={GoogleAPIAvailability.openGooglePlayUpdate}
           />
@@ -285,7 +291,7 @@ class MapScreen extends Component {
     }
     return (
       <MapView
-        style={Styles.map}
+        style={styles.map}
         provider={PROVIDER_GOOGLE}
         customMapStyle={mapStyle}
         initialRegion={this.props.region}
@@ -307,19 +313,19 @@ class MapScreen extends Component {
         renderTitle={NavItems.brandTitle}
         renderLeftButton={NavItems.hamburgerButton(this.props.navigation)}
       >
-        <View style={Styles.mainContainer}>
-          <View style={Styles.mapContainer}>
+        <View style={styles.mainContainer}>
+          <View style={styles.mapContainer}>
             {this.renderMap()}
-            <View style={Styles.bannerContainer}>
+            <View style={styles.bannerContainer}>
               {this.renderAlert()}
             </View>
             {this.state.showBackBoulder &&
-            <TouchableOpacity style={Styles.locationButtonContainer} onPress={() => this.onBackBoulder()}>
-              <Image source={Images.locationBack} style={Styles.imgLocationBack} />
+            <TouchableOpacity style={styles.locationButtonContainer} onPress={() => this.onBackBoulder()}>
+              <Image source={Images.locationBack} style={styles.imgLocationBack} />
             </TouchableOpacity>
             }
           </View>
-          <ScrollView style={Styles.barListContainer}>
+          <ScrollView style={styles.barListContainer}>
             {this.renderBarResults()}
           </ScrollView>
         </View>
