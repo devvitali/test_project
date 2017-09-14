@@ -117,13 +117,11 @@ class MapScreen extends Component {
       const clusters = getClusters(clusterMarkerItems, this.mapZoom);
       const clusterMarkers = [];
       clusters.forEach(({ properties, geometry }) => {
-        const latitude = geometry.coordinates[1];
-        const longitude = geometry.coordinates[0];
         if (properties.cluster) {
           clusterMarkers.push({
             count: properties.point_count,
-            latitude,
-            longitude,
+            latitude: geometry.coordinates[1],
+            longitude: geometry.coordinates[0],
           });
         } else {
           markerBarItems.push(clusterMarkerItems[properties.barId]);
@@ -140,7 +138,7 @@ class MapScreen extends Component {
   onBackBoulder = (longitudeDelta = 0.16, latitudeDelta = 0.08) => {
     const position = this.props.location ? this.props.location : boulderPosition;
     this.currentRegion = { ...position, longitudeDelta, latitudeDelta };
-    this.map.animateToRegion(this.currentRegion, 10);
+    this.map.animateToRegion(this.currentRegion, 1000);
   };
   onClusterMarkerPressed = ({ latitude, longitude }) => {
     const longitudeDelta = this.currentRegion.longitudeDelta / 2;
@@ -150,24 +148,21 @@ class MapScreen extends Component {
   };
   onRegionChange = (region) => {
     this.currentRegion = region;
-    if (region.longitudeDelta <= 1.6 && region.latitudeDelta <= 0.8) {
-      this.mapZoom = calculateZoom(region.longitudeDelta);
-      let distance = calculateDistanceByRegion(region);
-      this.geoQuery.updateCriteria({
-        center: [region.latitude, region.longitude],
-        radius: distance,
-      });
-      const position = this.props.location ? this.props.location : boulderPosition;
-      distance = getDistance(position, region) * 0.001;
-      if (distance > 10) {
-        this.setState({ showBackBoulder: true });
-      } else {
-        this.setState({ showBackBoulder: false });
-      }
-      this.onUpdateMapBars();
+    // if (region.longitudeDelta <= 1.6 && region.latitudeDelta <= 0.8) {
+    this.mapZoom = calculateZoom(region.longitudeDelta);
+    let distance = calculateDistanceByRegion(region);
+    this.geoQuery.updateCriteria({
+      center: [region.latitude, region.longitude],
+      radius: distance,
+    });
+    const position = this.props.location ? this.props.location : boulderPosition;
+    distance = getDistance(position, region) * 0.001;
+    if (distance > 10) {
+      this.setState({ showBackBoulder: true });
     } else {
-      this.onBackBoulder(1.2, 0.6);
+      this.setState({ showBackBoulder: false });
     }
+    this.onUpdateMapBars();
   };
 
   handleEventPress(bar) {
@@ -257,7 +252,7 @@ class MapScreen extends Component {
       );
     }
     const text = 'We haven\'t launced in this area yet :(\n\n' +
-      'Tell us what your favorite bars are in the area and we \'ll add them to ALKO asap';
+      'Tell us what your favorite bars are in the area and we\'ll add them to ALKO asap';
     return (
       <View style={styles.noBarsContainer}>
         <Text style={styles.noBarLabel}>
@@ -356,7 +351,7 @@ class MapScreen extends Component {
 }
 
 const mapStateToProps = ({ location, bar, drinkup, alert, auth }) => ({
-  region: { ...location.coords, longitudeDelta: 1.2, latitudeDelta: 0.6 },
+  region: { ...location.coords, longitudeDelta: 0.01, latitudeDelta: 0.005 },
   bars: location.coords && Bar.constructor.getBarsSortedByDistance(location.coords, bar.bars),
   alerts: alert.alerts,
   profile: auth.profile,
