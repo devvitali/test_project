@@ -143,7 +143,10 @@ class MapScreen extends Component {
     this.map.animateToRegion(region, 1000);
   };
   onRegionChange = (region) => {
-    this.currentRegion = region;
+    if (region.longitude >= 180) {
+      region.longitude -= 360;
+    }
+      this.currentRegion = region;
     // if (region.longitudeDelta <= 1.6 && region.latitudeDelta <= 0.8) {
     this.mapZoom = calculateZoom(region.longitudeDelta);
     let distance = calculateDistanceByRegion(region);
@@ -250,11 +253,12 @@ class MapScreen extends Component {
     return map(this.state.markerBarItems, (bar, id) => this.renderBarMarker(bar, id));
   }
   renderClusterMarkers() {
-    return this.state.clusterMarkers.map((marker, id) => {
+    return this.state.clusterMarkers.map((marker) => {
       const fontSize = (Fonts.size.medium - marker.count.length) + 1;
+      const id = `${marker.latitude.toFixed(3)}-${marker.longitude.toFixed(3)}-${marker.count}`;
       return (
         <MapView.Marker
-          key={`${new Date().getTime()}-${id}`}
+          key={id}
           coordinate={marker}
           onPress={() => this.onClusterMarkerPressed(marker)}
         >
