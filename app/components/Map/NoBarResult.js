@@ -4,7 +4,7 @@ import { Button } from '../';
 import { Metrics, Colors, Fonts } from '../../themes';
 
 const text = 'We haven\'t launched in this area yet :(\n\n' +
-  'Tell us what your favorite bars are in the area and we\'ll add them to ALKO asap';
+  'Tell us what your favorite bars are in the area and we\'ll add them to ALKO asap.';
 const styles = StyleSheet.create({
   noBarsContainer: {
     flex: 1,

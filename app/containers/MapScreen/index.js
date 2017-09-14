@@ -129,6 +129,8 @@ class MapScreen extends Component {
       }
       this.setState({ clusterMarkers, barResultItems, markerBarItems });
       // this.props.updateMapBar(updatedBars);
+    } else {
+      this.setState({ clusterMarkers: [], barResultItems: [], markerBarItems: [] });
     }
   };
   onBackCurrentLocation = (longitudeDelta = 0.16, latitudeDelta = 0.08) => {
