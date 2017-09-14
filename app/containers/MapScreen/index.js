@@ -7,7 +7,7 @@ import I18n from 'react-native-i18n';
 import { map } from 'lodash';
 import AppContainer from '../AppContainer';
 import { NavItems, BarResult, Button, Banner, IconAlko } from '../../components';
-import { AlertActions, BarActions, DrinkupActions, LocationActions } from '../../redux';
+import { BarActions, DrinkupActions, LocationActions } from '../../redux';
 import { geoFire } from '../../firebase';
 import { Bar } from '../../firebase/models';
 import { getClusters } from '../../utils/clustering';
@@ -28,12 +28,8 @@ class MapScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      animatingToRegion: false,
-      followUserOnMap: true,
-      showUserLocation: true,
       isGooglePlayServicesAvailable: true,
-      event: null,
-      showBackBoulder: false,
+      showBackCurrentLocation: false,
       clusterMarkers: [],
       barResultItems: [],
       markerBarItems: [],
@@ -135,7 +131,7 @@ class MapScreen extends Component {
       // this.props.updateMapBar(updatedBars);
     }
   };
-  onBackBoulder = (longitudeDelta = 0.16, latitudeDelta = 0.08) => {
+  onBackCurrentLocation = (longitudeDelta = 0.16, latitudeDelta = 0.08) => {
     const position = this.props.location ? this.props.location : boulderPosition;
     this.currentRegion = { ...position, longitudeDelta, latitudeDelta };
     this.map.animateToRegion(this.currentRegion, 1000);
@@ -158,9 +154,9 @@ class MapScreen extends Component {
     const position = this.props.location ? this.props.location : boulderPosition;
     distance = getDistance(position, region) * 0.001;
     if (distance > 10) {
-      this.setState({ showBackBoulder: true });
+      this.setState({ showBackCurrentLocation: true });
     } else {
-      this.setState({ showBackBoulder: false });
+      this.setState({ showBackCurrentLocation: false });
     }
     this.onUpdateMapBars();
   };
@@ -230,16 +226,12 @@ class MapScreen extends Component {
 
     if (this.props.location && address) {
       const { latitude, longitude, accuracy } = this.props.location;
-      const start = {
-        latitude,
-        longitude,
-      };
+      const start = { latitude, longitude };
       if (address.latitude) {
         const distance = getDistance(start, address, accuracy);
         props.distance = `${(distance * METRES_TO_MILES_FACTOR).toFixed(2)}mi`;
       }
     }
-
     return <BarResult {...props} />;
   }
 
@@ -315,7 +307,7 @@ class MapScreen extends Component {
         initialRegion={this.props.region}
         rotateEnabled={false}
         onRegionChangeComplete={this.onRegionChange}
-        showsUserLocation={this.state.showUserLocation}
+        showsUserLocation
         ref={ref => this.map = ref}
       >
         {this.renderBarMarkers()}
@@ -337,8 +329,8 @@ class MapScreen extends Component {
             <View style={styles.bannerContainer}>
               {this.renderAlert()}
             </View>
-            {this.state.showBackBoulder &&
-            <TouchableOpacity style={styles.locationButtonContainer} onPress={() => this.onBackBoulder()}>
+            {this.state.showBackCurrentLocation &&
+            <TouchableOpacity style={styles.locationButtonContainer} onPress={() => this.onBackCurrentLocation()}>
               <Image source={Images.locationBack} style={styles.imgLocationBack} />
             </TouchableOpacity>
             }
@@ -350,11 +342,8 @@ class MapScreen extends Component {
   }
 }
 
-const mapStateToProps = ({ location, bar, drinkup, alert, auth }) => ({
+const mapStateToProps = ({ location, drinkup }) => ({
   region: { ...location.coords, longitudeDelta: 0.01, latitudeDelta: 0.005 },
-  bars: location.coords && Bar.constructor.getBarsSortedByDistance(location.coords, bar.bars),
-  alerts: alert.alerts,
-  profile: auth.profile,
   location: location.coords,
   drinkupBar: drinkup.bar,
 });
@@ -364,7 +353,6 @@ const mapDispatchToProps = dispatch => ({
   startBackgroundGeoLocation: () => dispatch(LocationActions.startBackgroundGeoLocation()),
   clearBars: () => dispatch(BarActions.clearBars()),
   updateMapBar: bars => dispatch(BarActions.updateMapBar(bars)),
-  markAlertAsRead: alert => dispatch(AlertActions.markAlertAsRead(alert)),
   setDrinkupBar: bar => dispatch(DrinkupActions.barRequestSuccessful(bar)),
 });
 
