@@ -20,16 +20,25 @@ import SponsoredScreen from '../containers/SponsoredScreen';
 import Redeem2For1Screen from '../containers/Redeem2For1Screen';
 import DrawBar from '../containers/DrawerBar';
 
-const DrawerNavigation = DrawerNavigator(
+const DrinkupNavigator = StackNavigator(
   {
-    EditProfileScreen: { screen: EditProfileScreen },
     MapScreen: { screen: MapScreen },
     JoinDrinkUpScreen: { screen: JoinDrinkUpScreen },
     DrinkUpScreen: { screen: DrinkUpScreen },
+  },
+  {
+    initialRouteName: 'MapScreen',
+    headerMode: 'none',
+  }
+);
+const DrawerNavigation = DrawerNavigator(
+  {
+    EditProfileScreen: { screen: EditProfileScreen },
     FeedBackScreen: { screen: FeedBackScreen },
     PushNotificationsScreen: { screen: PushNotificationsScreen },
     PrivacyPolicyScreen: { screen: PrivacyPolicyScreen },
     TermsOfServiceScreen: { screen: TermsOfServiceScreen },
+    MapScreen: { screen: DrinkupNavigator },
   },
   {
     initialRouteName: 'MapScreen',

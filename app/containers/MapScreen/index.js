@@ -144,9 +144,10 @@ class MapScreen extends Component {
   };
   onRegionChange = (region) => {
     if (region.longitude >= 180) {
+      // eslint-disable-next-line
       region.longitude -= 360;
     }
-      this.currentRegion = region;
+    this.currentRegion = region;
     // if (region.longitudeDelta <= 1.6 && region.latitudeDelta <= 0.8) {
     this.mapZoom = calculateZoom(region.longitudeDelta);
     let distance = calculateDistanceByRegion(region);
