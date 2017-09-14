@@ -55,6 +55,7 @@ export default StyleSheet.create({
   imgLocationBack: {
     width: 32,
     height: 32,
+    tintColor: Colors.brand.darkGray,
   },
   clusterContainer: {
     position: 'absolute',
