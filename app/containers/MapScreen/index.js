@@ -12,7 +12,7 @@ import { geoFire } from '../../firebase';
 import { Bar } from '../../firebase/models';
 import { getClusters } from '../../utils/clustering';
 import { Colors, Images, Fonts } from '../../themes';
-import { calculateZoom, calculateDistanceByRegion } from '../../utils/mapUtils';
+import { calculateZoom, calculateDistanceByRegion, hasLocation } from '../../utils/mapUtils';
 import styles from './styles';
 import mapStyle from './mapStyle';
 
@@ -152,14 +152,12 @@ class MapScreen extends Component {
     this.currentRegion = region;
     // if (region.longitudeDelta <= 1.6 && region.latitudeDelta <= 0.8) {
     this.mapZoom = calculateZoom(region.longitudeDelta);
-    let distance = calculateDistanceByRegion(region);
     this.geoQuery.updateCriteria({
       center: [region.latitude, region.longitude],
-      radius: distance,
+      radius: calculateDistanceByRegion(region) / 1.1,
     });
     const position = this.props.location ? this.props.location : boulderPosition;
-    distance = getDistance(position, region) * 0.001;
-    if (distance > 10) {
+    if (!hasLocation(position, region)) {
       this.setState({ showBackCurrentLocation: true });
     } else {
       this.setState({ showBackCurrentLocation: false });
@@ -322,7 +320,10 @@ class MapScreen extends Component {
               {this.renderAlert()}
             </View>
             {this.state.showBackCurrentLocation &&
-            <TouchableOpacity style={styles.locationButtonContainer} onPress={() => this.onBackCurrentLocation()}>
+            <TouchableOpacity
+              style={styles.locationButtonContainer}
+              onPress={() => this.onBackCurrentLocation(this.currentRegion.latitudeDelta, this.currentRegion.latitudeDelta)}
+            >
               <Image source={Images.locationBack} style={styles.imgLocationBack} />
             </TouchableOpacity>
             }

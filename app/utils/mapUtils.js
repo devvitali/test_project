@@ -57,3 +57,15 @@ export const calculateDistanceByRegion = (region) => {
   };
   return getDistance(start, end) * 0.0004;
 };
+export const hasLocation = (location, region) => {
+  const locLat = location.latitude;
+  const locLon = location.longitude;
+  const { latitude, longitude, latitudeDelta, longitudeDelta } = region;
+  if (locLat > latitude - (latitudeDelta / 2) && locLat < (latitudeDelta / 2) + latitude) {
+    if (locLon > longitude - (longitudeDelta / 2) && locLon < (longitudeDelta / 2) + longitude) {
+      return true;
+    }
+  }
+  return false;
+};
+
