@@ -6,7 +6,7 @@ import { getDistance } from 'geolib';
 import I18n from 'react-native-i18n';
 import { map } from 'lodash';
 import AppContainer from '../AppContainer';
-import { NavItems, BarResult, Button, Banner, IconAlko } from '../../components';
+import { NavItems, BarResult, Button, Banner, IconAlko, NoBarResult } from '../../components';
 import { BarActions, DrinkupActions, LocationActions } from '../../redux';
 import { geoFire } from '../../firebase';
 import { Bar } from '../../firebase/models';
@@ -243,22 +243,7 @@ class MapScreen extends Component {
         </ScrollView>
       );
     }
-    const text = 'We haven\'t launced in this area yet :(\n\n' +
-      'Tell us what your favorite bars are in the area and we\'ll add them to ALKO asap';
-    return (
-      <View style={styles.noBarsContainer}>
-        <Text style={styles.noBarLabel}>
-          {text}
-        </Text>
-        <View style={{ alignSelf: 'stretch', marginHorizontal: 20 }} >
-          <Button
-            onPress={this.navigateFeedBackScreen}
-            textStyle={styles.buttonLabel}
-            text={'What bars should we add to ALKO?'}
-          />
-        </View>
-      </View>
-    );
+    return <NoBarResult onPress={this.navigateFeedBackScreen} />;
   }
 
   renderBarMarkers() {
