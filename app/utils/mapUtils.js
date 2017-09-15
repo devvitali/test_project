@@ -69,3 +69,11 @@ export const hasLocation = (location, region) => {
   return false;
 };
 
+export const isUSArea = (location) => {
+  if (location.latitude < 49.3457868 && location.latitude > 24.7433195) {
+    if (location.longitude < -66.9513812 && location.longitude >  -124.7844079) {
+      return true;
+    }
+  }
+  return false;
+};

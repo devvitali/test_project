@@ -55,7 +55,7 @@ export default class Base {
     return new Promise((resolve, reject) => {
       this.dbRef(key).once('value', (snapshot) => {
         if (key) {
-          const result = snapshot.val();
+          let result = snapshot.val();
           if (result) {
             if (appendKey) {
               result.id = snapshot.key;
@@ -63,6 +63,12 @@ export default class Base {
             this.populateResult(result)
               .then(resolve)
               .catch(reject);
+          } else {
+            result = {
+              removed: true,
+              id: key,
+            };
+            resolve(result);
           }
         } else {
           const promises = _.map(snapshot.val(), (value, id) => new Promise(innerResolve =>
@@ -131,6 +137,7 @@ export default class Base {
     }
     if (this.actions.onUpdate) {
       this.dbRef(key).on('value', (snapshot) => {
+        console.log('subscribe value', snapshot);
         if (!key) {
           emit(this.actions.onUpdate(snapshot.val()));
         } else {
@@ -141,7 +148,7 @@ export default class Base {
 
     if (this.actions.onAdd) {
       this.dbRef(key).on('child_added', (snapshot) => {
-        // console.log('subscribe child_added', snapshot);
+        console.log('subscribe child_added', snapshot);
         if (!initialized) return;
         if (!key) {
           emit(this.actions.onAdd(this.constructor.unwrapSnapshot(snapshot)));
@@ -153,7 +160,7 @@ export default class Base {
 
     if (this.actions.onChange) {
       this.dbRef(key).on('child_changed', (snapshot) => {
-        // console.log('subscribe child_changed', snapshot);
+        console.log('subscribe child_changed', snapshot);
         if (!key) {
           emit(this.actions.onChange(this.constructor.unwrapSnapshot(snapshot)));
         } else {
@@ -164,7 +171,7 @@ export default class Base {
 
     if (this.actions.onRemove) {
       this.dbRef(key).on('child_removed', (snapshot) => {
-        // console.log('subscribe child_removed', snapshot);
+        console.log('subscribe child_removed', snapshot);
         if (!key) {
           emit(this.actions.onRemove(this.constructor.unwrapSnapshot(snapshot), snapshot.key));
         } else {
