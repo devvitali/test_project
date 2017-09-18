@@ -3,6 +3,15 @@ import { BarFactory } from '../../firebase/models';
 import { calculateZoom, hasLocation } from '../../utils/mapUtils';
 import { getClusters } from '../../utils/clustering';
 
+function setBarAddress(_bar, location) {
+  const bar = _bar;
+  if (!bar.address) {
+    bar.address = {};
+  }
+  bar.address.latitude = location[0];
+  bar.address.longitude = location[1];
+  return bar;
+}
 class BarInformation {
   constructor() {
     this.bars = {};
@@ -16,43 +25,48 @@ class BarInformation {
     this.subscribedKeys = [];
     this.barModel = new BarFactory();
     this.barSubscribeModel = new BarFactory(this.barActions);
+    this.enteredBarCount = 0;
+    this.callbackCount = 0;
   }
   onBarEntered = async (barId, location) => {
+    this.enteredBarCount += 1;
     if (!this.bars[barId]) {
       const bar = await this.barModel.get(barId, true);
-      this.bars[barId] = { ...this.setBarAddress(bar, location), location };
+      this.bars[barId] = { ...setBarAddress(bar, location), location };
     }
     this.barSubscribeModel.unsubscribe(barId);
     this.barSubscribeModel.subscribe(() => {}, barId);
+    if (this.enteredBarCount === 0) {
+      setTimeout(() => {
+        this.enteredBarCount -= 1;
+        if (this.enteredBarCount === 0) {
+          this.callback();
+        }
+      }, 100);
+    }
     this.subscribedKeys.push(barId);
   };
   onUpdate = (bar, barId) => {
     const oldBar = this.bars[barId];
+    this.callbackCount += 1;
     if (this.bars[barId]) {
       const { location } = this.bars[barId];
-      this.bars[barId] = { ...this.setBarAddress(bar, location), location };
+      this.bars[barId] = { ...setBarAddress(bar, location), location };
       this.bars[barId].id = barId;
     }
     const oldJson = JSON.stringify(oldBar, Object.keys(oldBar).sort());
     const newJson = JSON.stringify(this.bars[barId], Object.keys(this.bars[barId]).sort());
     if (oldJson !== newJson) {
-      console.log('update', oldJson, newJson);
       this.saveBars();
-      if (this.callback) {
-        this.callback();
-      }
+      setTimeout(() => {
+        this.callbackCount -= 1;
+        if (this.callback === 0) {
+          this.callback();
+        }
+      }, 200);
     }
   };
   setCallback = callback => this.callback = callback;
-  setBarAddress(_bar, location) {
-    const bar = _bar;
-    if (!bar.address) {
-      bar.address = {};
-    }
-    bar.address.latitude = location[0];
-    bar.address.longitude = location[1];
-    return bar;
-  }
   async saveBars() {
     const keys = Object.keys(this.bars).map((key) => {
       try {
@@ -100,7 +114,7 @@ class BarInformation {
         if (this.bars[bar.id]) {
           const oldBar = this.bars[bar.id];
           const { location } = this.bars[bar.id];
-          this.bars[bar.id] = { ...this.setBarAddress(bar, location), location };
+          this.bars[bar.id] = { ...setBarAddress(bar, location), location };
 
           const oldJson = JSON.stringify(oldBar, Object.keys(oldBar).sort());
           const newJson = JSON.stringify(this.bars[bar.id], Object.keys(this.bars[bar.id]).sort());
@@ -123,7 +137,6 @@ class BarInformation {
     }
   }
   getBarMarkers(region, location) {
-    console.log('getBarMarkers');
     let barResultItems = this.getBarsFromRegion(region);
     if (location) {
       barResultItems = this.barModel.constructor.getBarsSortedByDistance(location, barResultItems);

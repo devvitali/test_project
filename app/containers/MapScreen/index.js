@@ -89,6 +89,7 @@ class MapScreen extends Component {
   onBackCurrentLocation = (longitudeDelta = 0.16, latitudeDelta = 0.08) => {
     const position = this.props.location ? this.props.location : boulderPosition;
     this.currentRegion = { ...position, longitudeDelta, latitudeDelta };
+    this.currentRegion = { ...boulderPosition, longitudeDelta: 0.3, latitudeDelta: 0.15 };
     this.map.animateToRegion(this.currentRegion, 1000);
   };
   onClusterMarkerPressed = ({ latitude, longitude }) => {
@@ -168,7 +169,7 @@ class MapScreen extends Component {
     }
     return (
       <MapView.Marker
-        key={bar.barId}
+        key={bar.id}
         onPress={() => this.props.setDrinkupBar({ ...bar })}
         coordinate={{ latitude: address.latitude, longitude: address.longitude }}
       >
