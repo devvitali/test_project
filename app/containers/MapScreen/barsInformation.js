@@ -48,7 +48,6 @@ class BarInformation {
   };
   onUpdate = (bar, barId) => {
     const oldBar = this.bars[barId];
-    this.callbackCount += 1;
     if (this.bars[barId]) {
       const { location } = this.bars[barId];
       this.bars[barId] = { ...setBarAddress(bar, location), location };
@@ -57,10 +56,11 @@ class BarInformation {
     const oldJson = JSON.stringify(oldBar, Object.keys(oldBar).sort());
     const newJson = JSON.stringify(this.bars[barId], Object.keys(this.bars[barId]).sort());
     if (oldJson !== newJson) {
+      this.callbackCount += 1;
       this.saveBars();
       setTimeout(() => {
         this.callbackCount -= 1;
-        if (this.callback === 0) {
+        if (this.callbackCount === 0) {
           this.callback();
         }
       }, 100);
@@ -101,6 +101,7 @@ class BarInformation {
     return ret;
   }
   async subscribeBars(region) {
+    console.log('subscribeBars');
     const bars = this.getBarsFromRegion(region);
     const barIds = bars.map(bar => bar.id);
     if (this.subscribedKeys) {
@@ -137,6 +138,7 @@ class BarInformation {
     }
   }
   getBarMarkers(region, location) {
+    console.log('getBarMarkers');
     let barResultItems = this.getBarsFromRegion(region);
     if (location) {
       barResultItems = this.barModel.constructor.getBarsSortedByDistance(location, barResultItems);

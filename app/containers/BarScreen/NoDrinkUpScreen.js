@@ -8,9 +8,10 @@ import Styles from './styles';
 
 class NoDrinkUpScreen extends Component {
 
-  componentDidUpdate() {
-    if (this.props.joined) {
-      this.props.navigation.navigate('DrinkUpScreen', { barId: this.props.bar.id });
+  componentWillReceiveProps(newProps) {
+    if (!this.props.joined && newProps.joined) {
+      console.log('NoDrinkUpScreen navigate DrinkUpScreen');
+      this.props.navigation.navigate('DrinkUpScreen', { });
     }
   }
 

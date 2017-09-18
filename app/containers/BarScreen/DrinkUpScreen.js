@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { View } from 'react-native';
-import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
 import AppContainer from '../AppContainer';
 import { NavItems, DirectionDialog } from '../../components';
@@ -27,20 +26,16 @@ class DrinkUp extends Component {
         this.props.getUsers(this.props.bar.currentDrinkUp);
       }
     }
-    this.props.getBar(barId);
-  }
-
-  componentDidUpdate() {
-    if (this.props.joined !== null && !this.props.joined) {
-      const resetAction = NavigationActions.reset({
-        index: 0,
-        actions: [NavigationActions.navigate({ routeName: 'DrawerNavigation' })],
-      });
-      this.props.navigation.dispatch(resetAction);
+    if (barId) {
+      this.props.getBar(barId);
     }
   }
-  componentWillUnmount() {
-    this.props.clearDrinkupUsers();
+  componentWillReceiveProps(newProps) {
+    if (this.props.joined !== newProps.joined && !newProps.joined) {
+      this.props.setDrinkupBar(null);
+      this.props.clearDrinkupUsers();
+      // this.props.navigation.goBack();
+    }
   }
   onShowDirectionDialog = () => this.setState({ isDirectionDialogShowing: true });
   onCloseDirectionDialog = () => this.setState({ isDirectionDialogShowing: false });
@@ -101,6 +96,7 @@ const mapDispatchToProps = dispatch => ({
   getBar: barId => dispatch(DrinkupActions.barRequest(barId)),
   getUsers: drinkUpId => dispatch(DrinkupActions.drinkupRequest(drinkUpId)),
   clearDrinkupUsers: () => dispatch(DrinkupActions.clearDrinkupUsers()),
+  setDrinkupBar: bar => dispatch(DrinkupActions.barRequestSuccessful(bar)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(DrinkUp);

@@ -21,14 +21,14 @@ class JoinDrinkUp extends Component {
       isDirectionDialogShowing: false,
     };
   }
-
-  componentDidMount() {
-    if (!this.props.isUserValid) {
-      this.props.navigation.navigate('EditProfileScreen');
+  componentWillReceiveProps(newProps) {
+    if (!newProps.bar) {
+      this.props.navigation.goBack();
     }
   }
   onShowDirectionDialog = () => this.setState({ isDirectionDialogShowing: true });
   onCloseDirectionDialog = () => this.setState({ isDirectionDialogShowing: false });
+  onGoBack = () => this.props.setDrinkupBar(null);
   getTitle() {
     if (this.props.bar) {
       return this.props.bar.name;
@@ -43,7 +43,6 @@ class JoinDrinkUp extends Component {
   }
   renderScreen() {
     if (this.props.bar) {
-      console.log('renderScreen this.props.bar', this.props.bar);
       if (this.props.bar.currentDrinkUp) {
         return <WaitingScreen navigation={this.props.navigation} />;
       }
@@ -70,12 +69,11 @@ class JoinDrinkUp extends Component {
       />
     );
   }
-
   render() {
     return (
       <AppContainer
         title={this.getTitle()}
-        renderLeftButton={NavItems.backButton(this.props.navigation)}
+        renderLeftButton={NavItems.backButton(this.props.navigation, this.onGoBack)}
         renderRightButton={this.getRightNavBarButton()}
       >
         <View style={styles.contentContainer}>
@@ -96,6 +94,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   getBar: barId => dispatch(DrinkupActions.barRequest(barId)),
   getUsers: barId => dispatch(DrinkupActions.usersRequest(barId)),
+  setDrinkupBar: bar => dispatch(DrinkupActions.barRequestSuccessful(bar)),
 });
 
 

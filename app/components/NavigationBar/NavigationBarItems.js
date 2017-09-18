@@ -15,9 +15,15 @@ function goBack(navigation) {
   navigation.goBack();
 }
 export default {
-  backButton(navigation) {
+  backButton(navigation, onBack) {
+    const onPress = () => {
+      if (onBack) {
+        onBack();
+      }
+      goBack(navigation);
+    };
     return () => (
-      <TouchableOpacity onPress={() => goBack(navigation)} style={styles.backButton}>
+      <TouchableOpacity onPress={onPress} style={styles.backButton}>
         <Icon name="angle-left" size={35} color={Colors.snow} style={styles.backIcon} />
       </TouchableOpacity>
     );

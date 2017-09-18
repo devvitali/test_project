@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, ScrollView, Image, Platform, Text, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import { getDistance } from 'geolib';
 import I18n from 'react-native-i18n';
@@ -45,12 +46,7 @@ class MapScreen extends Component {
     this.geoQuery.on('key_entered', BarsInformation.onBarEntered);
     BarsInformation.setCallback(() => {
       const position = this.props.location ? this.props.location : boulderPosition;
-      const {
-        markerBarItems,
-        clusterMarkers,
-        barResultItems,
-      } = BarsInformation.getBarMarkers(this.currentRegion, position);
-      this.setState({ markerBarItems, clusterMarkers, barResultItems });
+      this.setState({ ...BarsInformation.getBarMarkers(this.currentRegion, position) });
     });
   }
 
@@ -75,10 +71,8 @@ class MapScreen extends Component {
         }, 1000);
       }
     }
-  }
-  componentDidUpdate(prevProps) {
-    if (this.props.drinkupBar && prevProps.drinkupBar !== this.props.drinkupBar) {
-      this.props.navigation.navigate('JoinDrinkUpScreen', { barId: this.props.drinkupBar.id });
+    if (!this.props.drinkupBar && newProps.drinkupBar) {
+      this.props.navigation.navigate('JoinDrinkUpScreen', { barId: newProps.drinkupBar.id });
     }
   }
 
@@ -104,7 +98,6 @@ class MapScreen extends Component {
       region.longitude -= 360;
     }
     this.currentRegion = region;
-    // if (region.longitudeDelta <= 1.6 && region.latitudeDelta <= 0.8) {
     this.geoQuery.updateCriteria({
       center: [region.latitude, region.longitude],
       radius: calculateDistanceByRegion(region) / 1.1,
@@ -116,12 +109,7 @@ class MapScreen extends Component {
       this.setState({ showBackCurrentLocation: false });
     }
 
-    const {
-      markerBarItems,
-      clusterMarkers,
-      barResultItems,
-    } = BarsInformation.getBarMarkers(this.currentRegion, position);
-    this.setState({ markerBarItems, clusterMarkers, barResultItems });
+    this.setState({ ...BarsInformation.getBarMarkers(this.currentRegion, position) });
 
     BarsInformation.subscribeBars(region);
   };
@@ -301,18 +289,22 @@ class MapScreen extends Component {
   }
 }
 
-const mapStateToProps = ({ location, drinkup }) => {
+const location$ = state => state.location;
+export const locationSelector = createSelector(location$, (location) => {
   let region = { ...boulderPosition, longitudeDelta: 0.3, latitudeDelta: 0.15 };
   if (location.coords) {
     region = { ...location.coords, longitudeDelta: 0.01, latitudeDelta: 0.005 };
   }
-
-  return ({
-    region,
-    location: location.coords,
-    drinkupBar: drinkup.bar,
-  });
-}
+  return { region, location: location.coords };
+});
+const drinkupBar$ = state => state.drinkup;
+export const drinkupSelector = createSelector(drinkupBar$, drinkup => ({
+  drinkupBar: drinkup.bar,
+}));
+const mapStateToProps = state => ({
+  ...locationSelector(state),
+  ...drinkupSelector(state),
+});
 
 //eslint-disable-next-line
 const mapDispatchToProps = dispatch => ({

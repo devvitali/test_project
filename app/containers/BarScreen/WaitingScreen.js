@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { View, Text } from 'react-native';
 import I18n from 'react-native-i18n';
 import { connect } from 'react-redux';
-import { isEqual } from 'lodash';
 import * as Animation from 'react-native-animatable';
 import { Button, Banner, AvatarList } from '../../components';
 import { DrinkupActions } from '../../redux';
@@ -32,42 +31,25 @@ class WaitingScreen extends Component {
   }
   componentDidMount() {
     if (!this.props.bar) {
-      this.props.getBar(this.props.barId);
+      if (this.props.barId) {
+        this.props.getBar(this.props.barId);
+      }
     } else if (this.props.bar.currentDrinkUp) {
       this.props.getDrinkup(this.props.bar.currentDrinkUp, this.props.uid);
     }
+    if (this.props.joined) {
+      console.log('Waiting screen navigate DrinkUpScreen');
+      this.props.navigation.navigate('DrinkUpScreen', { barId: this.props.bar.id });
+    }
   }
   componentWillReceiveProps(newProps) {
-    console.log('componentWillReceiveProps', newProps);
-  }
-  shouldComponentUpdate(newProps, newState) {
-    let update = false;
-    if (!isEqual(this.props.bar, newProps.bar)) {
-      update = true;
+    if (!this.props.joined && newProps.joined) {
+      console.log('Waiting screen navigate DrinkUpScreen');
+      this.props.navigation.navigate('DrinkUpScreen', { barId: this.props.bar.id });
     }
-    if (!isEqual(this.props.users, newProps.users)) {
-      update = true;
-    }
-    if (!isEqual(this.props.user, newProps.user)) {
-      update = true;
-    }
-    if (!isEqual(this.state, newState)) {
-      update = true;
-    }
-    if (this.props.joined !== newProps.joined) {
-      update = true;
-    }
-    if (this.props.waitingInvite !== newProps.waitingInvite) {
-      update = true;
-    }
-    return update;
   }
   componentDidUpdate() {
-    const { joined, bar, navigation, users, getDrinkup, uid } = this.props;
-    console.log('waiting componentDidUpdate', this.props);
-    if (joined) {
-      navigation.navigate('DrinkUpScreen', { barId: bar.id });
-    }
+    const { bar, users, getDrinkup, uid } = this.props;
     if (bar && bar.currentDrinkUp && !users) {
       getDrinkup(bar.currentDrinkUp, uid);
     }
