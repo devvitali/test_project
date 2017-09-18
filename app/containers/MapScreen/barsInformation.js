@@ -63,7 +63,7 @@ class BarInformation {
         if (this.callback === 0) {
           this.callback();
         }
-      }, 200);
+      }, 100);
     }
   };
   setCallback = callback => this.callback = callback;

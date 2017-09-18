@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { View, Text } from 'react-native';
 import I18n from 'react-native-i18n';
 import { connect } from 'react-redux';
+import { isEqual } from 'lodash';
 import * as Animation from 'react-native-animatable';
 import { Button, Banner, AvatarList } from '../../components';
 import { DrinkupActions } from '../../redux';
@@ -35,6 +36,31 @@ class WaitingScreen extends Component {
     } else if (this.props.bar.currentDrinkUp) {
       this.props.getDrinkup(this.props.bar.currentDrinkUp, this.props.uid);
     }
+  }
+  componentWillReceiveProps(newProps) {
+    console.log('componentWillReceiveProps', newProps);
+  }
+  shouldComponentUpdate(newProps, newState) {
+    let update = false;
+    if (!isEqual(this.props.bar, newProps.bar)) {
+      update = true;
+    }
+    if (!isEqual(this.props.users, newProps.users)) {
+      update = true;
+    }
+    if (!isEqual(this.props.user, newProps.user)) {
+      update = true;
+    }
+    if (!isEqual(this.state, newState)) {
+      update = true;
+    }
+    if (this.props.joined !== newProps.joined) {
+      update = true;
+    }
+    if (this.props.waitingInvite !== newProps.waitingInvite) {
+      update = true;
+    }
+    return update;
   }
   componentDidUpdate() {
     const { joined, bar, navigation, users, getDrinkup, uid } = this.props;

@@ -89,7 +89,7 @@ class MapScreen extends Component {
   onBackCurrentLocation = (longitudeDelta = 0.16, latitudeDelta = 0.08) => {
     const position = this.props.location ? this.props.location : boulderPosition;
     this.currentRegion = { ...position, longitudeDelta, latitudeDelta };
-    this.currentRegion = { ...boulderPosition, longitudeDelta: 0.3, latitudeDelta: 0.15 };
+    // this.currentRegion = { ...boulderPosition, longitudeDelta: 0.3, latitudeDelta: 0.15 };
     this.map.animateToRegion(this.currentRegion, 1000);
   };
   onClusterMarkerPressed = ({ latitude, longitude }) => {
@@ -301,11 +301,18 @@ class MapScreen extends Component {
   }
 }
 
-const mapStateToProps = ({ location, drinkup }) => ({
-  region: { ...location.coords, longitudeDelta: 0.01, latitudeDelta: 0.005 },
-  location: location.coords,
-  drinkupBar: drinkup.bar,
-});
+const mapStateToProps = ({ location, drinkup }) => {
+  let region = { ...boulderPosition, longitudeDelta: 0.3, latitudeDelta: 0.15 };
+  if (location.coords) {
+    region = { ...location.coords, longitudeDelta: 0.01, latitudeDelta: 0.005 };
+  }
+
+  return ({
+    region,
+    location: location.coords,
+    drinkupBar: drinkup.bar,
+  });
+}
 
 //eslint-disable-next-line
 const mapDispatchToProps = dispatch => ({
