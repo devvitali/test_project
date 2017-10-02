@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Text, Image, View } from 'react-native';
 import I18n from 'react-native-i18n';
 
@@ -21,8 +20,4 @@ const CheersDialog = ({ onClose, visible }) => (
     <Button text={I18n.t('Drinkup_MeetNewPeople')} onPress={onClose} />
   </Dialog>
 );
-CheersDialog.propTypes = {
-  onClose: PropTypes.func,
-  visible: PropTypes.bool,
-};
 export default CheersDialog;

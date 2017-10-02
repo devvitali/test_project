@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Text, View } from 'react-native';
 import moment from 'moment';
 
@@ -17,9 +16,6 @@ const Document = ({ file }) => {
       </Markdown>
     </View>
   );
-};
-Document.propTypes = {
-  file: PropTypes.string,
 };
 
 export default Document;

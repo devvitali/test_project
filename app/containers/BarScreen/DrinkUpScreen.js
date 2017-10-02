@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { View } from 'react-native';
 import { connect } from 'react-redux';
 import AppContainer from '../AppContainer';
@@ -9,9 +8,6 @@ import DrinkUpLobby from './DrinkUpLobbyScreen';
 import { DrinkupActions } from '../../redux';
 
 class DrinkUp extends Component {
-  static propTypes = {
-    barId: PropTypes.string,
-  };
   constructor(props) {
     super(props);
     this.state = {

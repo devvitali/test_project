@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { TouchableOpacity, Text, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
@@ -33,17 +32,6 @@ const Button = (props) => {
   );
 };
 
-Button.propTypes = {
-  style: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
-  gradient: PropTypes.bool,
-  gradientColors: PropTypes.array,
-  disabledStyle: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
-  disabled: PropTypes.bool,
-  textStyle: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
-  text: PropTypes.string,
-  theme: PropTypes.oneOf(Object.keys(ButtonTheme)),
-  onPress: PropTypes.func,
-};
 Button.defaultProps = {
   text: 'Button',
   theme: 'primary',

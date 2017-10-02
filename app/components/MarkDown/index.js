@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { ScrollView, Text, View } from 'react-native';
 import { findIndex, map, slice } from 'lodash';
 
@@ -32,9 +31,4 @@ const Markdown = ({ content, style, children }) => (
     })}
   </ScrollView>
 );
-Markdown.propTypes = {
-  style: PropTypes.any,
-  content: PropTypes.arrayOf(PropTypes.string),
-  children: PropTypes.any,
-};
 export default Markdown;

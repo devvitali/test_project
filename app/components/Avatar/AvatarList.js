@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { View, ListView, Dimensions } from 'react-native';
 
 import { Metrics } from '../../themes';
@@ -39,13 +38,6 @@ export const AvatarList = ({ users, columns, columnPadding, style, iconOnly, onS
       )}
     />
   );
-};
-AvatarList.propTypes = {
-  style: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
-  users: PropTypes.object,
-  columns: PropTypes.number,
-  columnPadding: PropTypes.number,
-  iconOnly: PropTypes.bool,
 };
 AvatarList.defaultProps = {
   columns: 3,

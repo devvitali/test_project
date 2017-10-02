@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { TextInput, Text, ListView, View, TouchableOpacity } from 'react-native';
 import I18n from 'react-native-i18n';
 
@@ -45,12 +44,5 @@ const ComposeMessageDialog = (props) => {
       />
     </Dialog>
   );
-};
-ComposeMessageDialog.propTypes = {
-  message: PropTypes.string,
-  messagePlaceholder: PropTypes.string,
-  onClose: PropTypes.func,
-  onChangeMessage: PropTypes.func,
-  visible: PropTypes.bool,
 };
 export default ComposeMessageDialog;

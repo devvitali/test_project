@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Text } from 'react-native';
 import I18n from 'react-native-i18n';
 
@@ -19,9 +18,4 @@ const AlkoSpecialWarningDialog = ({ onClose, onButtonPress, visible }) => (
     <Button onPress={onButtonPress} text={I18n.t('Redeem_WarningDismiss')} />
   </Dialog>
 );
-AlkoSpecialWarningDialog.propTypes = {
-  onClose: PropTypes.func,
-  onButtonPress: PropTypes.func,
-  visible: PropTypes.bool,
-};
 export default AlkoSpecialWarningDialog;

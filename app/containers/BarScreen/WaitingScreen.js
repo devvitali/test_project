@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { View, Text } from 'react-native';
 import I18n from 'react-native-i18n';
 import { connect } from 'react-redux';
@@ -10,13 +9,6 @@ import { requestingMember } from '../../fixture/drinkupMembers';
 import styles from './styles';
 
 class WaitingScreen extends Component {
-  static propTypes = {
-    users: PropTypes.object,
-    column: PropTypes.number,
-    columnPadding: PropTypes.number,
-    joined: PropTypes.bool,
-    joinDrinkup: PropTypes.func,
-  };
   static defaultProps = {
     column: 3,
     columnPadding: 15,

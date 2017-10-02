@@ -1,6 +1,5 @@
 // @flow
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Text, TouchableOpacity, View } from 'react-native';
 import IconFontAwesome from 'react-native-vector-icons/FontAwesome';
 import IconMaterial from 'react-native-vector-icons/MaterialIcons';
@@ -45,15 +44,6 @@ const DrawerButton = (props) => {
       <IconMaterial name="keyboard-arrow-right" size={Metrics.icons.medium} style={iconStyle} />
     </TouchableOpacity>
   );
-};
-DrawerButton.propTypes = {
-  iconFamily: PropTypes.oneOf(['material', 'fontawesome', 'alko']),
-  iconName: PropTypes.string,
-  iconSize: PropTypes.number,
-  iconColor: PropTypes.string,
-  text: PropTypes.string.isRequired,
-  isActive: PropTypes.bool.isRequired,
-  onPress: PropTypes.func.isRequired,
 };
 
 DrawerButton.defaultProps = {

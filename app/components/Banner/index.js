@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { TouchableOpacity, Text } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import IconFontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -40,19 +39,6 @@ const Banner = (props) => {
       </TouchableOpacity>
     </LinearGradient>
   );
-};
-
-Banner.propTypes = {
-  style: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
-  gradientColors: PropTypes.array,
-  textStyle: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
-  text: PropTypes.string,
-  onPress: PropTypes.func,
-  iconFamily: PropTypes.oneOf(['material', 'fontawesome', 'alko']),
-  iconName: PropTypes.string,
-  iconSize: PropTypes.number,
-  iconColor: PropTypes.string,
-  theme: PropTypes.oneOf(Object.keys(BannerTheme)),
 };
 
 Banner.defaultProps = {

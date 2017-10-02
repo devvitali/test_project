@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -57,20 +56,6 @@ export const Avatar = props => (props.onPress ?
   </TouchableOpacity> :
   renderAvatar(props)
 );
-
-Avatar.propTypes = {
-  style: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
-  name: PropTypes.string,
-  icon: PropTypes.string,
-  image: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-  imageStyle: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
-  width: PropTypes.number,
-  height: PropTypes.number,
-  message: PropTypes.string,
-  messagesRead: PropTypes.bool,
-  onPress: PropTypes.func,
-  disabled: PropTypes.bool,
-};
 
 Avatar.defaultProps = {
   width: 100,

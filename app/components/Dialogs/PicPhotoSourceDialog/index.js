@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { StyleSheet } from 'react-native';
 import I18n from 'react-native-i18n';
 import { Metrics } from '../../../themes';
@@ -25,12 +24,5 @@ const PicPhotoSourceDialog = ({ onClose, visible, onUsePhotosPress, onUseCameraP
     />
   </Dialog>
 );
-
-PicPhotoSourceDialog.propTypes = {
-  visible: PropTypes.bool,
-  onClose: PropTypes.func,
-  onUseCameraPress: PropTypes.func,
-  onUsePhotosPress: PropTypes.func,
-};
 export default PicPhotoSourceDialog;
 

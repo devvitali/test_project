@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import {
   StyleSheet,
   TouchableOpacity,
@@ -77,14 +76,5 @@ const BarResult = (props) => {
       </View>
     </TouchableOpacity>
   );
-};
-BarResult.propTypes = {
-  style: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
-  textStyle: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
-  name: PropTypes.string,
-  activeDrinkUp: PropTypes.bool,
-  activeSpecial: PropTypes.bool,
-  distance: PropTypes.string,
-  onPress: PropTypes.func,
 };
 export default BarResult;

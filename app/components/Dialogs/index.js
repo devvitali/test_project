@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Modal, View, TouchableHighlight, TouchableOpacity } from 'react-native';
 
 import IconFontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -40,19 +39,6 @@ const Dialog = props => (
     </View>
   </Modal>
 );
-Dialog.propTypes = {
-  closeOnBackdropPress: PropTypes.bool,
-  onClose: PropTypes.func,
-  animationType: PropTypes.string,
-  backdropColor: PropTypes.string,
-  visible: PropTypes.bool,
-  closeButton: PropTypes.bool,
-  subcontent: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.node),
-    PropTypes.node,
-  ]),
-  dialogStyle: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
-};
 Dialog.defaultProps = {
   onClose: () => {},
   closeOnBackdropPress: true,

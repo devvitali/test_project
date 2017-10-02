@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { View, Text, Image, ScrollView } from 'react-native';
 import I18n from 'react-native-i18n';
 import moment from 'moment';
@@ -9,14 +8,6 @@ import { Button } from '../../components';
 import { Images } from '../../themes';
 
 export default class Redeem2For1Screen extends Component {
-
-  static propTypes = {
-    bar: PropTypes.string,
-    redeemDate: PropTypes.object,
-    expiryDate: PropTypes.object,
-    onExpire: PropTypes.func,
-  };
-
   static defaultProps = {
     redeemDate: moment(),
     expiryDate: moment().add(3, 'minutes'),

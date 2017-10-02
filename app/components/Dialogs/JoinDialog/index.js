@@ -1,9 +1,5 @@
-import React, { PropTypes } from 'react';
-import {
-  Text,
-  View,
-  TouchableOpacity,
-} from 'react-native';
+import React from 'react';
+import { Text, View, TouchableOpacity } from 'react-native';
 import I18n from 'react-native-i18n';
 
 import { Avatar } from '../../Avatar';
@@ -33,11 +29,4 @@ const JoinDialog = ({ name, avatarSrc, distance, onClose }) => (
     <Button onPress={onClose} text={I18n.t('Drinkup_SendInvite')} />
   </Dialog>
 );
-JoinDialog.propTypes = {
-  name: PropTypes.string,
-  avatarSrc: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  distance: PropTypes.number,
-  onClose: PropTypes.func,
-  visible: PropTypes.bool,
-};
 export default JoinDialog;

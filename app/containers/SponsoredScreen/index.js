@@ -6,9 +6,6 @@ import { NavItems, MarkDown, parseFile } from '../../components';
 import styles from './styles';
 
 export default class SponsoredScreen extends React.Component {
-  static propTypes = {
-    bar: React.PropTypes.object.isRequired,
-  };
   constructor(props) {
     super(props);
     this.state = {

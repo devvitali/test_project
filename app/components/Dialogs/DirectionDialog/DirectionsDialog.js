@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Text } from 'react-native';
 import I18n from 'react-native-i18n';
 
@@ -14,9 +13,3 @@ export const DirectionsDialog = ({ onClose, visible, openGoogleMaps, openAppleMa
     <Button style={styles.button} onPress={openAppleMaps} text={I18n.t('Drinkup_AppleMap')} />
   </Dialog>
 );
-DirectionsDialog.propTypes = {
-  visible: PropTypes.bool.isRequired,
-  openGoogleMaps: PropTypes.func.isRequired,
-  openAppleMaps: PropTypes.func.isRequired,
-  onClose: PropTypes.func.isRequired,
-};

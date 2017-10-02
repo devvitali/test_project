@@ -10,7 +10,6 @@ class NoDrinkUpScreen extends Component {
 
   componentWillReceiveProps(newProps) {
     if (!this.props.joined && newProps.joined) {
-      console.log('NoDrinkUpScreen navigate DrinkUpScreen');
       this.props.navigation.navigate('DrinkUpScreen', { });
     }
   }

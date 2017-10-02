@@ -5,10 +5,10 @@ import { createSelector } from 'reselect';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import { getDistance } from 'geolib';
 import I18n from 'react-native-i18n';
-import { map } from 'lodash';
+import { map, isEqual } from 'lodash';
 import AppContainer from '../AppContainer';
 import { NavItems, BarResult, Button, Banner, IconAlko, NoBarResult } from '../../components';
-import { BarActions, DrinkupActions, LocationActions } from '../../redux';
+import { DrinkupActions, LocationActions } from '../../redux';
 import { geoFire } from '../../firebase';
 import { Colors, Images, Fonts } from '../../themes';
 import { calculateDistanceByRegion, hasLocation, isUSArea } from '../../utils/mapUtils';
@@ -24,7 +24,6 @@ const boulderPosition = {
   longitude: -105.14,
 };
 class MapScreen extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -36,23 +35,17 @@ class MapScreen extends Component {
     };
     this.criteriaTimeout = -1;
     this.currentRegion = null;
-    this.barLocations = {};
-    this.geoQuery = geoFire('barLocations')
-      .query({
-        center: props.region.latitude ? [props.region.latitude, props.region.longitude] : [50, -50],
-        radius: 1,
-      });
-
+    this.geoQuery = geoFire('barLocations').query({
+      center: props.region.latitude ? [props.region.latitude, props.region.longitude] : [50, -50],
+      radius: 1,
+    });
     this.geoQuery.on('key_entered', BarsInformation.onBarEntered);
     BarsInformation.setCallback(() => {
       const position = this.props.location ? this.props.location : boulderPosition;
       this.setState({ ...BarsInformation.getBarMarkers(this.currentRegion, position) });
     });
   }
-
   componentDidMount() {
-    const { clearBars } = this.props;
-    clearBars();
     if (GoogleAPIAvailability) {
       GoogleAPIAvailability.checkGooglePlayServices((result) => {
         this.setState({ isGooglePlayServicesAvailable: result === 'success' });
@@ -60,7 +53,7 @@ class MapScreen extends Component {
     }
   }
   componentWillReceiveProps(newProps) {
-    if (newProps.location) {
+    if (newProps.location && !isEqual(this.props.location, newProps.location)) {
       if (this.criteriaTimeout === -1) {
         this.criteriaTimeout = setTimeout(() => {
           this.geoQuery.updateCriteria({
@@ -77,7 +70,6 @@ class MapScreen extends Component {
   }
 
   componentWillUnmount() {
-    this.props.clearBars();
     this.geoQuery.cancel();
   }
   onBackCurrentLocation = (longitudeDelta = 0.16, latitudeDelta = 0.08) => {
@@ -108,9 +100,7 @@ class MapScreen extends Component {
     } else {
       this.setState({ showBackCurrentLocation: false });
     }
-
     this.setState({ ...BarsInformation.getBarMarkers(this.currentRegion, position) });
-
     BarsInformation.subscribeBars(region);
   };
 
@@ -306,11 +296,8 @@ const mapStateToProps = state => ({
   ...drinkupSelector(state),
 });
 
-//eslint-disable-next-line
 const mapDispatchToProps = dispatch => ({
   startBackgroundGeoLocation: () => dispatch(LocationActions.startBackgroundGeoLocation()),
-  clearBars: () => dispatch(BarActions.clearBars()),
-  updateMapBar: bars => dispatch(BarActions.updateMapBar(bars)),
   setDrinkupBar: bar => dispatch(DrinkupActions.barRequestSuccessful(bar)),
 });
 
