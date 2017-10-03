@@ -1,20 +1,10 @@
 import React from 'react';
 import { View, ScrollView } from 'react-native';
-import { download } from '../../utils/downloadUtils';
 import AppContainer from '../AppContainer';
-import { NavItems, MarkDown, parseFile } from '../../components';
+import { NavItems, MarkDown, parseFile, Button } from '../../components';
 import styles from './styles';
 
 export default class SponsoredScreen extends React.Component {
-  renderContent(eventContent) {
-    return (
-      <View style={styles.mainContainer}>
-        <ScrollView>
-          <MarkDown content={eventContent.content} style={styles} />
-        </ScrollView>
-      </View>
-    );
-  }
   render() {
     const { event } = this.props.navigation.state.params;
     if (event) {
@@ -24,7 +14,14 @@ export default class SponsoredScreen extends React.Component {
           title={eventContent.metadata.title}
           renderLeftButton={NavItems.backButton(this.props.navigation)}
         >
-          {this.renderContent(eventContent)}
+          <View style={styles.mainContainer}>
+            <ScrollView>
+              <MarkDown content={eventContent.content} style={styles} />
+            </ScrollView>
+          </View>
+          <View style={styles.buttonContainer}>
+            <Button onPress={this.onDraftJoined} text={'Go to'} />
+          </View>
         </AppContainer>
       );
     }

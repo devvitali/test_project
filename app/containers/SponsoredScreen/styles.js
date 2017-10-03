@@ -27,5 +27,8 @@ export default StyleSheet.create({
   spacer: {
     height: Metrics.baseMargin,
   },
-
+  buttonContainer: {
+    alignSelf: 'stretch',
+    margin: 30,
+  },
 });
