@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity, Text } from 'react-native';
+import { TouchableOpacity, Text, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import IconFontAwesome from 'react-native-vector-icons/FontAwesome';
 import IconMaterial from 'react-native-vector-icons/MaterialIcons';
@@ -32,12 +32,14 @@ const Banner = (props) => {
   } = applyComponentTheme(theme, props);
   const Icon = getIconFamilyComponent(props.iconFamily);
   return (
-    <LinearGradient colors={gradientColors} style={[styles.btn, style]}>
-      <TouchableOpacity activeOpacity={0.7} style={styles.body} onPress={onPress}>
-        <Icon style={styles.icon} name={iconName} size={iconSize} color={iconColor} />
-        <Text style={[styles.bodyText, textStyle]}>{props.text}</Text>
-      </TouchableOpacity>
-    </LinearGradient>
+    <TouchableOpacity activeOpacity={0.7} onPress={onPress}>
+      <LinearGradient colors={gradientColors} style={[styles.btn, style]}>
+        <View style={styles.body}>
+          <Icon style={styles.icon} name={iconName} size={iconSize} color={iconColor} />
+          <Text style={[styles.bodyText, textStyle]}>{props.text}</Text>
+        </View>
+      </LinearGradient>
+    </TouchableOpacity>
   );
 };
 

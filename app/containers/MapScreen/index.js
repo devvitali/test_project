@@ -7,16 +7,17 @@ import { getDistance } from 'geolib';
 import I18n from 'react-native-i18n';
 import { map, isEqual } from 'lodash';
 import AppContainer from '../AppContainer';
-import { NavItems, BarResult, Button, Banner, IconAlko, NoBarResult } from '../../components';
+import { NavItems, BarResult, Button, Banner, IconAlko, NoBarResult, parseFile } from '../../components';
 import { DrinkupActions, LocationActions } from '../../redux';
 import { geoFire } from '../../firebase';
 import { Colors, Images, Fonts } from '../../themes';
 import { calculateDistanceByRegion, hasLocation, isUSArea } from '../../utils/mapUtils';
 import { BarsInformation } from './barsInformation';
+import { EventsInformation } from './eventInformation';
 import styles from './styles';
 import mapStyle from './mapStyle';
 
-const GoogleAPIAvailability = Platform.OS === 'android' ? require('react-native-google-api-availability-bridge') : null;
+const googleAPI = Platform.OS === 'android' ? require('react-native-google-api-availability-bridge') : null;
 const METRES_TO_MILES_FACTOR = 0.000621371192237;
 
 const boulderPosition = {
@@ -27,7 +28,7 @@ class MapScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isGooglePlayServicesAvailable: true,
+      googleAPIAvailable: true,
       showBackCurrentLocation: false,
       clusterMarkers: [],
       barResultItems: [],
@@ -35,20 +36,23 @@ class MapScreen extends Component {
     };
     this.criteriaTimeout = -1;
     this.currentRegion = null;
-    this.geoQuery = geoFire('barLocations').query({
+    const geoParam = {
       center: props.region.latitude ? [props.region.latitude, props.region.longitude] : [50, -50],
       radius: 1,
-    });
-    this.geoQuery.on('key_entered', BarsInformation.onBarEntered);
+    };
+    this.barGeoQuery = geoFire('barLocations').query(geoParam);
+    this.eventGeoQuery = geoFire('eventLocations').query({ ...geoParam, radius: 15 });
+    this.barGeoQuery.on('key_entered', BarsInformation.onBarEntered);
+    this.eventGeoQuery.on('key_entered', EventsInformation.onEventEntered);
     BarsInformation.setCallback(() => {
       const position = this.props.location ? this.props.location : boulderPosition;
       this.setState({ ...BarsInformation.getBarMarkers(this.currentRegion, position) });
     });
   }
   componentDidMount() {
-    if (GoogleAPIAvailability) {
-      GoogleAPIAvailability.checkGooglePlayServices((result) => {
-        this.setState({ isGooglePlayServicesAvailable: result === 'success' });
+    if (googleAPI) {
+      googleAPI.checkGooglePlayServices((result) => {
+        this.setState({ googleAPIAvailable: result === 'success' });
       });
     }
   }
@@ -56,10 +60,12 @@ class MapScreen extends Component {
     if (newProps.location && !isEqual(this.props.location, newProps.location)) {
       if (this.criteriaTimeout === -1) {
         this.criteriaTimeout = setTimeout(() => {
-          this.geoQuery.updateCriteria({
+          const geoParam = {
             center: [newProps.location.latitude, newProps.location.longitude],
             radius: 100,
-          });
+          };
+          this.barGeoQuery.updateCriteria(geoParam);
+          this.eventGeoQuery.updateCriteria({ ...geoParam, radius: 15 });
           this.criteriaTimeout = -1;
         }, 1000);
       }
@@ -70,7 +76,8 @@ class MapScreen extends Component {
   }
 
   componentWillUnmount() {
-    this.geoQuery.cancel();
+    this.barGeoQuery.cancel();
+    this.eventGeoQuery.cancel();
   }
   onBackCurrentLocation = (longitudeDelta = 0.16, latitudeDelta = 0.08) => {
     const position = this.props.location ? this.props.location : boulderPosition;
@@ -78,7 +85,7 @@ class MapScreen extends Component {
     // this.currentRegion = { ...boulderPosition, longitudeDelta: 0.3, latitudeDelta: 0.15 };
     this.map.animateToRegion(this.currentRegion, 1000);
   };
-  onClusterMarkerPressed = ({ latitude, longitude }) => {
+  onPressClusterMarker = ({ latitude, longitude }) => {
     const longitudeDelta = this.currentRegion.longitudeDelta / 2;
     const latitudeDelta = this.currentRegion.latitudeDelta / 2;
     const region = { latitude, longitude, latitudeDelta, longitudeDelta };
@@ -90,10 +97,12 @@ class MapScreen extends Component {
       region.longitude -= 360;
     }
     this.currentRegion = region;
-    this.geoQuery.updateCriteria({
+    const geoParam = {
       center: [region.latitude, region.longitude],
       radius: calculateDistanceByRegion(region) / 1.1,
-    });
+    };
+    this.barGeoQuery.updateCriteria(geoParam);
+    this.eventGeoQuery.updateCriteria({ ...geoParam, radius: 15 });
     const position = this.props.location ? this.props.location : boulderPosition;
     if (!hasLocation(position, region)) {
       this.setState({ showBackCurrentLocation: true });
@@ -103,35 +112,38 @@ class MapScreen extends Component {
     this.setState({ ...BarsInformation.getBarMarkers(this.currentRegion, position) });
     BarsInformation.subscribeBars(region);
   };
-
-  handleEventPress(bar) {
-    const title = bar.name;
-    this.props.navigation.navigate('SponsoredScreen', { bar, title });
-  }
+  onClickEvent = (event) => {
+    this.props.navigation.navigate('SponsoredScreen', { event });
+  };
   navigateFeedBackScreen = () => {
     this.props.navigation.navigate('FeedBackScreen');
   };
   renderAlert() {
-    const { bar } = this.state;
-    if (!bar) {
-      return null;
+    const event = EventsInformation.getEvent();
+    if (event) {
+      const eventContent = parseFile(event.content);
+      console.log('eventContent', eventContent);
+      return (
+        <View style={styles.bannerContainer}>
+          <Banner
+            theme="alert"
+            text={eventContent.metadata.title}
+            iconFamily="alko"
+            iconName="badge"
+            onPress={() => this.onClickEvent(event)}
+          />
+        </View>
+      );
     }
-    return (
-      <Banner
-        theme="alert"
-        text={bar.event.title}
-        iconFamily="alko"
-        iconName="badge"
-        onPress={() => this.handleEventPress(bar)}
-      />
-    );
+    return null;
   }
 
   renderBarMarker(bar) {
     if (!bar || !this.props.region) {
       return null;
     }
-    const { address, currentDrinkUp, currentSpecial } = bar;
+    const { address, currentDrinkUp } = bar;
+    const currentSpecial = EventsInformation.checkEventStatus(bar.id);
     if (!address) {
       return null;
     }
@@ -149,7 +161,7 @@ class MapScreen extends Component {
       <MapView.Marker
         key={bar.id}
         onPress={() => this.props.setDrinkupBar({ ...bar })}
-        coordinate={{ latitude: address.latitude, longitude: address.longitude }}
+        coordinate={address}
       >
         <Image source={image} />
       </MapView.Marker>
@@ -157,7 +169,8 @@ class MapScreen extends Component {
   }
 
   renderBarResult(bar, id) {
-    const { name, currentDrinkUp, currentSpecial, address } = bar;
+    const { name, currentDrinkUp, address } = bar;
+    const currentSpecial = EventsInformation.checkEventStatus(bar.id);
     const props = {
       name,
       activeDrinkUp: !!currentDrinkUp,
@@ -166,7 +179,6 @@ class MapScreen extends Component {
       distance: '',
       onPress: () => this.props.setDrinkupBar({ ...bar }),
     };
-
     if (this.props.location && address) {
       const { latitude, longitude, accuracy } = this.props.location;
       const start = { latitude, longitude };
@@ -193,25 +205,16 @@ class MapScreen extends Component {
     }
     return <NoBarResult onPress={this.navigateFeedBackScreen} />;
   }
-
-  renderBarMarkers() {
-    return map(this.state.markerBarItems, (bar, id) => this.renderBarMarker(bar, id));
-  }
   renderClusterMarkers() {
     return this.state.clusterMarkers.map((marker) => {
       const fontSize = (Fonts.size.medium - marker.count.length) + 1;
       const id = `${marker.latitude.toFixed(3)}-${marker.longitude.toFixed(3)}-${marker.count}`;
       return (
-        <MapView.Marker
-          key={id}
-          coordinate={marker}
-          onPress={() => this.onClusterMarkerPressed(marker)}
-        >
+        <MapView.Marker key={id} coordinate={marker} onPress={() => this.onPressClusterMarker(marker)}>
           <Image source={Images.pin} />
           <View style={styles.clusterContainer}>
-            <Text
-              style={[styles.labelClusterCount, { fontSize }]}
-            >{marker.count}
+            <Text style={[styles.labelClusterCount, { fontSize }]}>
+              {marker.count}
             </Text>
           </View>
         </MapView.Marker>
@@ -219,17 +222,12 @@ class MapScreen extends Component {
     });
   }
   renderMap() {
-    if (!this.state.isGooglePlayServicesAvailable) {
+    if (!this.state.googleAPIAvailable) {
       return (
         <View style={styles.noMapContainer}>
           <IconAlko name="map" color={Colors.snow} size={48} style={styles.noMapIcon} />
           <Text style={styles.noMapText}>{I18n.t('Map_GoogleMapsNotAvailable')}</Text>
-          <Button
-            theme="dark"
-            style={styles.noMapButton}
-            text={'Update'}
-            onPress={GoogleAPIAvailability.openGooglePlayUpdate}
-          />
+          <Button theme="dark" style={styles.noMapButton} text={'Update'} onPress={googleAPI.openGooglePlayUpdate} />
         </View>
       );
     }
@@ -244,7 +242,7 @@ class MapScreen extends Component {
         showsUserLocation
         ref={ref => this.map = ref}
       >
-        {this.renderBarMarkers()}
+        {map(this.state.markerBarItems, (bar, id) => this.renderBarMarker(bar, id))}
         {this.renderClusterMarkers()}
       </MapView>
     );
@@ -260,9 +258,7 @@ class MapScreen extends Component {
         <View style={styles.mainContainer}>
           <View style={styles.mapContainer}>
             {this.renderMap()}
-            <View style={styles.bannerContainer}>
-              {this.renderAlert()}
-            </View>
+            {this.renderAlert()}
             {this.state.showBackCurrentLocation &&
             <TouchableOpacity
               style={styles.locationButtonContainer}
@@ -282,9 +278,9 @@ class MapScreen extends Component {
 const location$ = state => state.location;
 export const locationSelector = createSelector(location$, (location) => {
   let region = { ...boulderPosition, longitudeDelta: 0.3, latitudeDelta: 0.15 };
-  if (location.coords) {
-    region = { ...location.coords, longitudeDelta: 0.01, latitudeDelta: 0.005 };
-  }
+  // if (location.coords) {
+  //   region = { ...location.coords, longitudeDelta: 0.01, latitudeDelta: 0.005 };
+  // }
   return { region, location: location.coords };
 });
 const drinkupBar$ = state => state.drinkup;

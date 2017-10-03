@@ -6,41 +6,28 @@ import { NavItems, MarkDown, parseFile } from '../../components';
 import styles from './styles';
 
 export default class SponsoredScreen extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      file: null,
-    };
+  renderContent(eventContent) {
+    return (
+      <View style={styles.mainContainer}>
+        <ScrollView>
+          <MarkDown content={eventContent.content} style={styles} />
+        </ScrollView>
+      </View>
+    );
   }
-  componentDidMount() {
-    if (this.props.bar) {
-      const { event } = this.props.bar;
-      download(event.content)
-        .then((file) => {
-          this.setState({
-            file: parseFile(file),
-          });
-        });
-    }
-  }
-  renderContent() {
-    const { file } = this.state;
-    if (file) {
+  render() {
+    const { event } = this.props.navigation.state.params;
+    if (event) {
+      const eventContent = parseFile(event.content);
       return (
-        <View style={styles.mainContainer}>
-          <ScrollView>
-            <MarkDown content={file.content} style={styles} />
-          </ScrollView>
-        </View>
+        <AppContainer
+          title={eventContent.metadata.title}
+          renderLeftButton={NavItems.backButton(this.props.navigation)}
+        >
+          {this.renderContent(eventContent)}
+        </AppContainer>
       );
     }
     return null;
-  }
-  render() {
-    return (
-      <AppContainer renderLeftButton={NavItems.backButton(this.props.navigation)}>
-        {this.renderContent()}
-      </AppContainer>
-    );
   }
 }
