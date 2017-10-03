@@ -112,7 +112,9 @@ class MapScreen extends Component {
     this.setState({ ...BarsInformation.getBarMarkers(this.currentRegion, position) });
     BarsInformation.subscribeBars(region);
   };
-  onClickEvent = (event) => {
+  onClickEvent = async (event) => {
+    // eslint-disable-next-line
+    event.bar = await BarsInformation.getBar(event.barId);
     this.props.navigation.navigate('SponsoredScreen', { event });
   };
   navigateFeedBackScreen = () => {

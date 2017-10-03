@@ -1,10 +1,17 @@
 import React from 'react';
 import { View, ScrollView } from 'react-native';
+import { connect } from 'react-redux';
+import { DrinkupActions } from '../../redux';
 import AppContainer from '../AppContainer';
 import { NavItems, MarkDown, parseFile, Button } from '../../components';
 import styles from './styles';
 
-export default class SponsoredScreen extends React.Component {
+class SponsoredScreen extends React.Component {
+  onGotoBar = () => {
+    const { event } = this.props.navigation.state.params;
+    this.props.setDrinkupBar({ ...event.bar });
+    // this.props.navigation.goBack();
+  };
   render() {
     const { event } = this.props.navigation.state.params;
     if (event) {
@@ -20,7 +27,7 @@ export default class SponsoredScreen extends React.Component {
             </ScrollView>
           </View>
           <View style={styles.buttonContainer}>
-            <Button onPress={this.onDraftJoined} text={'Go to'} />
+            <Button onPress={this.onGotoBar} text={`Go to ${event.bar.name}`} />
           </View>
         </AppContainer>
       );
@@ -28,3 +35,9 @@ export default class SponsoredScreen extends React.Component {
     return null;
   }
 }
+const mapDispatchToProps = dispatch => ({
+  setDrinkupBar: bar => dispatch(DrinkupActions.barRequestSuccessful(bar)),
+});
+
+export default connect(null, mapDispatchToProps)(SponsoredScreen);
+

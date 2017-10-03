@@ -91,6 +91,13 @@ class BarInformation {
       }
     }
   }
+  async getBar(barId) {
+    if (this.bars[barId]) {
+      return this.bars[barId];
+    }
+    const bar = await this.barModel.get(barId, true);
+    return bar;
+  }
   getBarsFromRegion(region) {
     const ret = [];
     Object.keys(this.bars).forEach((key) => {

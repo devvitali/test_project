@@ -25,6 +25,7 @@ const DrinkupNavigator = StackNavigator(
     MapScreen: { screen: MapScreen },
     JoinDrinkUpScreen: { screen: JoinDrinkUpScreen },
     DrinkUpScreen: { screen: DrinkUpScreen },
+    SponsoredScreen: { screen: SponsoredScreen },
   },
   {
     initialRouteName: 'MapScreen',
@@ -54,7 +55,6 @@ const AppNavigator = StackNavigator({
   OnBoardingStep4: { screen: OnBoardingStep4 },
   Redeem2For1Screen: { screen: Redeem2For1Screen },
   DrawerNavigation: { screen: DrawerNavigation },
-  SponsoredScreen: { screen: SponsoredScreen },
 }, {
   initialRouteName: 'SplashScreen',
   headerMode: 'none',

@@ -14,7 +14,7 @@ class EventInformation {
   checkEventStatus = (barId) => {
     let ret = false;
     map(this.events, (event) => {
-      if (event.bar === barId) {
+      if (event.barId === barId) {
         ret = true;
       }
     });
