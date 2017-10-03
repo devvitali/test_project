@@ -44,7 +44,8 @@ export default {
   backButton: {
     ...navButton,
     paddingBottom: 4,
-    width: 15,
+    paddingLeft: 10,
+    width: 45,
     marginRight: 20,
   },
   navButtonLeft: {
