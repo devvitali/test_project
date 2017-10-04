@@ -146,7 +146,6 @@ class BarInformation {
     }
   }
   getBarMarkers(region, location) {
-    console.log('getBarMarkers');
     let barResultItems = this.getBarsFromRegion(region);
     if (location) {
       barResultItems = this.barModel.constructor.getBarsSortedByDistance(location, barResultItems);

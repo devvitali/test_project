@@ -1,16 +1,47 @@
 import { map } from 'lodash';
+import { getDistance } from 'geolib';
 import { EventFactory } from '../../firebase/models';
+import { geoFire } from '../../firebase';
 
+const barGeoFire = geoFire('barLocations');
 class EventInformation {
   constructor() {
     this.events = {
     };
-    this.eventModel = new EventFactory();
+    this.eventActions = {
+      onAdd: this.onAdd,
+      onRemove: this.onRemove,
+    };
+    this.eventModel = new EventFactory(this.eventActions);
+    this.eventModel.subscribe(() => {}, null);
+    this.callback = null;
   }
-  onEventEntered = async (eventId) => {
-    this.events[eventId] = await this.eventModel.get(eventId, true);
-    console.log('onEventEntered', this.events);
+  onAdd = async (data) => {
+    const eventId = Object.keys(data)[0];
+    const event = data[eventId];
+    if (event.barId) {
+      const barLocation = await barGeoFire.get(event.barId);
+      this.onEventEntered(eventId, barLocation);
+      console.log('onAdd', eventId, data[eventId], barLocation);
+    }
   };
+  onRemove = (data) => {
+    const eventId = Object.keys(data)[0];
+    delete this.events[eventId];
+    if (this.callback) {
+      this.callback();
+    }
+    console.log('onRemove', eventId, data[eventId]);
+  };
+  onEventEntered = async (eventId, location) => {
+    this.events[eventId] = await this.eventModel.get(eventId, true);
+    this.events[eventId].location = location;
+    console.log('onEventEntered', this.events);
+    if (this.callback) {
+      this.callback();
+    }
+  };
+  setCallback = callback => this.callback = callback;
   checkEventStatus = (barId) => {
     let ret = false;
     map(this.events, (event) => {
@@ -20,10 +51,13 @@ class EventInformation {
     });
     return ret;
   };
-  getEvent = () => {
+  getEvent = (position) => {
     let ret = null;
-    map(this.events, (event, index) => {
-      if (index) {
+    let retDistance = -1;
+    map(this.events, (event) => {
+      const distance = getDistance(position, event.location);
+      if (retDistance === -1 || distance < retDistance) {
+        retDistance = distance;
         ret = event;
       }
     });

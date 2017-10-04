@@ -29,7 +29,7 @@ const drinkupActions = {
 export const UserFactory = (actions = userActions) => new UserModel(firebaseDb, actions);
 export const BarFactory = (actions = barActions) => new BarModel(firebaseDb, actions);
 export const DrinkUpFactory = (actions = drinkupActions) => new DrinkUpModel(firebaseDb, actions);
-export const EventFactory = () => new EventModel(firebaseDb);
+export const EventFactory = actions => new EventModel(firebaseDb, actions);
 
 export const User = new UserModel(firebaseDb, userActions);
 export const Bar = new BarModel(firebaseDb, barActions);

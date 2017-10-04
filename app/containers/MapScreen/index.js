@@ -33,6 +33,7 @@ class MapScreen extends Component {
       clusterMarkers: [],
       barResultItems: [],
       markerBarItems: [],
+      forceUpdate: false,
     };
     this.criteriaTimeout = -1;
     this.currentRegion = null;
@@ -48,6 +49,7 @@ class MapScreen extends Component {
       const position = this.props.location ? this.props.location : boulderPosition;
       this.setState({ ...BarsInformation.getBarMarkers(this.currentRegion, position) });
     });
+    EventsInformation.setCallback(() => this.setState({ forceUpdate: !this.state.forceUpdate }));
   }
   componentDidMount() {
     if (googleAPI) {
@@ -121,7 +123,8 @@ class MapScreen extends Component {
     this.props.navigation.navigate('FeedBackScreen');
   };
   renderAlert() {
-    const event = EventsInformation.getEvent();
+    const position = this.props.location ? this.props.location : boulderPosition;
+    const event = EventsInformation.getEvent(position);
     if (event) {
       const eventContent = parseFile(event.content);
       console.log('eventContent', eventContent);

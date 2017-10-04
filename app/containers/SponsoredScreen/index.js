@@ -7,10 +7,9 @@ import { NavItems, MarkDown, parseFile, Button } from '../../components';
 import styles from './styles';
 
 class SponsoredScreen extends React.Component {
-  onGotoBar = () => {
+  onEnterBar = () => {
     const { event } = this.props.navigation.state.params;
     this.props.setDrinkupBar({ ...event.bar });
-    // this.props.navigation.goBack();
   };
   render() {
     const { event } = this.props.navigation.state.params;
@@ -27,7 +26,7 @@ class SponsoredScreen extends React.Component {
             </ScrollView>
           </View>
           <View style={styles.buttonContainer}>
-            <Button onPress={this.onGotoBar} text={`Go to ${event.bar.name}`} />
+            <Button onPress={this.onEnterBar} text={`Go to ${event.bar.name}`} />
           </View>
         </AppContainer>
       );

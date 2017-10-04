@@ -134,6 +134,8 @@ export default class Base {
         // TODO: Avoid using setTimeout
         setTimeout(() => initialized = true, 1000);
       });
+    } else {
+      initialized = true;
     }
     if (this.actions.onUpdate) {
       this.dbRef(key).on('value', (snapshot) => {
