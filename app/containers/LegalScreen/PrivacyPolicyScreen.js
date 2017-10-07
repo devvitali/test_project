@@ -19,7 +19,7 @@ export default class PrivacyPolicyScreen extends Component {
       .then(download)
       .then(file => this.setState({ file }))
       .catch(() => this.setState({ file: localFile }));
-    console.track('viewed_privacy_policy');
+    console.log('viewed_privacy_policy');
   }
 
   renderContent() {

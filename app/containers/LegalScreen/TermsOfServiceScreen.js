@@ -18,7 +18,7 @@ export default class TermsOfServiceScreen extends Component {
       .then(download)
       .then(file => this.setState({ file }))
       .catch(() => this.setState({ file: localFile }));
-    console.track('viewed_terms_of_service');
+    console.log('viewed_terms_of_service');
   }
 
   renderContent() {

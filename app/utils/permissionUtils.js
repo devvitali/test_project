@@ -7,7 +7,7 @@ const requestPermission = (...args) => (
       .getPermissionStatus(...args)
       .then((response) => {
 
-        console.tron.display({
+        console.log({
           name: 'PermissionStatus',
           value: { args, response },
           important: true,
@@ -26,17 +26,17 @@ const requestPermission = (...args) => (
         Permissions
           .requestPermission(...args)
           .then((permissionResponse) => {
-            console.tron.display({
+            console.log({
               name: 'PermissionResponse',
               value: { args, permissionResponse },
               important: true,
             });
 
             if (permissionResponse === 'authorized') {
-              console.track(`${args[0]}_permission_granted`);
+              console.log(`${args[0]}_permission_granted`);
               resolve();
             } else {
-              console.track(`${args[0]}_permission_rejected`);
+              console.log(`${args[0]}_permission_rejected`);
               reject();
             }
 
@@ -58,7 +58,7 @@ export const notificationPermission = () => (
         FCM.requestPermissions();
         FCM.getFCMToken()
           .then((token) => {
-            console.tron.display({
+            console.log({
               name: 'FCM Token',
               value: { token },
               important: true,

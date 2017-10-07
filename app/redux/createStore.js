@@ -12,8 +12,7 @@ export default (rootReducer, rootSaga) => {
   const enhancers = [];
 
   /* ------------- Saga Middleware ------------- */
-  const sagaMonitor = __DEV__ ? console.tron.createSagaMonitor() : null;
-  const sagaMiddleware = createSagaMiddleware({ sagaMonitor });
+  const sagaMiddleware = createSagaMiddleware();
   middleware.push(sagaMiddleware);
 
   /* ------------- Assemble Middleware ------------- */
@@ -26,8 +25,7 @@ export default (rootReducer, rootSaga) => {
   }
 
   // if Reactotron is enabled (default for __DEV__), we'll create the store through Reactotron
-  const createAppropriateStore = Config.useReactotron ? console.tron.createStore : createStore;
-  const store = createAppropriateStore(rootReducer, compose(...enhancers));
+  const store = createStore(rootReducer, compose(...enhancers));
 
   // configure persistStore and check reducer version number
   if (ReduxPersist.active) {

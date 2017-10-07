@@ -37,7 +37,7 @@ class OnboardingPushNotifications extends Component {
   doNotificationPermissionRequest = () => (
     notificationPermission()
       .then((token) => {
-        console.tron.display({
+        console.log({
           name: 'NotificationPermissionAccepted',
           value: { token },
           important: true,
@@ -48,7 +48,7 @@ class OnboardingPushNotifications extends Component {
       })
       .catch((e) => {
 
-        console.tron.display({
+        console.log({
           name: 'NotificationPermissionError',
           value: e.message,
           important: true,

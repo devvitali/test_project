@@ -8,7 +8,7 @@ import { locationPermission } from '../../utils/permissionUtils';
 const requestLocationPermission = (props) => {
   locationPermission()
     .then(() => {
-      console.tron.display({
+      console.log({
         name: 'LocationPermissionAccepted',
         value: {},
         important: true,

@@ -28,8 +28,8 @@ class FeedbackScreen extends Component {
         error ? reject(error) : resolve()
       ));
     })
-      .then(() => console.tron.log('Thanks!'))
-      .catch(() => console.tron.log('Fail!'));
+      .then(() => console.log('Thanks!'))
+      .catch(() => console.log('Fail!'));
   };
   render() {
     const { feedback } = this.state;
