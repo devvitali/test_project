@@ -73,6 +73,7 @@ export function* updateProfile({ diff }) {
   try {
     const authData = yield call([firebaseAuth, firebaseAuth.signInAnonymously]);
     yield call([User, User.update], authData.user.uid, diff);
+    yield call(watch, subscribe, authData.user.uid);
   } catch (error) {
     yield put(authActions.updateProfileFailed(error));
   }

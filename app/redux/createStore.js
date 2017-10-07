@@ -24,7 +24,6 @@ export default (rootReducer, rootSaga) => {
     enhancers.push(autoRehydrate());
   }
 
-  // if Reactotron is enabled (default for __DEV__), we'll create the store through Reactotron
   const store = createStore(rootReducer, compose(...enhancers));
 
   // configure persistStore and check reducer version number
