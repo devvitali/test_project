@@ -41,7 +41,7 @@ class JoinDrinkUp extends Component {
       if (this.props.bar.currentDrinkUp) {
         return <WaitingScreen navigation={this.props.navigation} />;
       }
-      const special = this.props.bar.currentSpecial;
+      const special = this.props.bar.specialId;
       return <NoDrinkUp special={special} navigation={this.props.navigation} />;
     }
     return null;

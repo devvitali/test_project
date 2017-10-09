@@ -2,6 +2,7 @@ import { map } from 'lodash';
 import { getDistance } from 'geolib';
 import { EventFactory } from '../../firebase/models';
 import { geoFire } from '../../firebase';
+import { download } from '../../utils/downloadUtils';
 
 const barGeoFire = geoFire('barLocations');
 class EventInformation {
@@ -35,8 +36,9 @@ class EventInformation {
   };
   onEventEntered = async (eventId, location) => {
     this.events[eventId] = await this.eventModel.get(eventId, true);
+    const contentUrl = this.events[eventId].content_url;
+    this.events[eventId].content = await download(contentUrl);
     this.events[eventId].location = location;
-    console.log('onEventEntered', this.events);
     if (this.callback) {
       this.callback();
     }

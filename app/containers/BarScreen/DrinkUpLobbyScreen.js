@@ -147,7 +147,7 @@ class DrinkupLobbyScreen extends React.Component {
   }
   render() {
     const { bar, users } = this.props;
-    const special = bar.currentSpecial;
+    const special = bar.specialId;
     return (
       <View style={[styles.mainContainer, styles.container]}>
         {special &&

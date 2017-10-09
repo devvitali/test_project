@@ -2,7 +2,6 @@ import { AsyncStorage } from 'react-native';
 import { BarFactory } from '../../firebase/models';
 import { calculateZoom, hasLocation } from '../../utils/mapUtils';
 import { getClusters } from '../../utils/clustering';
-import { EventsInformation } from './eventInformation';
 
 function setBarAddress(_bar, location) {
   const bar = _bar;
@@ -153,8 +152,10 @@ class BarInformation {
     const clusterInputBars = {};
     const markerBarItems = [];
     barResultItems.forEach((bar) => {
-      const currentSpecial = EventsInformation.checkEventStatus(bar.id);
-      if (bar.currentDrinkUp || currentSpecial) {
+      if (bar.specialId) {
+        console.log('bar.specialId', bar.specialId);
+      }
+      if (bar.currentDrinkUp || bar.specialId) {
         markerBarItems.push(bar);
       } else {
         clusterInputBars[bar.id] = bar;
@@ -173,6 +174,7 @@ class BarInformation {
         markerBarItems.push(clusterInputBars[properties.id]);
       }
     });
+    console.log('markerBarItems', markerBarItems);
     return {
       markerBarItems,
       clusterMarkers,

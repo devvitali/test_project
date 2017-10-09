@@ -59,10 +59,11 @@ class WaitingScreen extends Component {
     this.props.cancelRequestDrinkup(bar, currentUser);
   };
   render() {
-    const { bar: { currentSpecial }, users, waitingInvite } = this.props;
+    const { bar: { specialId }, users, waitingInvite } = this.props;
+    console.log('specialId', specialId);
     return (
       <View style={[styles.mainContainer, styles.container]}>
-        {currentSpecial &&
+        {specialId &&
         <Banner theme="info" text={I18n.t('Drinkup_JoinDrinkUpAndGet2For1Drinks')} onPress={this.onWaiting} />
         }
         <AvatarList users={users} iconOnly />

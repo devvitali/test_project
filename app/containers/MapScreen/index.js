@@ -132,7 +132,7 @@ class MapScreen extends Component {
         <View style={styles.bannerContainer}>
           <Banner
             theme="alert"
-            text={eventContent.metadata.title}
+            text={eventContent.metadata.header}
             iconFamily="alko"
             iconName="badge"
             onPress={() => this.onClickEvent(event)}
@@ -147,17 +147,16 @@ class MapScreen extends Component {
     if (!bar || !this.props.region) {
       return null;
     }
-    const { address, currentDrinkUp } = bar;
-    const currentSpecial = EventsInformation.checkEventStatus(bar.id);
+    const { address, currentDrinkUp, specialId } = bar;
     if (!address) {
       return null;
     }
     let image = '';
-    if (currentDrinkUp && currentSpecial) {
+    if (currentDrinkUp && specialId) {
       image = Images.pinMugSeal;
     } else if (currentDrinkUp) {
       image = Images.pinMug;
-    } else if (currentSpecial) {
+    } else if (specialId) {
       image = Images.pinSeal;
     } else {
       image = Images.pin;
@@ -174,12 +173,11 @@ class MapScreen extends Component {
   }
 
   renderBarResult(bar, id) {
-    const { name, currentDrinkUp, address } = bar;
-    const currentSpecial = EventsInformation.checkEventStatus(bar.id);
+    const { name, currentDrinkUp, address, specialId } = bar;
     const props = {
       name,
       activeDrinkUp: !!currentDrinkUp,
-      activeSpecial: !!currentSpecial,
+      activeSpecial: !!specialId,
       key: id,
       distance: '',
       onPress: () => this.props.setDrinkupBar({ ...bar }),
@@ -189,7 +187,7 @@ class MapScreen extends Component {
       const start = { latitude, longitude };
       if (address.latitude) {
         const distance = getDistance(start, address, accuracy);
-        const position = this.props.location ? this.props.location : boulderPosition;
+        const position = this.currentRegion;
         if (isUSArea(position)) {
           props.distance = `${(distance * METRES_TO_MILES_FACTOR).toFixed(2)}mi`;
         } else {
@@ -247,8 +245,8 @@ class MapScreen extends Component {
         showsUserLocation
         ref={ref => this.map = ref}
       >
-        {map(this.state.markerBarItems, (bar, id) => this.renderBarMarker(bar, id))}
         {this.renderClusterMarkers()}
+        {map(this.state.markerBarItems, (bar, id) => this.renderBarMarker(bar, id))}
       </MapView>
     );
   }

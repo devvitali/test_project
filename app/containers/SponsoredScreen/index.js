@@ -26,7 +26,7 @@ class SponsoredScreen extends React.Component {
             </ScrollView>
           </View>
           <View style={styles.buttonContainer}>
-            <Button onPress={this.onEnterBar} text={`Go to ${event.bar.name}`} />
+            <Button onPress={this.onEnterBar} text={eventContent.metadata.action} />
           </View>
         </AppContainer>
       );
