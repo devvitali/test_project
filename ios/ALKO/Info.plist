@@ -21,7 +21,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>10</string>
+	<string>12</string>
 	<key>CodePushDeploymentKey</key>
 	<string>ecA7zEEfwrP58tqFAG0eAWa78KPRa065dcdc-8b6a-4077-8542-8057ac867034</string>
 	<key>LSRequiresIPhoneOS</key>
@@ -43,6 +43,8 @@
 	<string>Calenader usage</string>
 	<key>NSCameraUsageDescription</key>
 	<string>to take a pic</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>CHANGEME: Location Always And When In Use Usage Description</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>to find nearby bars</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
@@ -89,7 +91,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>CHANGEME: Location Always And When In Use Usage Description</string>
 </dict>
 </plist>
