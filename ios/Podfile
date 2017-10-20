@@ -14,7 +14,7 @@ end
   'Firebase/Database',
   'Firebase/RemoteConfig',
   'Firebase/Messaging',
-].each do |lib
+].each do |lib|
   pod lib
   pod ‘GoogleMaps’
 end
