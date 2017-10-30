@@ -6,8 +6,11 @@ import {
   View,
   Image,
 } from 'react-native';
+import { getDistance } from 'geolib';
 import { Images, Colors, Fonts } from '../../themes';
+import { isUSArea } from '../../utils/mapUtils';
 
+const METRES_TO_MILES_FACTOR = 0.000621371192237;
 const styles = StyleSheet.create({
   btnContainer: {
     height: 60,
@@ -59,19 +62,32 @@ function renderBarIcon(activeDrinkUp, activeSpecial) {
   return <Image style={styles.icon} source={Images.mug} />;
 }
 
-const BarResult = (props) => {
-  const { name, activeDrinkUp, activeSpecial, distance, textStyle, onPress } = props;
-  const buttonStyles = [styles.btnContainer, props.style];
-  if (activeDrinkUp) {
+const BarResult = ({ bar, location, onPress }) => {
+  const { name, currentDrinkUp, address, specialId } = bar;
+  let distance = 0;
+  if (this.props.location && address) {
+    const { latitude, longitude, accuracy } = location;
+    const start = { latitude, longitude };
+    if (address && address.latitude) {
+      const position = this.currentRegion;
+      if (isUSArea(position)) {
+        distance = `${(getDistance(start, address, accuracy) * METRES_TO_MILES_FACTOR).toFixed(2)}mi`;
+      } else {
+        distance = `${(getDistance(start, address, accuracy) * 0.001).toFixed(2)}km`;
+      }
+    }
+  }
+  const buttonStyles = [styles.btnContainer];
+  if (currentDrinkUp) {
     buttonStyles.push(styles.btnActiveDrinkUp);
   }
   return (
     <TouchableOpacity activeOpacity={0.7} style={buttonStyles} onPress={onPress}>
       <View style={styles.container}>
-        {renderBarIcon(activeDrinkUp, activeSpecial)}
+        {renderBarIcon(!!currentDrinkUp, !!specialId)}
         <View style={styles.infoContainer}>
           <Text style={[styles.btnText, styles.barName]} numberOfLines={1}>{name}</Text>
-          <Text style={[styles.btnText, textStyle]}>{distance}</Text>
+          <Text style={styles.btnText}>{distance}</Text>
         </View>
       </View>
     </TouchableOpacity>

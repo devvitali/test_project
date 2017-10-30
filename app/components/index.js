@@ -15,6 +15,7 @@ export { default as IconAlko } from './IconAlko';
 export { default as Document } from './Document';
 export { default as BarResult } from './Map/BarResult';
 export { default as NoBarResult } from './Map/NoBarResult';
+export { BarMarker, ClusterMarker } from './Map/MapMarkers';
 export { default as MarkDown, parseFile } from './MarkDown';
 export { default as NavigationBar } from './NavigationBar';
 export { default as NavItems } from './NavigationBar/NavigationBarItems';

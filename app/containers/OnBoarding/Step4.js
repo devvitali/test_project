@@ -72,8 +72,9 @@ class OnboardingPushNotifications extends Component {
 
     updateProfile({
       pushNotifications,
+      onboardingComplete: true,
     });
-    this.props.navigation.navigate('EditProfileScreenWithoutSignIn');
+    this.props.navigation.navigate('DrawerNavigation');
   };
 
   render() {

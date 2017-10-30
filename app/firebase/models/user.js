@@ -6,18 +6,6 @@ export default class User extends Base {
     this.ref = 'users_sand';
   }
 
-  static isProfileComplete(user) {
-    return Boolean(user
-                   && user.photoURL
-                   && user.firstName
-                   && user.firstName.length > 0
-                   && user.icon);
-  }
 
-  isUserValid(user) {
-    return Boolean(user
-                   && user.onboardingComplete
-                   && this.constructor.isProfileComplete(user));
-  }
 
 }

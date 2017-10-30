@@ -3,22 +3,23 @@ import { View, ScrollView, Image, Platform, Text, TouchableOpacity } from 'react
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
-import { getDistance } from 'geolib';
 import I18n from 'react-native-i18n';
-import { map, isEqual } from 'lodash';
+import { isEqual } from 'lodash';
 import AppContainer from '../AppContainer';
-import { NavItems, BarResult, Button, Banner, IconAlko, NoBarResult, parseFile } from '../../components';
+import {
+  NavItems, BarResult, Button, Banner, IconAlko, NoBarResult, parseFile, ClusterMarker, BarMarker,
+} from '../../components';
 import { DrinkupActions, LocationActions } from '../../redux';
 import { geoFire } from '../../firebase';
-import { Colors, Images, Fonts } from '../../themes';
-import { calculateDistanceByRegion, hasLocation, isUSArea } from '../../utils/mapUtils';
+import { Colors, Images } from '../../themes';
+import { isProfileComplete } from '../../utils/auth';
+import { calculateDistanceByRegion, hasLocation } from '../../utils/mapUtils';
 import { BarsInformation } from './barsInformation';
 import { EventsInformation } from './eventInformation';
 import styles from './styles';
 import mapStyle from './mapStyle';
 
 const googleAPI = Platform.OS === 'android' ? require('react-native-google-api-availability-bridge') : null;
-const METRES_TO_MILES_FACTOR = 0.000621371192237;
 
 const boulderPosition = {
   latitude: 40.0822214,
@@ -50,6 +51,7 @@ class MapScreen extends Component {
       this.setState({ ...BarsInformation.getBarMarkers(this.currentRegion, position) });
     });
     EventsInformation.setCallback(() => this.setState({ forceUpdate: !this.state.forceUpdate }));
+    this.props.startBackgroundGeoLocation();
   }
   componentDidMount() {
     if (googleAPI) {
@@ -73,15 +75,18 @@ class MapScreen extends Component {
       }
     }
     if (!this.props.drinkupBar && newProps.drinkupBar) {
-      this.props.navigation.navigate('JoinDrinkUpScreen', { barId: newProps.drinkupBar.id });
+      if (isProfileComplete(this.props.profile)) {
+        this.props.navigation.navigate('JoinDrinkUpScreen', { barId: newProps.drinkupBar.id });
+      } else {
+        this.props.navigation.navigate('EditProfileScreen');
+      }
     }
   }
-
   componentWillUnmount() {
     this.barGeoQuery.cancel();
     this.eventGeoQuery.cancel();
   }
-  onBackCurrentLocation = (longitudeDelta = 0.16, latitudeDelta = 0.08) => {
+  onBackCurrentLocation = ({ longitudeDelta = 0.16, latitudeDelta = 0.08 }) => {
     const position = this.props.location ? this.props.location : boulderPosition;
     this.currentRegion = { ...position, longitudeDelta, latitudeDelta };
     // this.currentRegion = { ...boulderPosition, longitudeDelta: 0.3, latitudeDelta: 0.15 };
@@ -127,7 +132,6 @@ class MapScreen extends Component {
     const event = EventsInformation.getEvent(position);
     if (event) {
       const eventContent = parseFile(event.content);
-      console.log('eventContent', eventContent);
       return (
         <View style={styles.bannerContainer}>
           <Banner
@@ -143,86 +147,26 @@ class MapScreen extends Component {
     return null;
   }
 
-  renderBarMarker(bar) {
-    if (!bar || !this.props.region) {
-      return null;
-    }
-    const { address, currentDrinkUp, specialId } = bar;
-    if (!address) {
-      return null;
-    }
-    let image = '';
-    if (currentDrinkUp && specialId) {
-      image = Images.pinMugSeal;
-    } else if (currentDrinkUp) {
-      image = Images.pinMug;
-    } else if (specialId) {
-      image = Images.pinSeal;
-    } else {
-      image = Images.pin;
-    }
-    return (
-      <MapView.Marker
-        key={bar.id}
-        onPress={() => this.props.setDrinkupBar({ ...bar })}
-        coordinate={address}
-      >
-        <Image source={image} />
-      </MapView.Marker>
-    );
-  }
-
   renderBarResult(bar, id) {
-    const { name, currentDrinkUp, address, specialId } = bar;
-    const props = {
-      name,
-      activeDrinkUp: !!currentDrinkUp,
-      activeSpecial: !!specialId,
-      key: id,
-      distance: '',
-      onPress: () => this.props.setDrinkupBar({ ...bar }),
-    };
-    if (this.props.location && address) {
-      const { latitude, longitude, accuracy } = this.props.location;
-      const start = { latitude, longitude };
-      if (address.latitude) {
-        const distance = getDistance(start, address, accuracy);
-        const position = this.currentRegion;
-        if (isUSArea(position)) {
-          props.distance = `${(distance * METRES_TO_MILES_FACTOR).toFixed(2)}mi`;
-        } else {
-          props.distance = `${(distance * 0.001).toFixed(2)}km`;
-        }
-      }
-    }
-    return <BarResult {...props} />;
+    return (
+      <BarResult
+        id={id}
+        bar={bar}
+        location={this.props.location}
+        onPress={() => this.props.setDrinkupBar({ ...bar })}
+      />
+    );
   }
 
   renderBarResults() {
     if (this.state.barResultItems.length > 0) {
       return (
         <ScrollView style={styles.barListContainer}>
-          {map(this.state.barResultItems, (bar, id) => this.renderBarResult(bar, id))}
+          {this.state.barResultItems.map((bar, id) => this.renderBarResult(bar, id))}
         </ScrollView>
       );
     }
     return <NoBarResult onPress={this.navigateFeedBackScreen} />;
-  }
-  renderClusterMarkers() {
-    return this.state.clusterMarkers.map((marker) => {
-      const fontSize = (Fonts.size.medium - marker.count.length) + 1;
-      const id = `${marker.latitude.toFixed(3)}-${marker.longitude.toFixed(3)}-${marker.count}`;
-      return (
-        <MapView.Marker key={id} coordinate={marker} onPress={() => this.onPressClusterMarker(marker)}>
-          <Image source={Images.pin} />
-          <View style={styles.clusterContainer}>
-            <Text style={[styles.labelClusterCount, { fontSize }]}>
-              {marker.count}
-            </Text>
-          </View>
-        </MapView.Marker>
-      );
-    });
   }
   renderMap() {
     if (!this.state.googleAPIAvailable) {
@@ -245,8 +189,20 @@ class MapScreen extends Component {
         showsUserLocation
         ref={ref => this.map = ref}
       >
-        {this.renderClusterMarkers()}
-        {map(this.state.markerBarItems, (bar, id) => this.renderBarMarker(bar, id))}
+        {this.state.clusterMarkers.map(marker => (
+          <ClusterMarker
+            marker={marker}
+            onPress={() => this.onPressClusterMarker(marker)}
+            id={`${marker.latitude.toFixed(3)}-${marker.longitude.toFixed(3)}-${marker.count}`}
+          />
+        ))}
+        {this.state.markerBarItems.map(bar => (
+          <BarMarker
+            key={bar.id}
+            bar={bar}
+            onPress={() => this.props.setDrinkupBar({ ...bar })}
+          />
+        ))}
       </MapView>
     );
   }
@@ -265,7 +221,7 @@ class MapScreen extends Component {
             {this.state.showBackCurrentLocation &&
             <TouchableOpacity
               style={styles.locationButtonContainer}
-              onPress={() => this.onBackCurrentLocation(this.currentRegion.latitudeDelta, this.currentRegion.latitudeDelta)}
+              onPress={() => this.onBackCurrentLocation(this.currentRegion)}
             >
               <Image source={Images.locationBack} style={styles.imgLocationBack} />
             </TouchableOpacity>
@@ -279,20 +235,17 @@ class MapScreen extends Component {
 }
 
 const location$ = state => state.location;
-export const locationSelector = createSelector(location$, (location) => {
+const drinkupBar$ = state => state.drinkup;
+const profile$ = state => state.auth.profile;
+const selector = createSelector(location$, drinkupBar$, profile$, (location, drinkup, profile) => {
   let region = { ...boulderPosition, longitudeDelta: 0.3, latitudeDelta: 0.15 };
   // if (location.coords) {
   //   region = { ...location.coords, longitudeDelta: 0.01, latitudeDelta: 0.005 };
   // }
-  return { region, location: location.coords };
+  return { region, location: location.coords, drinkupBar: drinkup.bar, profile };
 });
-const drinkupBar$ = state => state.drinkup;
-export const drinkupSelector = createSelector(drinkupBar$, drinkup => ({
-  drinkupBar: drinkup.bar,
-}));
 const mapStateToProps = state => ({
-  ...locationSelector(state),
-  ...drinkupSelector(state),
+  ...selector(state),
 });
 
 const mapDispatchToProps = dispatch => ({

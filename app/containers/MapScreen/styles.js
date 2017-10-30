@@ -57,16 +57,4 @@ export default StyleSheet.create({
     height: 32,
     tintColor: Colors.brand.darkGray,
   },
-  clusterContainer: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top: 3,
-  },
-  labelClusterCount: {
-    fontFamily: Fonts.type.primary,
-    color: Colors.snow,
-    textAlign: 'center',
-    fontSize: Fonts.size.medium,
-  },
 });

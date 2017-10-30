@@ -3,13 +3,12 @@ import { connect } from 'react-redux';
 import configureStore from './createStore';
 import rootSaga from './sagas';
 
-import { User } from '../firebase/models';
 import AuthActions, { authReducer as auth } from './auth';
 import LocationActions, { locationReducer as location } from './location';
 import AlertActions, { alertReducer as alert } from './alert';
 import DrinkupActions, { drinkupReducer as drinkup } from './drinkup';
 import BarActions, { barReducer as bar } from './bar';
-
+import { isUserValid } from '../utils/auth';
 export default () => {
   /* ------------- Assemble The Reducers ------------- */
   const rootReducer = combineReducers({
@@ -37,7 +36,7 @@ export function Connect(component, mapStateToProps) {
     // eslint-disable-next-line no-param-reassign
     mapStateToProps = state => ({
       auth: state.auth,
-      isUserValid: User.isUserValid(state.auth.profile),
+      isUserValid: isUserValid(state.auth.profile),
     });
   }
   return connect(mapStateToProps, mapDispatchToProps)(component);

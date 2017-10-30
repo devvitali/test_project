@@ -67,7 +67,7 @@ export function* startBackgroundGeoLocation({ geoLocationConfig = bgGeoLocationC
     let bgLocationState = yield call(getBackgroundLocationState, geoLocationConfig);
 
     if (!bgLocationState) {
-      bgLocationState = yield call(configureBackgroundGeoLocation, geoLocationConfig);
+      yield call(configureBackgroundGeoLocation, geoLocationConfig);
     }
 
     bgLocationState = yield call(reconfigureBackgroundGeoLocation, geoLocationConfig);

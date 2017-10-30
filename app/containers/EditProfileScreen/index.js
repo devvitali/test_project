@@ -6,6 +6,7 @@ import AppContainer from '../AppContainer';
 import { Connect } from '../../redux';
 import { Button, PicPhotoSourceDialog, NavItems } from '../../components';
 import { openPicker } from '../../utils/photoUtils';
+import { isUserValid, isProfileComplete } from '../../utils/auth';
 import { Colors, DrinkIcons } from '../../themes';
 import { User } from '../../firebase/models';
 import Styles from './styles';
@@ -142,8 +143,8 @@ class EditProfileScreen extends Component {
 const mapStateToProps = state => ({
   fetching: state.auth.fetching,
   user: state.auth.profile,
-  isProfileComplete: User.constructor.isProfileComplete(state.auth.profile) && !state.auth.fetching,
-  isUserValid: User.isUserValid(state.auth.profile),
+  isProfileComplete: isProfileComplete(state.auth.profile) && !state.auth.fetching,
+  isUserValid: isUserValid(state.auth.profile),
 });
 
 export default Connect(EditProfileScreen, mapStateToProps);

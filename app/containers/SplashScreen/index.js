@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
 import { NavigationActions } from 'react-navigation';
-import { User } from '../../firebase/models';
+import { isUserValid } from '../../utils/auth';
 import { Connect } from '../../redux';
 
 class SplashScreen extends Component {
@@ -56,7 +56,7 @@ class SplashScreen extends Component {
 const mapStateToProps = state => ({
   user: state.auth.profile,
   joined: state.drinkup.joined,
-  isUserValid: User.isUserValid(state.auth.profile),
+  isUserValid: isUserValid(state.auth.profile),
 });
 
 export default Connect(SplashScreen, mapStateToProps);

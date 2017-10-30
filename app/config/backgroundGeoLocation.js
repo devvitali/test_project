@@ -8,6 +8,7 @@ export default {
   // Activity Recognition
   stopTimeout: 1,
   // Application config
+  locationAuthorizationRequest: 'WhenInUse',
   debug: false, // <-- enable this hear sounds for background-geolocation life-cycle.
   logLevel: BackgroundGeoLocation.LOG_LEVEL_VERBOSE,
   stopOnTerminate: false, // <-- Allow the background-service to continue tracking when user closes the app.

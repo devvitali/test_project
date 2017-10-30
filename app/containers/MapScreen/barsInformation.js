@@ -68,13 +68,12 @@ class BarInformation {
   };
   setCallback = callback => this.callback = callback;
   async saveBars() {
-    const keys = Object.keys(this.bars).map((key) => {
+    const keys = Object.keys(this.bars).forEach((key) => {
       try {
         AsyncStorage.setItem(`bar-${key}`, JSON.stringify(this.bars[key]));
       } catch (err) {
         console.log('error on save', this.bars[key], key);
       }
-      return key;
     });
     AsyncStorage.setItem('bar-keys', JSON.stringify(keys));
   }
@@ -94,8 +93,7 @@ class BarInformation {
     if (this.bars[barId]) {
       return this.bars[barId];
     }
-    const bar = await this.barModel.get(barId, true);
-    return bar;
+    return this.barModel.get(barId, true);
   }
   getBarsFromRegion(region) {
     const ret = [];
@@ -108,7 +106,6 @@ class BarInformation {
     return ret;
   }
   async subscribeBars(region) {
-    console.log('subscribeBars');
     const bars = this.getBarsFromRegion(region);
     const barIds = bars.map(bar => bar.id);
     if (this.subscribedKeys) {
@@ -152,9 +149,6 @@ class BarInformation {
     const clusterInputBars = {};
     const markerBarItems = [];
     barResultItems.forEach((bar) => {
-      if (bar.specialId) {
-        console.log('bar.specialId', bar.specialId);
-      }
       if (bar.currentDrinkUp || bar.specialId) {
         markerBarItems.push(bar);
       } else {
@@ -174,7 +168,6 @@ class BarInformation {
         markerBarItems.push(clusterInputBars[properties.id]);
       }
     });
-    console.log('markerBarItems', markerBarItems);
     return {
       markerBarItems,
       clusterMarkers,

@@ -5,7 +5,7 @@ import AppContainer from '../AppContainer';
 import WaitingScreen from './WaitingScreen';
 import NoDrinkUp from './NoDrinkUpScreen';
 import { NavItems, DirectionDialog } from '../../components';
-import { User } from '../../firebase/models';
+import { isUserValid } from '../../utils/auth';
 import { DrinkupActions } from '../../redux';
 import styles from './styles';
 
@@ -82,10 +82,10 @@ class JoinDrinkUp extends Component {
 
 const mapStateToProps = state => ({
   bar: state.drinkup.bar,
-  isUserValid: User.isUserValid(state.auth.profile),
+  isUserValid: isUserValid(state.auth.profile),
 });
 
-//eslint-disable-next-line
+// eslint-disable-next-line
 const mapDispatchToProps = dispatch => ({
   getBar: barId => dispatch(DrinkupActions.barRequest(barId)),
   getUsers: barId => dispatch(DrinkupActions.usersRequest(barId)),
