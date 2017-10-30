@@ -8,13 +8,6 @@ export default class Bar extends Base {
     this.ref = 'bars';
   }
 
-  static getBarsLocations(bars) {
-    return _.map(bars, (bar) => {
-      const { latitude, longitude } = bar.address;
-      return { latitude, longitude };
-    });
-  }
-
   static getBarsSortedByDistance(locationCoords, bars, asc = true) {
     const barDistances = {};
     _.each(bars, (bar, key) => {

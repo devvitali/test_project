@@ -62,15 +62,14 @@ function renderBarIcon(activeDrinkUp, activeSpecial) {
   return <Image style={styles.icon} source={Images.mug} />;
 }
 
-const BarResult = ({ bar, location, onPress }) => {
+const BarResult = ({ bar, location, onPress, currentRegion }) => {
   const { name, currentDrinkUp, address, specialId } = bar;
-  let distance = 0;
-  if (this.props.location && address) {
+  let distance = '';
+  if (location && address) {
     const { latitude, longitude, accuracy } = location;
     const start = { latitude, longitude };
     if (address && address.latitude) {
-      const position = this.currentRegion;
-      if (isUSArea(position)) {
+      if (isUSArea(currentRegion)) {
         distance = `${(getDistance(start, address, accuracy) * METRES_TO_MILES_FACTOR).toFixed(2)}mi`;
       } else {
         distance = `${(getDistance(start, address, accuracy) * 0.001).toFixed(2)}km`;

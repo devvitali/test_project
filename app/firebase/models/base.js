@@ -157,7 +157,7 @@ export default class Base {
         } else {
           emit(this.actions.onAdd(this.constructor.unwrapSnapshot(snapshot), key));
         }
-      }).then(() => {}, () => {});
+      });
     }
 
     if (this.actions.onChange) {
@@ -168,7 +168,7 @@ export default class Base {
         } else {
           emit(this.actions.onChange(this.constructor.unwrapSnapshot(snapshot), key));
         }
-      }).then(() => {}, () => {});
+      });
     }
 
     if (this.actions.onRemove) {
@@ -179,7 +179,7 @@ export default class Base {
         } else {
           emit(this.actions.onRemove(this.constructor.unwrapSnapshot(snapshot), snapshot.key, key));
         }
-      }).then(() => {}, () => {});
+      });
     }
 
     this._unsubscribers[key] = () => this.dbRef(key).off();

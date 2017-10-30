@@ -1,13 +1,11 @@
 import GeoFire from 'geofire';
-import firestack from './firestack';
-import { firebaseDb as firebaseJsDb } from './firebase';
+import firebase from 'react-native-firebase';
 
-export { default as FirebaseList } from './firebase-list';
+// import firestack from './firestack';
+// import { firebaseDb as firebaseJavscriptDb } from './firebase';
 
-export const firebaseAuth = firestack.auth;
-export const firebaseDb = firestack.database;
-export const firebaseAnalytics = firestack.analytics;
-export const firebaseMessaging = firestack.messaging;
-export const firebaseStorage = firestack.storage;
+export const firebaseAuth = firebase.auth();
+export const firebaseDb = firebase.database();
+export const firebaseStorage = firebase.storage();
 
-export const geoFire = key => new GeoFire(firebaseJsDb.ref(key));
+export const geoFire = key => new GeoFire(firebaseDb.ref(key));

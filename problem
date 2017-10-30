@@ -7,3 +7,16 @@ npm i babel-preset-react-native@2.0.0 -D -S
 npm install
 npm start -- --reset-cache
 react-native run-ios
+
+
+#if __has_include(<React/RCTBridgeModule.h>)
+#import <React/RCTBridgeModule.h>
+#import <React/RCTEventDispatcher.h>
+#import <React/RCTEventEmitter.h>
+#import <React/RCTUtils.h>
+#else
+#import "RCTBridgeModule.h"
+#import "RCTEventDispatcher.h"
+#import "RCTEventEmitter.h"
+#import "RCTUtils.h"
+#endif

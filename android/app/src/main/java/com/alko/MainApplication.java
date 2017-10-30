@@ -3,6 +3,7 @@ package com.alko;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import io.invertase.firebase.RNFirebasePackage;
 import com.idehub.GoogleAnalyticsBridge.GoogleAnalyticsBridgePackage;
 import com.microsoft.codepush.react.CodePush;
 import com.instabug.reactlibrary.RNInstabugReactnativePackage;
@@ -43,6 +44,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNFirebasePackage(),
             new GoogleAnalyticsBridgePackage(),
             new CodePush(null, getApplicationContext(), BuildConfig.DEBUG),
             new RNInstabugReactnativePackage.Builder("YOUR_ANDROID_APPLICATION_TOKEN",MainApplication.this)

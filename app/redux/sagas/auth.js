@@ -85,8 +85,8 @@ export function* uploadProfilePhoto({ photo }) {
     const authData = yield call([firebaseAuth, firebaseAuth.signInAnonymously]);
     const storageOpts = { contentType: 'image/jpeg', contentEncoding: 'base64' };
     const filename = photo.path.replace(/^.*[\\/]/, '');
-    const storagePath = `photos/${authData.user.uid}/${filename}`;
-    const res = yield call([firebaseStorage, firebaseStorage.uploadFile], storagePath, photo.path, storageOpts);
+    const storageRef = firebaseStorage.ref(`photos/${authData.user.uid}/${filename}`);
+    const res = yield call([storageRef, storageRef.put], photo.path, storageOpts);
     yield call([User, User.update], authData.user.uid, { photoURL: res.downloadUrl });
     yield put(authActions.uploadProfilePhotoFulfilled());
   } catch (error) {

@@ -153,6 +153,7 @@ class MapScreen extends Component {
         id={id}
         bar={bar}
         location={this.props.location}
+        currentRegion={this.currentRegion}
         onPress={() => this.props.setDrinkupBar({ ...bar })}
       />
     );

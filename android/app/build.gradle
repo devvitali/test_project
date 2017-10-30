@@ -134,6 +134,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-firebase')
     compile project(':react-native-google-analytics-bridge')
     compile project(':react-native-code-push')
     compile project(':instabug-reactnative')
