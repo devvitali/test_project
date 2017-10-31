@@ -28,18 +28,29 @@ const styles = StyleSheet.create({
   },
 });
 
-const NoBarResult = ({ onPress }) => (
-  <View style={styles.noBarsContainer}>
-    <Text style={styles.noBarLabel}>
-      {text}
-    </Text>
-    <View style={styles.buttonContainer} >
-      <Button
-        onPress={onPress}
-        textStyle={styles.buttonLabel}
-        text={'What bars should we add to ALKO?'}
-      />
+const NoBarResult = ({ onPress, barCount }) => {
+  if (barCount !== 0) {
+    return (
+      <View style={styles.noBarsContainer}>
+        <Text style={styles.noBarLabel}>
+          Zoom out to see the bars in the area.
+        </Text>
+      </View>
+    );
+  }
+  return (
+    <View style={styles.noBarsContainer}>
+      <Text style={styles.noBarLabel}>
+        {text}
+      </Text>
+      <View style={styles.buttonContainer} >
+        <Button
+          onPress={onPress}
+          textStyle={styles.buttonLabel}
+          text={'What bars should we add to ALKO?'}
+        />
+      </View>
     </View>
-  </View>
-);
+  );
+};
 export default NoBarResult;

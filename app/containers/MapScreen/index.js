@@ -163,7 +163,7 @@ class MapScreen extends Component {
         </ScrollView>
       );
     }
-    return <NoBarResult onPress={this.navigateFeedBackScreen} />;
+    return <NoBarResult onPress={this.navigateFeedBackScreen} barCount={BarsInformation.getBarsCount()} />;
   }
   renderMap() {
     if (!this.state.googleAPIAvailable) {
@@ -175,7 +175,6 @@ class MapScreen extends Component {
         </View>
       );
     }
-    console.log('this.props.region', this.props.region.latitude);
     return (
       <MapView
         style={styles.map}
@@ -238,7 +237,7 @@ const profile$ = state => state.auth.profile;
 const selector = createSelector(location$, drinkupBar$, profile$, (location, drinkup, profile) => {
   let region = { ...boulderPosition, longitudeDelta: 0.3, latitudeDelta: 0.15 };
   if (location.coords) {
-    region = { ...location.coords, longitudeDelta: 0.01, latitudeDelta: 0.005 };
+    // region = { ...location.coords, longitudeDelta: 0.01, latitudeDelta: 0.005 };
   }
   return { region, location: location.coords, drinkupBar: drinkup.bar, profile };
 });

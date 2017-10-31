@@ -42,6 +42,7 @@ class BarInformation {
         if (this.enteredBarCount === 0) {
           this.callback();
         }
+        this.saveBars();
       }, 100);
     }
     this.subscribedKeys.push(barId);
@@ -53,8 +54,8 @@ class BarInformation {
       this.bars[barId] = { ...setBarAddress(bar, location), location };
       this.bars[barId].id = barId;
     }
-    const oldJson = JSON.stringify(oldBar, Object.keys(oldBar).sort());
-    const newJson = JSON.stringify(this.bars[barId], Object.keys(this.bars[barId]).sort());
+    const oldJson = !oldBar ? '' : JSON.stringify(oldBar, Object.keys(oldBar).sort());
+    const newJson = !this.bars[barId] ? '' : JSON.stringify(this.bars[barId], Object.keys(this.bars[barId]).sort());
     if (oldJson !== newJson) {
       this.callbackCount += 1;
       this.saveBars();
@@ -68,14 +69,17 @@ class BarInformation {
   };
   setCallback = callback => this.callback = callback;
   async saveBars() {
-    const keys = Object.keys(this.bars).forEach((key) => {
-      try {
-        AsyncStorage.setItem(`bar-${key}`, JSON.stringify(this.bars[key]));
-      } catch (err) {
-        console.log('error on save', this.bars[key], key);
-      }
-    });
-    AsyncStorage.setItem('bar-keys', JSON.stringify(keys));
+    const keys = Object.keys(this.bars);
+    if (keys.length > 0) {
+      keys.forEach((key) => {
+        try {
+          AsyncStorage.setItem(`bar-${key}`, JSON.stringify(this.bars[key]));
+        } catch (err) {
+          console.log('error on save', this.bars[key], key);
+        }
+      });
+      AsyncStorage.setItem('bar-keys', JSON.stringify(keys));
+    }
   }
   async getBars() {
     const strKeys = await AsyncStorage.getItem('bar-keys');
@@ -88,6 +92,12 @@ class BarInformation {
         this.bars[key] = JSON.parse(strBar);
       }
     }
+    if (this.callback) {
+      this.callback();
+    }
+  }
+  getBarsCount() {
+    return Object.keys(this.bars).length;
   }
   async getBar(barId) {
     if (this.bars[barId]) {
@@ -113,32 +123,20 @@ class BarInformation {
     }
     this.subscribedKeys = [];
     const result = await this.barModel.gets(barIds, true);
-    let flagSave = false;
     result.forEach((bar) => {
       if (!bar.removed) {
         if (this.bars[bar.id]) {
-          const oldBar = this.bars[bar.id];
           const { location } = this.bars[bar.id];
           this.bars[bar.id] = { ...setBarAddress(bar, location), location };
-
-          const oldJson = JSON.stringify(oldBar, Object.keys(oldBar).sort());
-          const newJson = JSON.stringify(this.bars[bar.id], Object.keys(this.bars[bar.id]).sort());
-          if (oldJson !== newJson) {
-            flagSave = true;
-          }
         }
         this.subscribedKeys.push(bar.id);
       } else {
         delete this.bars[bar.id];
-        flagSave = true;
       }
     });
     this.barSubscribeModel.subscribeMultiple(() => {}, this.subscribedKeys);
-    if (flagSave) {
-      this.saveBars();
-      if (this.callback) {
-        this.callback();
-      }
+    if (this.callback) {
+      this.callback();
     }
   }
   getBarMarkers(region, location) {
