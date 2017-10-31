@@ -50,10 +50,8 @@ const stopBackgroundGeoLocationSuccess = (state, { geoLocationEnabled }) => ({
 
 const onLocationChange = (state, { location }) => ({
   ...state,
-  activity: location.activity.type,
   coords: location.coords,
   // coords: { latitude: 39.9616, longitude: -105.51025 },
-  isMoving: location.is_moving,
   lastLocationTimestamp: location.timestamp,
   error: null,
 });

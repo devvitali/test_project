@@ -21,7 +21,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>14</string>
+	<string>15</string>
 	<key>CodePushDeploymentKey</key>
 	<string>ecA7zEEfwrP58tqFAG0eAWa78KPRa065dcdc-8b6a-4077-8542-8057ac867034</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
@@ -45,12 +45,8 @@
 	<string>Calenader usage</string>
 	<key>NSCameraUsageDescription</key>
 	<string>to take a pic</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>CHANGEME: Location Always And When In Use Usage Description</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>to find nearby bars</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Location when in usage</string>
+	<string>to find bars</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>to use Microphone</string>
 	<key>NSMotionUsageDescription</key>

@@ -58,12 +58,15 @@ class DrawBar extends Component {
               text={I18n.t('PROFILE')}
               onPress={this.navigateTo('EditProfileScreen')}
             />
-
+            {
+              /*
             <DrawerButton
               isActive={activeItemKey === 'PushNotificationsScreen'}
               text={I18n.t('PUSH_NOTIFICATIONS')}
               onPress={this.navigateTo('PushNotificationsScreen')}
             />
+               */
+            }
 
             <DrawerButton
               isActive={activeItemKey === 'TermsOfServiceScreen'}

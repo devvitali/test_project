@@ -30,7 +30,7 @@ import {
   acceptDrinkupInvitation,
 } from './drinkup';
 import { getBars, updateMapBar } from './bar';
-import { startBackgroundGeoLocation, startBackgroundGeoLocationWatchers } from './location';
+import { startBackgroundGeoLocation } from './location';
 import { getAlerts } from './alert';
 import { startup } from './startup';
 
@@ -54,7 +54,6 @@ export default function* root() {
     takeLatest(AuthTypes.UPLOAD_PROFILE_PHOTO, uploadProfilePhoto),
     takeEvery(AuthTypes.UPDATE_PROFILE, updateProfile),
     takeLatest(LocationTypes.START_BACKGROUND_GEO_LOCATION, startBackgroundGeoLocation),
-    takeLatest(LocationTypes.START_BACKGROUND_GEO_LOCATION_SUCCESS, startBackgroundGeoLocationWatchers),
     takeEvery(BarTypes.UPDATE_MAP_BAR, updateMapBar),
     takeLatest(BarTypes.BARS_REQUEST, getBars),
     takeLatest(DrinkupTypes.BAR_REQUEST, getBar),

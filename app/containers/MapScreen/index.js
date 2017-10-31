@@ -51,6 +51,7 @@ class MapScreen extends Component {
       this.setState({ ...BarsInformation.getBarMarkers(this.currentRegion, position) });
     });
     EventsInformation.setCallback(() => this.setState({ forceUpdate: !this.state.forceUpdate }));
+    this.props.startBackgroundGeoLocation();
   }
   componentDidMount() {
     if (googleAPI) {
@@ -58,7 +59,6 @@ class MapScreen extends Component {
         this.setState({ googleAPIAvailable: result === 'success' });
       });
     }
-    // this.props.startBackgroundGeoLocation();
   }
   componentWillReceiveProps(newProps) {
     if (newProps.location && !isEqual(this.props.location, newProps.location)) {
