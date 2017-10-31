@@ -26,6 +26,7 @@ const DrinkupNavigator = StackNavigator(
     JoinDrinkUpScreen: { screen: JoinDrinkUpScreen },
     DrinkUpScreen: { screen: DrinkUpScreen },
     SponsoredScreen: { screen: SponsoredScreen },
+    CompleteProfileScene: { screen: EditProfileScreen },
   },
   {
     initialRouteName: 'MapScreen',
@@ -48,7 +49,6 @@ const DrawerNavigation = DrawerNavigator(
 );
 const AppNavigator = StackNavigator({
   SplashScreen: { screen: SplashScreen },
-  EditProfileScreenWithoutSignIn: { screen: EditProfileScreen },
   OnBoardingStep1: { screen: OnBoardingStep1 },
   OnBoardingStep2: { screen: OnBoardingStep2 },
   OnBoardingStep3: { screen: OnBoardingStep3 },

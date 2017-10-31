@@ -8,7 +8,6 @@ import { Button, PicPhotoSourceDialog, NavItems } from '../../components';
 import { openPicker } from '../../utils/photoUtils';
 import { isUserValid, isProfileComplete } from '../../utils/auth';
 import { Colors, DrinkIcons } from '../../themes';
-import { User } from '../../firebase/models';
 import Styles from './styles';
 
 const avatar = require('../../images/avatar-dark.png');
@@ -46,15 +45,15 @@ class EditProfileScreen extends Component {
   };
 
   render() {
-    const { user, isProfileComplete, fetching, isUserValid } = this.props;
+    const { user, isProfileComplete, fetching, navigation } = this.props;
     const { routeName } = this.props.navigation.state;
     const { firstName, showPicDialog } = this.state;
     const opacity = fetching ? 0.3 : 1.0;
     const source = user.photoURL ? { uri: user.photoURL } : avatar;
     return (
       <AppContainer
-        title={I18n.t('Profile_Edit')}
-        renderLeftButton={isUserValid ? NavItems.hamburgerButton(this.props.navigation) : null}
+        title={routeName !== 'CompleteProfileScene' ? 'Edit Profile' : 'Complete Profile'}
+        renderLeftButton={routeName !== 'CompleteProfileScene' ? NavItems.hamburgerButton(navigation) : NavItems.backButton(navigation)}
       >
         <View style={Styles.mainContainer}>
           <View style={Styles.formContainer}>
@@ -109,18 +108,7 @@ class EditProfileScreen extends Component {
                 </TouchableOpacity>
               ))}
             </View>
-            {routeName === 'EditProfileScreenWithoutSignIn' &&
-            <View style={Styles.footer}>
-              <Text style={Styles.incompleteProfileText}>{I18n.t('Profile_IncompleteWarning')}</Text>
-              <Button
-                theme={isProfileComplete ? 'primary' : 'disallow'}
-                disabled={!isProfileComplete}
-                text={I18n.t('Introduction_getStarted')}
-                onPress={this.doCompleteOnboarding}
-              />
-            </View>
-            }
-            {(routeName === 'EditProfileScreen' && !isProfileComplete) &&
+            {!isProfileComplete &&
             <View style={Styles.footer}>
               <Text style={Styles.incompleteProfileText}>{I18n.t('Profile_IncompleteWarning')}</Text>
             </View>
@@ -144,7 +132,6 @@ const mapStateToProps = state => ({
   fetching: state.auth.fetching,
   user: state.auth.profile,
   isProfileComplete: isProfileComplete(state.auth.profile) && !state.auth.fetching,
-  isUserValid: isUserValid(state.auth.profile),
 });
 
 export default Connect(EditProfileScreen, mapStateToProps);

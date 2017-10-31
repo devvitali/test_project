@@ -78,7 +78,8 @@ class MapScreen extends Component {
       if (isProfileComplete(this.props.profile)) {
         this.props.navigation.navigate('JoinDrinkUpScreen', { barId: newProps.drinkupBar.id });
       } else {
-        this.props.navigation.navigate('EditProfileScreen');
+        this.props.setDrinkupBar(null);
+        this.props.navigation.navigate('CompleteProfileScene');
       }
     }
   }
