@@ -86,7 +86,7 @@ export function* uploadProfilePhoto({ photo }) {
     const filename = photo.path.replace(/^.*[\\/]/, '');
     const storageRef = firebaseStorage.ref(`photos/${authData.uid}/${filename}`);
     const res = yield call([storageRef, storageRef.put], photo.path, storageOpts);
-    yield call([User, User.update], authData.uid, { photoURL: res.downloadUrl });
+    yield call([User, User.update], authData.uid, { photoURL: res.downloadURL });
     yield put(authActions.uploadProfilePhotoFulfilled());
   } catch (error) {
     yield put(authActions.uploadProfilePhotoFailed(error));
