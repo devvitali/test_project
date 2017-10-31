@@ -46,7 +46,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>to take a pic</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>to find bars</string>
+	<string>To find nearby Drink-ups and free drinks</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>to use Microphone</string>
 	<key>NSMotionUsageDescription</key>
