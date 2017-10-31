@@ -35,10 +35,14 @@ class EventInformation {
     console.log('onRemove', eventId, data[eventId]);
   };
   onEventEntered = async (eventId, location) => {
-    this.events[eventId] = await this.eventModel.get(eventId, true);
-    const contentUrl = this.events[eventId].content_url;
-    this.events[eventId].content = await download(contentUrl);
-    this.events[eventId].location = location;
+    const event = await this.eventModel.get(eventId, true);
+    const contentUrl = event.content_url;
+    event.content = await download(contentUrl);
+    event.location = {
+      latitude: location[0],
+      longitude: location[1],
+    };
+    this.events[eventId] = event;
     if (this.callback) {
       this.callback();
     }

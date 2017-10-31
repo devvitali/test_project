@@ -51,7 +51,6 @@ class MapScreen extends Component {
       this.setState({ ...BarsInformation.getBarMarkers(this.currentRegion, position) });
     });
     EventsInformation.setCallback(() => this.setState({ forceUpdate: !this.state.forceUpdate }));
-    this.props.startBackgroundGeoLocation();
   }
   componentDidMount() {
     if (googleAPI) {
@@ -59,6 +58,7 @@ class MapScreen extends Component {
         this.setState({ googleAPIAvailable: result === 'success' });
       });
     }
+    // this.props.startBackgroundGeoLocation();
   }
   componentWillReceiveProps(newProps) {
     if (newProps.location && !isEqual(this.props.location, newProps.location)) {
@@ -147,23 +147,19 @@ class MapScreen extends Component {
     return null;
   }
 
-  renderBarResult(bar, id) {
-    return (
-      <BarResult
-        id={id}
-        bar={bar}
-        location={this.props.location}
-        currentRegion={this.currentRegion}
-        onPress={() => this.props.setDrinkupBar({ ...bar })}
-      />
-    );
-  }
-
   renderBarResults() {
     if (this.state.barResultItems.length > 0) {
       return (
         <ScrollView style={styles.barListContainer}>
-          {this.state.barResultItems.map((bar, id) => this.renderBarResult(bar, id))}
+          {this.state.barResultItems.map((bar, id) => (
+            <BarResult
+              key={`${bar.id$}-bar-result-${id}`}
+              bar={bar}
+              location={this.props.location}
+              currentRegion={this.currentRegion}
+              onPress={() => this.props.setDrinkupBar({ ...bar })}
+            />
+          ))}
         </ScrollView>
       );
     }
@@ -179,6 +175,7 @@ class MapScreen extends Component {
         </View>
       );
     }
+    console.log('this.props.region', this.props.region.latitude);
     return (
       <MapView
         style={styles.map}
@@ -194,7 +191,7 @@ class MapScreen extends Component {
           <ClusterMarker
             marker={marker}
             onPress={() => this.onPressClusterMarker(marker)}
-            id={`${marker.latitude.toFixed(3)}-${marker.longitude.toFixed(3)}-${marker.count}`}
+            key={`${marker.latitude.toFixed(3)}-${marker.longitude.toFixed(3)}-${marker.count}`}
           />
         ))}
         {this.state.markerBarItems.map(bar => (
@@ -240,9 +237,9 @@ const drinkupBar$ = state => state.drinkup;
 const profile$ = state => state.auth.profile;
 const selector = createSelector(location$, drinkupBar$, profile$, (location, drinkup, profile) => {
   let region = { ...boulderPosition, longitudeDelta: 0.3, latitudeDelta: 0.15 };
-  // if (location.coords) {
-  //   region = { ...location.coords, longitudeDelta: 0.01, latitudeDelta: 0.005 };
-  // }
+  if (location.coords) {
+    region = { ...location.coords, longitudeDelta: 0.01, latitudeDelta: 0.005 };
+  }
   return { region, location: location.coords, drinkupBar: drinkup.bar, profile };
 });
 const mapStateToProps = state => ({

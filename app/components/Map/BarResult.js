@@ -65,15 +65,13 @@ function renderBarIcon(activeDrinkUp, activeSpecial) {
 const BarResult = ({ bar, location, onPress, currentRegion }) => {
   const { name, currentDrinkUp, address, specialId } = bar;
   let distance = '';
-  if (location && address) {
+  if (location && address && address.latitude) {
     const { latitude, longitude, accuracy } = location;
     const start = { latitude, longitude };
-    if (address && address.latitude) {
-      if (isUSArea(currentRegion)) {
-        distance = `${(getDistance(start, address, accuracy) * METRES_TO_MILES_FACTOR).toFixed(2)}mi`;
-      } else {
-        distance = `${(getDistance(start, address, accuracy) * 0.001).toFixed(2)}km`;
-      }
+    if (isUSArea(currentRegion)) {
+      distance = `${(getDistance(start, address, accuracy) * METRES_TO_MILES_FACTOR).toFixed(2)}mi`;
+    } else {
+      distance = `${(getDistance(start, address, accuracy) * 0.001).toFixed(2)}km`;
     }
   }
   const buttonStyles = [styles.btnContainer];

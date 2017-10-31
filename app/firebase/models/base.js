@@ -106,7 +106,7 @@ export default class Base {
   exists(key) {
     return new Promise((resolve) => {
       this.dbRef(key).once('value', (snap) => {
-        resolve(Boolean(snap.value));
+        resolve(Boolean(snap.val()));
       });
     });
   }
