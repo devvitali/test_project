@@ -39,7 +39,7 @@ export default {
     paddingVertical: 40,
   },
   footer: {
-    height: 40,
+    height: 80,
     padding: Metrics.baseMargin,
     alignItems: 'center',
     justifyContent: 'center',
@@ -48,6 +48,12 @@ export default {
     fontWeight: '600',
     fontFamily: Fonts.type.primary,
     color: Colors.brand.gray,
-    fontSize: Fonts.size.small,
+    fontSize: Fonts.size.medium,
   },
+  row: {
+    margin: 10,
+    alignSelf: 'stretch',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  }
 };

@@ -55,7 +55,7 @@ class DrawBar extends Component {
 
             <DrawerButton
               isActive={activeItemKey === 'EditProfileScreen'}
-              text={I18n.t('PROFILE')}
+              text="MY PROFILE"
               onPress={this.navigateTo('EditProfileScreen')}
             />
             {
@@ -67,29 +67,24 @@ class DrawBar extends Component {
             />
                */
             }
-
-            <DrawerButton
-              isActive={activeItemKey === 'TermsOfServiceScreen'}
-              text={I18n.t('TERMS_OF_SERVICE')}
-              onPress={this.navigateTo('TermsOfServiceScreen')}
-            />
-
-            <DrawerButton
-              isActive={activeItemKey === 'PrivacyPolicyScreen'}
-              text={I18n.t('PRIVACY_POLICY')}
-              onPress={this.navigateTo('PrivacyPolicyScreen')}
-            />
-
             <DrawerButton
               isActive={activeItemKey === 'FeedBackScreen'}
-              text={I18n.t('SEND_FEEDBACK')}
+              text="IDEAS? FEEDBACK?"
               onPress={this.navigateTo('FeedBackScreen')}
             />
 
           </ScrollView>
           <View style={styles.footer}>
+            <View style={styles.row}>
+              <TouchableOpacity onPress={this.navigateTo('TermsOfServiceScreen')}>
+                <Text style={styles.copyright}>TERMS OF SERVICE</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={this.navigateTo('PrivacyPolicyScreen')}>
+                <Text style={styles.copyright}>PRIVACY POLICY</Text>
+              </TouchableOpacity>
+            </View>
             <TouchableOpacity onPress={this.onLogout}>
-              <Text style={styles.copyright}>© 2017 ALKO {config.codePushVersion}</Text>
+              <Text style={styles.copyright}>© ALKO LLC</Text>
             </TouchableOpacity>
           </View>
         </View>
