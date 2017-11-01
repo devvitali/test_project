@@ -4,9 +4,9 @@ import I18n from 'react-native-i18n';
 import { debounce, map } from 'lodash';
 import AppContainer from '../AppContainer';
 import { Connect } from '../../redux';
-import { Button, PicPhotoSourceDialog, NavItems } from '../../components';
+import { PicPhotoSourceDialog, NavItems } from '../../components';
 import { openPicker } from '../../utils/photoUtils';
-import { isUserValid, isProfileComplete } from '../../utils/auth';
+import { isProfileComplete } from '../../utils/auth';
 import { Colors, DrinkIcons } from '../../themes';
 import Styles from './styles';
 
