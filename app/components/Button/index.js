@@ -13,7 +13,7 @@ const Button = (props) => {
   } = applyComponentTheme(theme, props);
   const ButtonView = gradient ? LinearGradient : View;
   const ButtonProps = {
-    activeOpacity: 0.7,
+    activeOpacity: disabled ? 1 : 0.7,
     onPress: disabled ? null : onPress,
   };
   const ButtonViewProps = {
@@ -24,7 +24,7 @@ const Button = (props) => {
   }
 
   return (
-    <TouchableOpacity activeOpacity={0.7} {...ButtonProps}>
+    <TouchableOpacity activeOpacity={disabled ? 1 : 0.7} {...ButtonProps}>
       <ButtonView {...ButtonViewProps}>
         <Text style={[styles.btnText, textStyle]}>{props.text.toUpperCase()}</Text>
       </ButtonView>

@@ -56,9 +56,9 @@ class DrawBar extends Component {
           <ScrollView style={styles.contentContainer}>
             {joined ? (
               <DrawerButton
-                isActive={activeItemKey === 'DrinkUpScreen'}
+                isActive={activeItemKey !== 'EditProfileScreen' && activeItemKey !== 'FeedBackScreen'}
                 text={bar.name}
-                onPress={this.navigateTo('DrinkUpScreen')}
+                onPress={this.navigateTo('MapScreen')}
                 iconFamily="alko"
                 iconName="mug"
               />

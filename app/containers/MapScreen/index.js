@@ -219,7 +219,6 @@ class MapScreen extends Component {
         ))}
       </MapView>
     );
-    return null;
   }
 
   render() {

@@ -112,7 +112,7 @@ class EditProfileScreen extends Component {
               <Button
                 theme="primary"
                 disabled={!isProfileComplete}
-                text={!isProfileComplete ? 'Save profile' : `${params.type} a drink up`}
+                text="Save profile"
                 onPress={this.completeProfile}
               />
             </View>

@@ -29,10 +29,9 @@ export const AvatarList = ({ users, columns, columnPadding, style, iconOnly, onS
               message={user.message}
               messagesRead={user.messagesRead}
               onPress={user.message && onShowMessage}
-              disabled={!user.arrived_at}
             />
           ) : (
-            <Avatar icon={user.icon} width={avatarWidth} disabled={!user.arrived} name={user.firstName} />
+            <Avatar icon={user.icon} width={avatarWidth} name={user.firstName} />
           )}
         </View>
       )}
