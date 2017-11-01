@@ -97,7 +97,7 @@ class BarInformation {
     }
   }
   getBarsCount(region) {
-    return this.getBarsFromRegion({ ...region, latitudeDelta: 0.2, longitudeDelta: 0.2  }).length;
+    return this.getBarsFromRegion({ ...region, latitudeDelta: 0.05, longitudeDelta: 0.05  }).length;
   }
   async getBar(barId) {
     if (this.bars[barId]) {

@@ -166,12 +166,21 @@ class MapScreen extends Component {
     );
   }
   renderMap() {
+    console.log('location', this.props.location);
     if (!this.state.googleAPIAvailable) {
       return (
         <View style={styles.noMapContainer}>
           <IconAlko name="map" color={Colors.snow} size={48} style={styles.noMapIcon} />
           <Text style={styles.noMapText}>{I18n.t('Map_GoogleMapsNotAvailable')}</Text>
           <Button theme="dark" style={styles.noMapButton} text={'Update'} onPress={googleAPI.openGooglePlayUpdate} />
+        </View>
+      );
+    }
+    if (!this.props.location) {
+      return (
+        <View style={styles.noMapContainer}>
+          <IconAlko name="map" color={Colors.snow} size={48} style={styles.noMapIcon} />
+          <Text style={styles.noMapText}>Getting GPS Location</Text>
         </View>
       );
     }
@@ -218,7 +227,7 @@ class MapScreen extends Component {
             {this.state.showBackCurrentLocation &&
             <TouchableOpacity
               style={styles.locationButtonContainer}
-              onPress={() => this.onBackCurrentLocation({ ...this.currentRegion, longitudeDelta: 0.3, latitudeDelta: 0.15 })}
+              onPress={() => this.onBackCurrentLocation({ ...this.currentRegion, longitudeDelta: 0.02, latitudeDelta: 0.01 })}
             >
               <Image source={Images.locationBack} style={styles.imgLocationBack} />
             </TouchableOpacity>
@@ -235,9 +244,9 @@ const location$ = state => state.location;
 const drinkupBar$ = state => state.drinkup;
 const profile$ = state => state.auth.profile;
 const selector = createSelector(location$, drinkupBar$, profile$, (location, drinkup, profile) => {
-  let region = { ...boulderPosition, longitudeDelta: 0.3, latitudeDelta: 0.15 };
+  let region = { ...boulderPosition, longitudeDelta: 0.02, latitudeDelta: 0.01 };
   if (location.coords) {
-    region = { ...location.coords, longitudeDelta: 0.01, latitudeDelta: 0.005 };
+    region = { ...location.coords, longitudeDelta: 0.02, latitudeDelta: 0.01 };
   }
   return { region, location: location.coords, drinkupBar: drinkup.bar, profile };
 });
