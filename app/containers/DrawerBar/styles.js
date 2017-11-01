@@ -48,7 +48,7 @@ export default {
     fontWeight: '600',
     fontFamily: Fonts.type.primary,
     color: Colors.brand.gray,
-    fontSize: Fonts.size.medium,
+    fontSize: Fonts.size.small,
   },
   row: {
     margin: 10,

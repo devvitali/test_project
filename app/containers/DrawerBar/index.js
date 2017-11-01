@@ -2,7 +2,8 @@
 import React, { Component } from 'react';
 import { ScrollView, Image, View, Text, TouchableOpacity } from 'react-native';
 import I18n from 'react-native-i18n';
-import config from '../../config/appConfig';
+import CodePush from "react-native-code-push";
+
 import AppContainer from '../AppContainer';
 import { Connect } from '../../redux';
 import { DrawerButton } from '../../components';
@@ -15,6 +16,21 @@ class DrawBar extends Component {
     profile: {
       name: '',
     },
+  };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      metaData: {
+        label: ''
+      },
+    };
+    setTimeout(async () => {
+      const metaData = await CodePush.getUpdateMetadata(CodePush.UpdateState.RUNNING);
+      if (metaData && metaData.label) {
+        this.setState({ metaData });
+      }
+    });
   }
 
   onLogout = () => {
@@ -84,7 +100,7 @@ class DrawBar extends Component {
               </TouchableOpacity>
             </View>
             <TouchableOpacity onPress={this.onLogout}>
-              <Text style={styles.copyright}>© ALKO LLC</Text>
+              <Text style={styles.copyright}>© ALKO LLC {this.state.metaData.label}</Text>
             </TouchableOpacity>
           </View>
         </View>

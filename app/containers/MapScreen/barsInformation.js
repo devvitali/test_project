@@ -140,32 +140,37 @@ class BarInformation {
     }
   }
   getBarMarkers(region, location) {
-    let barResultItems = this.getBarsFromRegion(region);
-    if (location) {
-      barResultItems = this.barModel.constructor.getBarsSortedByDistance(location, barResultItems);
+    let markerBarItems = [];
+    let clusterMarkers = [];
+    let barResultItems = [];
+    if (region && location) {
+      barResultItems = this.getBarsFromRegion(region);
+      if (location) {
+        barResultItems = this.barModel.constructor.getBarsSortedByDistance(location, barResultItems);
+      }
+      const clusterInputBars = {};
+      markerBarItems = [];
+      barResultItems.forEach((bar) => {
+        if (bar.currentDrinkUp || bar.specialId) {
+          markerBarItems.push(bar);
+        } else {
+          clusterInputBars[bar.id] = bar;
+        }
+      });
+      const clusters = getClusters(clusterInputBars, calculateZoom(region.longitudeDelta));
+      clusterMarkers = [];
+      clusters.forEach(({ properties, geometry }) => {
+        if (properties.cluster) {
+          clusterMarkers.push({
+            count: properties.point_count,
+            latitude: geometry.coordinates[1],
+            longitude: geometry.coordinates[0],
+          });
+        } else {
+          markerBarItems.push(clusterInputBars[properties.id]);
+        }
+      });
     }
-    const clusterInputBars = {};
-    const markerBarItems = [];
-    barResultItems.forEach((bar) => {
-      if (bar.currentDrinkUp || bar.specialId) {
-        markerBarItems.push(bar);
-      } else {
-        clusterInputBars[bar.id] = bar;
-      }
-    });
-    const clusters = getClusters(clusterInputBars, calculateZoom(region.longitudeDelta));
-    const clusterMarkers = [];
-    clusters.forEach(({ properties, geometry }) => {
-      if (properties.cluster) {
-        clusterMarkers.push({
-          count: properties.point_count,
-          latitude: geometry.coordinates[1],
-          longitude: geometry.coordinates[0],
-        });
-      } else {
-        markerBarItems.push(clusterInputBars[properties.id]);
-      }
-    });
     return {
       markerBarItems,
       clusterMarkers,

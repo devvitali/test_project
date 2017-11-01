@@ -21,8 +21,8 @@ import mapStyle from './mapStyle';
 const googleAPI = Platform.OS === 'android' ? require('react-native-google-api-availability-bridge') : null;
 
 const boulderPosition = {
-  latitude: 40.0822214,
-  longitude: -105.14,
+  latitude: 39.984,
+  longitude: -105.249,
 };
 class MapScreen extends Component {
   constructor(props) {
@@ -30,9 +30,9 @@ class MapScreen extends Component {
     this.state = {
       googleAPIAvailable: true,
       showBackCurrentLocation: false,
-      clusterMarkers: [],
-      barResultItems: [],
-      markerBarItems: [],
+      // clusterMarkers: [],
+      // barResultItems: [],
+      // markerBarItems: [],
       forceUpdate: false,
     };
     this.criteriaTimeout = -1;
@@ -45,10 +45,11 @@ class MapScreen extends Component {
     this.eventGeoQuery = geoFire('eventLocations').query({ ...geoParam, radius: 15 });
     this.barGeoQuery.on('key_entered', BarsInformation.onBarEntered);
     this.eventGeoQuery.on('key_entered', EventsInformation.onEventEntered);
-    BarsInformation.setCallback(() => {
-      const position = this.props.location ? this.props.location : boulderPosition;
-      this.setState({ ...BarsInformation.getBarMarkers(this.currentRegion, position) });
-    });
+    BarsInformation.setCallback(() => this.setState({ forceUpdate: !this.state.forceUpdate }));
+    // BarsInformation.setCallback(() => {
+    //   const position = this.props.location ? this.props.location : boulderPosition;
+    //   this.setState({ ... });
+    // });
     EventsInformation.setCallback(() => this.setState({ forceUpdate: !this.state.forceUpdate }));
     this.props.startBackgroundGeoLocation();
   }
@@ -111,7 +112,6 @@ class MapScreen extends Component {
     } else {
       this.setState({ showBackCurrentLocation: false });
     }
-    this.setState({ ...BarsInformation.getBarMarkers(this.currentRegion, position) });
     BarsInformation.subscribeBars(region);
   };
   onClickEvent = async (event) => {
@@ -143,20 +143,23 @@ class MapScreen extends Component {
   }
 
   renderBarResults() {
-    if (this.state.barResultItems.length > 0) {
-      return (
-        <ScrollView style={styles.barListContainer}>
-          {this.state.barResultItems.map((bar, id) => (
-            <BarResult
-              key={`${bar.id$}-bar-result-${id}`}
-              bar={bar}
-              location={this.props.location}
-              currentRegion={this.currentRegion}
-              onPress={() => this.props.setDrinkupBar({ ...bar })}
-            />
-          ))}
-        </ScrollView>
-      );
+    if (this.currentRegion && this.props.location) {
+      const barMarkers = BarsInformation.getBarMarkers(this.currentRegion, this.props.location);
+      if (barMarkers.barResultItems.length > 0) {
+        return (
+          <ScrollView style={styles.barListContainer}>
+            {barMarkers.barResultItems.map((bar, id) => (
+              <BarResult
+                key={`${bar.id$}-bar-result-${id}`}
+                bar={bar}
+                location={this.props.location}
+                currentRegion={this.currentRegion}
+                onPress={() => this.props.setDrinkupBar({ ...bar })}
+              />
+            ))}
+          </ScrollView>
+        );
+      }
     }
     return (
       <NoBarResult
@@ -184,6 +187,7 @@ class MapScreen extends Component {
         </View>
       );
     }
+    const barMarkers = BarsInformation.getBarMarkers(this.currentRegion, this.props.location);
     return (
       <MapView
         style={styles.map}
@@ -195,14 +199,14 @@ class MapScreen extends Component {
         showsUserLocation
         ref={ref => this.map = ref}
       >
-        {this.state.clusterMarkers.map(marker => (
+        {barMarkers.clusterMarkers.map(marker => (
           <ClusterMarker
             marker={marker}
             onPress={() => this.onPressClusterMarker(marker)}
             key={`${marker.latitude.toFixed(3)}-${marker.longitude.toFixed(3)}-${marker.count}`}
           />
         ))}
-        {this.state.markerBarItems.map(bar => (
+        {barMarkers.markerBarItems.map(bar => (
           <BarMarker
             key={bar.id}
             bar={bar}
@@ -211,6 +215,7 @@ class MapScreen extends Component {
         ))}
       </MapView>
     );
+    return null;
   }
 
   render() {
@@ -244,6 +249,7 @@ const location$ = state => state.location;
 const drinkupBar$ = state => state.drinkup;
 const profile$ = state => state.auth.profile;
 const selector = createSelector(location$, drinkupBar$, profile$, (location, drinkup, profile) => {
+  location.coords = boulderPosition;
   let region = { ...boulderPosition, longitudeDelta: 0.02, latitudeDelta: 0.01 };
   if (location.coords) {
     region = { ...location.coords, longitudeDelta: 0.02, latitudeDelta: 0.01 };

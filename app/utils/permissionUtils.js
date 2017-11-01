@@ -4,9 +4,8 @@ import FCM from 'react-native-fcm';
 const requestPermission = (...args) => (
   new Promise((resolve, reject) => {
     Permissions
-      .getPermissionStatus(...args)
+      .check(...args)
       .then((response) => {
-
         console.log({
           name: 'PermissionStatus',
           value: { args, response },
@@ -49,7 +48,7 @@ const requestPermission = (...args) => (
   })
 );
 
-export const locationPermission = () => requestPermission('location', 'always');
+export const locationPermission = () => requestPermission('location', 'whenInUse');
 
 export const notificationPermission = () => (
   new Promise((resolve, reject) => {
