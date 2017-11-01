@@ -36,13 +36,13 @@ class BarInformation {
     }
     this.barSubscribeModel.unsubscribe(barId);
     this.barSubscribeModel.subscribe(() => {}, barId);
-    if (this.enteredBarCount === 0) {
+    if (this.enteredBarCount !== 0) {
       setTimeout(() => {
         this.enteredBarCount -= 1;
         if (this.enteredBarCount === 0) {
           this.callback();
+          this.saveBars();
         }
-        this.saveBars();
       }, 100);
     }
     this.subscribedKeys.push(barId);
@@ -70,15 +70,17 @@ class BarInformation {
   setCallback = callback => this.callback = callback;
   async saveBars() {
     const keys = Object.keys(this.bars);
+    const savedKeys = [];
     if (keys.length > 0) {
       keys.forEach((key) => {
         try {
-          AsyncStorage.setItem(`bar-${key}`, JSON.stringify(this.bars[key]));
+          let newKey = `bar-${key}`;
+          savedKeys.push(newKey);
+          AsyncStorage.setItem(newKey, JSON.stringify(this.bars[key]));
         } catch (err) {
-          console.log('error on save', this.bars[key], key);
         }
       });
-      AsyncStorage.setItem('bar-keys', JSON.stringify(keys));
+      AsyncStorage.setItem('bar-keys', JSON.stringify(savedKeys));
     }
   }
   async getBars() {
@@ -86,10 +88,10 @@ class BarInformation {
     if (strKeys) {
       const keys = JSON.parse(strKeys);
       for (let index = 0; index < keys.length; index += 1) {
-        const key = keys[index];
+        const barKey = keys[index].replace('bar-', '');
         // eslint-disable-next-line
-        const strBar = await AsyncStorage.getItem(key);
-        this.bars[key] = JSON.parse(strBar);
+        const strBar = await AsyncStorage.getItem(keys[index]);
+        this.bars[barKey] = JSON.parse(strBar);
       }
     }
     if (this.callback) {
