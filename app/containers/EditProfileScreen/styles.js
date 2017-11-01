@@ -12,7 +12,15 @@ export default StyleSheet.create({
   selectPhotoContainer: {
     marginBottom: Metrics.doubleBaseMargin * 2,
   },
-
+  photoContainer: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    left: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
   photo: {
     alignSelf: 'center',
     width: 128,

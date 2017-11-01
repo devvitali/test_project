@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, Text, TextInput, TouchableOpacity, View, Keyboard } from 'react-native';
+import { Image, Text, TextInput, TouchableOpacity, View, Keyboard, ActivityIndicator } from 'react-native';
 import I18n from 'react-native-i18n';
 import { debounce, map } from 'lodash';
 import AppContainer from '../AppContainer';
@@ -46,8 +46,9 @@ class EditProfileScreen extends Component {
     const { user, isProfileComplete, fetching, navigation } = this.props;
     const { routeName } = this.props.navigation.state;
     const { firstName, showPicDialog } = this.state;
-    const opacity = fetching ? 0.3 : 1.0;
     const source = user.photoURL ? { uri: user.photoURL } : avatar;
+    const opacity = fetching ? 0.3 : 1.0;
+
     return (
       <AppContainer
         title={routeName !== 'CompleteProfileScene' ? 'Edit Profile' : 'Complete Profile'}
@@ -57,12 +58,10 @@ class EditProfileScreen extends Component {
           <View style={Styles.formContainer}>
             <View style={Styles.selectPhotoContainer}>
               <TouchableOpacity activeOpacity={0.7} onPress={this.doShowPicDialog}>
-                <Image
-                  source={source}
-                  onLoadStart={this.isLoading}
-                  onLoadEnd={this.isNotLoading}
-                  style={[Styles.photo, { opacity }]}
-                />
+                <Image source={source} style={[Styles.photo, { opacity }]} />
+                <View style={Styles.photoContainer}>
+                  <ActivityIndicator size="large" animating={fetching} />
+                </View>
               </TouchableOpacity>
               <TouchableOpacity activeOpacity={0.7} onPress={this.doChoosePhoto}>
                 <Text style={Styles.updatePhoto}>{I18n.t('Profile_TapToAddPhoto').toUpperCase()}</Text>
