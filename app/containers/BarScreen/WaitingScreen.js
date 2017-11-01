@@ -4,6 +4,7 @@ import I18n from 'react-native-i18n';
 import { connect } from 'react-redux';
 import * as Animation from 'react-native-animatable';
 import { Button, Banner, AvatarList } from '../../components';
+import { isProfileComplete } from '../../utils/auth';
 import { DrinkupActions } from '../../redux';
 import { requestingMember } from '../../fixture/drinkupMembers';
 import styles from './styles';
@@ -50,8 +51,12 @@ class WaitingScreen extends Component {
   // this function is only use for demo
   onSendRequestDrinkup = () => {
     const { user, uid, bar } = this.props;
-    const currentUser = { ...user, uid };
-    this.props.sendRequestDrinkup(bar, currentUser);
+    if (isProfileComplete(user)) {
+      const currentUser = { ...user, uid };
+      this.props.sendRequestDrinkup(bar, currentUser);
+    } else {
+      this.props.navigation.navigate('CompleteProfileScene');
+    }
   };
   onCancelRequest = () => {
     const { user, uid, bar } = this.props;
