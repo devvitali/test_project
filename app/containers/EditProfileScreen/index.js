@@ -4,7 +4,7 @@ import I18n from 'react-native-i18n';
 import { debounce, map } from 'lodash';
 import AppContainer from '../AppContainer';
 import { Connect } from '../../redux';
-import { PicPhotoSourceDialog, NavItems } from '../../components';
+import { Button, PicPhotoSourceDialog, NavItems } from '../../components';
 import { openPicker } from '../../utils/photoUtils';
 import { isProfileComplete } from '../../utils/auth';
 import { Colors, DrinkIcons } from '../../themes';
@@ -37,11 +37,9 @@ class EditProfileScreen extends Component {
     updateProfile({ firstName });
   };
   saveProfileDelayed = debounce(this.saveProfile, 1000);
-  doCompleteOnboarding = () => {
-    this.props.actions.updateProfile({
-      onboardingComplete: true,
-    });
-    this.props.navigation.navigate('DrawerNavigation');
+  completeProfile = () => {
+    Keyboard.dismiss();
+    this.props.navigation.goBack();
   };
 
   render() {
@@ -108,7 +106,17 @@ class EditProfileScreen extends Component {
                 </TouchableOpacity>
               ))}
             </View>
-            {!isProfileComplete &&
+            {routeName === 'CompleteProfileScene' &&
+            <View style={Styles.footer}>
+              <Button
+                theme={isProfileComplete ? 'primary' : 'disallow'}
+                disabled={!isProfileComplete}
+                text="Go back"
+                onPress={this.completeProfile}
+              />
+            </View>
+            }
+            {(routeName === 'EditProfileScreen' && !isProfileComplete) &&
             <View style={Styles.footer}>
               <Text style={Styles.incompleteProfileText}>{I18n.t('Profile_IncompleteWarning')}</Text>
             </View>
@@ -133,5 +141,4 @@ const mapStateToProps = state => ({
   user: state.auth.profile,
   isProfileComplete: isProfileComplete(state.auth.profile) && !state.auth.fetching,
 });
-
 export default Connect(EditProfileScreen, mapStateToProps);

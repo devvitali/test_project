@@ -4,6 +4,7 @@ import I18n from 'react-native-i18n';
 import { connect } from 'react-redux';
 import { Button, Banner } from '../../components';
 import { DrinkupActions } from '../../redux';
+import { isProfileComplete } from '../../utils/auth';
 import Styles from './styles';
 
 class NoDrinkUpScreen extends Component {
@@ -17,7 +18,11 @@ class NoDrinkUpScreen extends Component {
   // this function is only use for demo
   onDraftJoined = () => {
     const { bar, uid, user, startDrinkup } = this.props;
-    startDrinkup(bar.id, { ...user, uid });
+    if (isProfileComplete(user)) {
+      startDrinkup(bar.id, { ...user, uid });
+    } else {
+      this.props.navigation.navigate('CompleteProfileScene');
+    }
   };
   render() {
     const { special } = this.props;
