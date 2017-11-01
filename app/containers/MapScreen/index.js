@@ -45,11 +45,8 @@ class MapScreen extends Component {
     this.eventGeoQuery = geoFire('eventLocations').query({ ...geoParam, radius: 15 });
     this.barGeoQuery.on('key_entered', BarsInformation.onBarEntered);
     this.eventGeoQuery.on('key_entered', EventsInformation.onEventEntered);
+    this.navigatedBarId = '';
     BarsInformation.setCallback(() => this.setState({ forceUpdate: !this.state.forceUpdate }));
-    // BarsInformation.setCallback(() => {
-    //   const position = this.props.location ? this.props.location : boulderPosition;
-    //   this.setState({ ... });
-    // });
     EventsInformation.setCallback(() => this.setState({ forceUpdate: !this.state.forceUpdate }));
     this.props.startBackgroundGeoLocation();
   }
@@ -74,8 +71,15 @@ class MapScreen extends Component {
         }, 1000);
       }
     }
-    if (!this.props.drinkupBar && newProps.drinkupBar) {
-      this.props.navigation.navigate('JoinDrinkUpScreen', { barId: newProps.drinkupBar.id });
+    if (!newProps.drinkupBar) {
+      this.navigatedBarId = '';
+    }
+    let newDrinkupId = newProps.drinkupBar ? newProps.drinkupBar.id : '';
+    if (newDrinkupId.length > 0) {
+      if (newDrinkupId !== this.navigatedBarId) {
+        this.props.navigation.navigate('JoinDrinkUpScreen', { barId: newDrinkupId });
+        this.navigatedBarId = newDrinkupId;
+      }
     }
   }
   componentWillUnmount() {
@@ -247,14 +251,13 @@ class MapScreen extends Component {
 
 const location$ = state => state.location;
 const drinkupBar$ = state => state.drinkup;
-const profile$ = state => state.auth.profile;
-const selector = createSelector(location$, drinkupBar$, profile$, (location, drinkup, profile) => {
+const selector = createSelector(location$, drinkupBar$, (location, drinkup) => {
   location.coords = boulderPosition;
   let region = { ...boulderPosition, longitudeDelta: 0.02, latitudeDelta: 0.01 };
   if (location.coords) {
     region = { ...location.coords, longitudeDelta: 0.02, latitudeDelta: 0.01 };
   }
-  return { region, location: location.coords, drinkupBar: drinkup.bar, profile };
+  return { region, location: location.coords, drinkupBar: drinkup.bar };
 });
 const mapStateToProps = state => ({
   ...selector(state),
