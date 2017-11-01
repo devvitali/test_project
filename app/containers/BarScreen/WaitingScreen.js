@@ -31,7 +31,6 @@ class WaitingScreen extends Component {
       this.props.getDrinkup(this.props.bar.currentDrinkUp, this.props.uid);
     }
     if (this.props.joined) {
-      console.log('Waiting screen navigate DrinkUpScreen');
       this.props.navigation.navigate('DrinkUpScreen', { barId: this.props.bar.id });
     }
   }
@@ -51,11 +50,13 @@ class WaitingScreen extends Component {
   // this function is only use for demo
   onSendRequestDrinkup = () => {
     const { user, uid, bar } = this.props;
+    const currentUser = { ...user, uid };
     if (isProfileComplete(user)) {
-      const currentUser = { ...user, uid };
       this.props.sendRequestDrinkup(bar, currentUser);
     } else {
-      this.props.navigation.navigate('CompleteProfileScene');
+      this.props.navigation.navigate('CompleteProfileScene', {
+        type: 'Join', bar,
+      });
     }
   };
   onCancelRequest = () => {

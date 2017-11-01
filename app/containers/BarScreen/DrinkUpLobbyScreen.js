@@ -26,7 +26,7 @@ class DrinkupLobbyScreen extends React.Component {
       showComposeMessage: false,
       showCheerDialog: true,
       showMessageDialog: true,
-      composedMessage: '',
+      composedMessage: ' ',
     };
   }
   onCloseMessage = () => {
@@ -147,7 +147,10 @@ class DrinkupLobbyScreen extends React.Component {
   }
   render() {
     const { bar, users } = this.props;
-    const special = bar.specialId;
+    let special = null;
+    if (bar) {
+      special = bar.specialId;
+    }
     return (
       <View style={[styles.mainContainer, styles.container]}>
         {special &&

@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { Image, Text, TextInput, TouchableOpacity, View, Keyboard, ActivityIndicator } from 'react-native';
 import I18n from 'react-native-i18n';
 import { debounce, map } from 'lodash';
+import { connect } from 'react-redux';
 import AppContainer from '../AppContainer';
-import { Connect } from '../../redux';
+import { DrinkupActions, AuthActions } from '../../redux';
 import { Button, PicPhotoSourceDialog, NavItems } from '../../components';
 import { openPicker } from '../../utils/photoUtils';
 import { isProfileComplete } from '../../utils/auth';
@@ -23,32 +24,33 @@ class EditProfileScreen extends Component {
   }
 
   onFirstNameChange = e => this.setState({ firstName: e.nativeEvent.text });
-  onSelectIcon = icon => this.props.actions.updateProfile({ icon });
-  doShowPicDialog = () => {
-    const { uploadProfilePhoto } = this.props.actions;
-    const opts = { width: 512, height: 512, cropping: true };
-    openPicker(opts)
-      .then(uploadProfilePhoto)
+  onSelectIcon = icon => this.props.updateProfile({ icon });
+  doShowPicDialog = () =>
+    openPicker({ width: 512, height: 512, cropping: true })
+      .then(this.props.uploadProfilePhoto)
       .catch(this.isNotLoading);
-  };
-  saveProfile = () => {
-    const { updateProfile } = this.props.actions;
-    const { firstName } = this.state;
-    updateProfile({ firstName });
-  };
+  saveProfile = () => this.props.updateProfile({ firstName: this.state.firstName });
   saveProfileDelayed = debounce(this.saveProfile, 1000);
   completeProfile = () => {
     Keyboard.dismiss();
-    this.props.navigation.goBack();
+    const { user, uid, navigation } = this.props;
+    const { params } = navigation.state;
+    const currentUser = { ...user, uid };
+    if (params.type === 'Join') {
+      this.props.sendRequestDrinkup(params.bar, currentUser);
+      navigation.goBack();
+    } else if (params.type === 'Start') {
+      this.props.startDrinkup(params.barId, currentUser);
+    }
   };
 
   render() {
     const { user, isProfileComplete, fetching, navigation } = this.props;
-    const { routeName } = this.props.navigation.state;
+    const { routeName, params } = this.props.navigation.state;
     const { firstName, showPicDialog } = this.state;
     const source = user.photoURL ? { uri: user.photoURL } : avatar;
     const opacity = fetching ? 0.3 : 1.0;
-
+    console.log('this.props.navigation.state', this.props.navigation.state);
     return (
       <AppContainer
         title={routeName !== 'CompleteProfileScene' ? 'Edit Profile' : 'Complete Profile'}
@@ -108,9 +110,9 @@ class EditProfileScreen extends Component {
             {routeName === 'CompleteProfileScene' &&
             <View style={Styles.footer}>
               <Button
-                theme={isProfileComplete ? 'primary' : 'disallow'}
+                theme="primary"
                 disabled={!isProfileComplete}
-                text="Go back"
+                text={!isProfileComplete ? 'Save profile' : `${params.type} a drink up`}
                 onPress={this.completeProfile}
               />
             </View>
@@ -138,6 +140,14 @@ class EditProfileScreen extends Component {
 const mapStateToProps = state => ({
   fetching: state.auth.fetching,
   user: state.auth.profile,
+  uid: state.auth.uid,
   isProfileComplete: isProfileComplete(state.auth.profile) && !state.auth.fetching,
 });
-export default Connect(EditProfileScreen, mapStateToProps);
+const mapDispatchToProps = dispatch => ({
+  startDrinkup: (barId, user) => dispatch(DrinkupActions.startDrinkup(barId, user)),
+  sendRequestDrinkup: (bar, user) => dispatch(DrinkupActions.sendRequestDrinkup(bar, user)),
+  updateProfile: diff => dispatch(AuthActions.updateProfile(diff)),
+  uploadProfilePhoto: photo => dispatch(AuthActions.uploadProfilePhoto(photo)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(EditProfileScreen);

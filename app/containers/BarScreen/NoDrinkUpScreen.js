@@ -14,14 +14,16 @@ class NoDrinkUpScreen extends Component {
       this.props.navigation.navigate('DrinkUpScreen', { });
     }
   }
-
   // this function is only use for demo
   onDraftJoined = () => {
     const { bar, uid, user, startDrinkup } = this.props;
+    const currentUser = { ...user, uid };
     if (isProfileComplete(user)) {
-      startDrinkup(bar.id, { ...user, uid });
+      startDrinkup(bar.id, currentUser);
     } else {
-      this.props.navigation.navigate('CompleteProfileScene');
+      this.props.navigation.navigate('CompleteProfileScene', {
+        type: 'Start', barId: bar.id,
+      });
     }
   };
   render() {
@@ -65,7 +67,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   startDrinkup: (barId, user) => dispatch(DrinkupActions.startDrinkup(barId, user)),
-  joinDrinkup: user => dispatch(DrinkupActions.joinDrinkup(user)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(NoDrinkUpScreen);
