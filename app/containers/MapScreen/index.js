@@ -12,7 +12,6 @@ import {
 import { DrinkupActions, LocationActions } from '../../redux';
 import { geoFire } from '../../firebase';
 import { Colors, Images } from '../../themes';
-import { isProfileComplete } from '../../utils/auth';
 import { calculateDistanceByRegion, hasLocation } from '../../utils/mapUtils';
 import { BarsInformation } from './barsInformation';
 import { EventsInformation } from './eventInformation';
@@ -75,12 +74,7 @@ class MapScreen extends Component {
       }
     }
     if (!this.props.drinkupBar && newProps.drinkupBar) {
-      if (isProfileComplete(this.props.profile)) {
-        this.props.navigation.navigate('JoinDrinkUpScreen', { barId: newProps.drinkupBar.id });
-      } else {
-        this.props.setDrinkupBar(null);
-        this.props.navigation.navigate('CompleteProfileScene');
-      }
+      this.props.navigation.navigate('JoinDrinkUpScreen', { barId: newProps.drinkupBar.id });
     }
   }
   componentWillUnmount() {
@@ -224,7 +218,7 @@ class MapScreen extends Component {
             {this.state.showBackCurrentLocation &&
             <TouchableOpacity
               style={styles.locationButtonContainer}
-              onPress={() => this.onBackCurrentLocation(this.currentRegion)}
+              onPress={() => this.onBackCurrentLocation({ ...this.currentRegion, longitudeDelta: 0.3, latitudeDelta: 0.15 })}
             >
               <Image source={Images.locationBack} style={styles.imgLocationBack} />
             </TouchableOpacity>
