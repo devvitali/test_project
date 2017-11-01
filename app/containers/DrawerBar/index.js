@@ -39,7 +39,8 @@ class DrawBar extends Component {
 
   navigateTo = page => () => this.props.navigation.navigate(page);
   render() {
-    const { activeItemKey, auth: { profile }, joined } = this.props;
+    const { activeItemKey, auth: { profile }, joined, bar } = this.props;
+    console.log('bar', bar);
     return (
       <AppContainer hideNavBar>
         <View style={styles.container}>
@@ -56,7 +57,7 @@ class DrawBar extends Component {
             {joined ? (
               <DrawerButton
                 isActive={activeItemKey === 'DrinkUpScreen'}
-                text={I18n.t('DRINK_UP')}
+                text={bar.name}
                 onPress={this.navigateTo('DrinkUpScreen')}
                 iconFamily="alko"
                 iconName="mug"
@@ -112,6 +113,7 @@ class DrawBar extends Component {
 const mapStateToProps = state => ({
   auth: state.auth,
   joined: state.drinkup.joined,
+  bar: state.drinkup.bar,
 });
 
 export default Connect(DrawBar, mapStateToProps);

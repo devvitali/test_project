@@ -34,6 +34,11 @@ export default {
     flex: 1,
     flexDirection: 'row',
   },
+  iconContainer: {
+    alignSelf: 'stretch',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   icon: {
     marginRight: Metrics.baseMargin,
   },

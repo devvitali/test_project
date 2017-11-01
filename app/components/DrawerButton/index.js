@@ -36,9 +36,11 @@ const DrawerButton = (props) => {
   return (
     <TouchableOpacity style={containerStyle} onPress={onPress} >
       <View style={styles.titleContainer}>
-        {iconFamily &&
-        <Icon name={iconName} size={iconSize} color={iconColor} style={styles.icon} />
-        }
+        <View style={styles.iconContainer}>
+          {iconFamily &&
+          <Icon name={iconName} size={iconSize} color={iconColor} style={styles.icon} />
+          }
+        </View>
         <Text style={textStyle}>{text}</Text>
       </View>
       <IconMaterial name="keyboard-arrow-right" size={Metrics.icons.medium} style={iconStyle} />
