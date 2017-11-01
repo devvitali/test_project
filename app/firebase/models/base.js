@@ -92,7 +92,13 @@ export default class Base {
   }
 
   push(value: Object) {
-    return this.dbRef().push(value);
+    return new Promise((resolve) => {
+      const ref = this.dbRef().push(value);
+      ref.once('value', (snap) => {
+        console.log(snap);
+        resolve(snap);
+      })
+    })
   }
 
   update(key, diff) {

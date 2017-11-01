@@ -42,8 +42,7 @@ export function* startDrinkUp({ barId, user }) {
       bar: barId,
       users: { [user.uid]: pick(user, DRINKUP_USER_PROPERTIES) },
     };
-    const drinkupRef = yield call([DrinkUp, DrinkUp.push], drinkup);
-    const drinkupSnap = yield call([drinkupRef, drinkupRef.once], 'value');
+    const drinkupSnap = yield call([DrinkUp, DrinkUp.push], drinkup);
     yield call([Bar, Bar.update], barId, { currentDrinkUp: drinkupSnap.key });
     const bar = yield call([Bar, Bar.get], barId);
     bar.id = barId;
