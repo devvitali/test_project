@@ -1,7 +1,7 @@
 import React from 'react';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-
+import { CachedImage } from 'react-native-cached-image';
 import IconAlko from '../IconAlko';
 import { Metrics, Colors } from '../../themes';
 import styles from './styles';
@@ -19,7 +19,7 @@ function renderImage(props) {
   const { width, message, disabled, imageStyle, messagesRead } = props;
   return (
     <View style={[styles.innerContainer, { width }]}>
-      <Image source={props.image} style={[styles.image, imageStyle, { width, height: width }]} />
+      <CachedImage source={props.image} style={[styles.image, imageStyle, { width, height: width }]} />
       {
         message &&
         <View style={styles.btnMessage}>

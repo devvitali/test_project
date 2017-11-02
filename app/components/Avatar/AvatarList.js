@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, ListView, Dimensions } from 'react-native';
 
-import { Metrics } from '../../themes';
+import { Metrics, DrinkIcons } from '../../themes';
 import styles from './styles';
 import { Avatar } from '../';
 
@@ -31,7 +31,7 @@ export const AvatarList = ({ users, columns, columnPadding, style, iconOnly, onS
               onPress={user.message && onShowMessage}
             />
           ) : (
-            <Avatar icon={user.icon} width={avatarWidth} name={user.firstName} />
+            <Avatar image={DrinkIcons[user.icon]} width={60} name={user.firstName} />
           )}
         </View>
       )}
