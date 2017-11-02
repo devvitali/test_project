@@ -249,7 +249,7 @@ class MapScreen extends Component {
 const location$ = state => state.location;
 const drinkupBar$ = state => state.drinkup;
 const selector = createSelector(location$, drinkupBar$, (location, drinkup) => {
-  location.coords = boulderPosition;
+  // location.coords = boulderPosition;
   let region = { ...boulderPosition, longitudeDelta: 0.02, latitudeDelta: 0.01 };
   if (location.coords) {
     region = { ...location.coords, longitudeDelta: 0.02, latitudeDelta: 0.01 };

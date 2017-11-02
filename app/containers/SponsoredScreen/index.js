@@ -36,7 +36,7 @@ class SponsoredScreen extends React.Component {
   }
 }
 const mapDispatchToProps = dispatch => ({
-  setDrinkupBar: bar => dispatch(DrinkupActions.barRequestSuccessful(bar)),
+  setDrinkupBar: bar => dispatch(DrinkupActions.initDrinkupBar(bar)),
 });
 
 export default connect(null, mapDispatchToProps)(SponsoredScreen);

@@ -102,7 +102,7 @@ const mapStateToProps = state => ({
   users: state.drinkup.users,
   uid: state.auth.uid,
   user: state.auth.profile,
-  bar: state.drinkup.bar,
+  bar: state.drinkup.draftBar,
 });
 
 // eslint-disable-next-line

@@ -63,7 +63,7 @@ class NoDrinkUpScreen extends Component {
 
 const mapStateToProps = state => ({
   joined: state.drinkup.joined,
-  bar: state.drinkup.bar,
+  bar: state.drinkup.draftBar,
   user: state.auth.profile,
   uid: state.auth.uid,
 });

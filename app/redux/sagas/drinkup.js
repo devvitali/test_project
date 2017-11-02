@@ -12,12 +12,20 @@ function drinkupSubscribe(Drinkup, key) {
 
 export function* getDrinkup({ drinkupId, userId }) {
   try {
+    console.log('getDrinkup');
     const drinkup = yield call([DrinkUp, DrinkUp.get], drinkupId);
-    const users = drinkup.users || {};
+    if (!drinkup.users) {
+      drinkup.users = {};
+    }
+    if (!drinkup.waitingUsers) {
+      drinkup.waitingUsers = {};
+    }
+    const users = drinkup.users;
     const waitingUsers = drinkup.waitingUsers || {};
     const joined = !!users[userId];
     const waitingInvite = !!waitingUsers[userId];
     yield put(DrinkupActions.drinkupRequestSuccessful(drinkup, joined, waitingInvite, waitingUsers, userId));
+    console.log('drinkupRequestSuccessful', drinkup, joined, waitingInvite, waitingUsers, userId);
     yield call([DrinkUp, DrinkUp.unsubscribe], drinkupId);
     yield call(watch, drinkupSubscribe, DrinkUp, drinkupId);
   } catch (error) {
