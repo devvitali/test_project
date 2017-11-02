@@ -61,18 +61,18 @@ class WaitingScreen extends Component {
     this.props.cancelRequestDrinkup(bar, currentUser);
   };
   renderButton() {
-    const { oldWaitingBar, oldWaitingInvite, fetching, waitingInvite } = this.props;
-    if (oldWaitingInvite) {
-      return (
-        <Button clickable={false} theme="disallow" text={`waiting for invite at ${oldWaitingBar.name}`} />
-      );
-    }
+    const { draftBar, oldWaitingInvite, fetching, waitingInvite } = this.props;
     if (waitingInvite) {
       return (
         <View>
           <Button theme={'disallow'} onPress={this.onCancelRequest} text={I18n.t('Drinkup_CancelRequest')} />
           <Text style={styles.waitingInviteText}>{I18n.t('Drinkup_WaitingInvite')}</Text>
         </View>
+      );
+    }
+    if (oldWaitingInvite) {
+      return (
+        <Button clickable={false} theme="disallow" text={`waiting for invite at ${draftBar.name}`} />
       );
     }
     if (!fetching) {
@@ -102,7 +102,8 @@ const mapStateToProps = state => ({
   users: state.drinkup.users,
   uid: state.auth.uid,
   user: state.auth.profile,
-  bar: state.drinkup.draftBar,
+  bar: state.drinkup.bar,
+  draftBar: state.drinkup.draftBar
 });
 
 // eslint-disable-next-line

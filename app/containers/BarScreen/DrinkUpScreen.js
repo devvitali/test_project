@@ -18,6 +18,7 @@ class DrinkUp extends Component {
   }
   componentDidMount() {
     if (this.props.bar) {
+      this.props.getDrinkup(this.props.bar.currentDrinkUp, this.props.uid);
       if (!this.props.users) {
         this.props.getUsers(this.props.bar.currentDrinkUp);
       }
@@ -88,10 +89,12 @@ const mapStateToProps = state => ({
   users: state.drinkup.users,
   bar: state.drinkup.bar,
   joined: state.drinkup.joined,
+  uid: state.auth.uid,
 });
 
 //eslint-disable-next-line
 const mapDispatchToProps = dispatch => ({
+  getDrinkup: (drinkupId, userId) => dispatch(DrinkupActions.drinkupRequest(drinkupId, userId)),
   getUsers: drinkUpId => dispatch(DrinkupActions.drinkupRequest(drinkUpId)),
   clearDrinkupUsers: () => dispatch(DrinkupActions.clearDrinkupUsers()),
   setDrinkupBar: bar => dispatch(DrinkupActions.barRequestSuccessful(bar)),

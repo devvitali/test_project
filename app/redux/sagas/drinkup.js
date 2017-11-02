@@ -46,6 +46,7 @@ export function* startDrinkUp({ barId, user }) {
     bar.id = barId;
     console.log('startDrinkUp', drinkupSnap.val(), bar);
     yield put(DrinkupActions.startDrinkupSuccessful(drinkupSnap.val(), bar));
+    yield call(watch, drinkupSubscribe, DrinkUp, drinkupSnap.key);
   } catch (error) {
     yield put(DrinkupActions.drinkupRequestFailure(error));
   }

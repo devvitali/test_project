@@ -8,10 +8,18 @@ import { isProfileComplete } from '../../utils/auth';
 import Styles from './styles';
 
 class NoDrinkUpScreen extends Component {
-
+  constructor(props) {
+    super(props);
+    this.navigateId = '';
+  }
   componentWillReceiveProps(newProps) {
-    if (!this.props.joined && newProps.joined) {
-      this.props.navigation.navigate('DrinkUpScreen', { });
+    if (newProps.joined) {
+      if (this.navigateId === '') {
+        this.props.navigation.navigate('DrinkUpScreen', { });
+      }
+      this.navigateId = 'DrinkUpScreen';
+    } else if (this.props.joined && !newProps.joined) {
+      this.navigateId = '';
     }
   }
   // this function is only use for demo
@@ -27,7 +35,7 @@ class NoDrinkUpScreen extends Component {
     }
   };
   render() {
-    const { special, waitingInvite, waitingBar } = this.props;
+    const { special, waitingInvite, draftBar } = this.props;
     return (
       <View style={Styles.mainContainer}>
         {special &&
@@ -52,7 +60,7 @@ class NoDrinkUpScreen extends Component {
         </View>
         <View style={Styles.footer}>
           {waitingInvite ?
-            <Button clickable={false} theme="disallow" text={`waiting for invite at ${waitingBar.name}`} /> :
+            <Button clickable={false} theme="disallow" text={`waiting for invite at ${draftBar.name}`} /> :
             <Button onPress={this.onDraftJoined} text={I18n.t('Bar_StartADrinkUp')} />
           }
         </View>
@@ -63,7 +71,8 @@ class NoDrinkUpScreen extends Component {
 
 const mapStateToProps = state => ({
   joined: state.drinkup.joined,
-  bar: state.drinkup.draftBar,
+  bar: state.drinkup.bar,
+  draftBar: state.drinkup.draftBar,
   user: state.auth.profile,
   uid: state.auth.uid,
 });

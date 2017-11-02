@@ -41,7 +41,6 @@ class JoinDrinkUp extends Component {
           <WaitingScreen
             navigation={this.props.navigation}
             oldWaitingInvite={this.props.waitingInvite}
-            oldWaitingBar={this.props.bar}
           />
         );
       }
@@ -51,7 +50,6 @@ class JoinDrinkUp extends Component {
           special={special}
           navigation={this.props.navigation}
           waitingInvite={this.props.waitingInvite}
-          waitingBar={this.props.bar}
         />
       );
     }
