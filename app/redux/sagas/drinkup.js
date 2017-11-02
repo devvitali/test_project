@@ -25,7 +25,6 @@ export function* getDrinkup({ drinkupId, userId }) {
     const joined = !!users[userId];
     const waitingInvite = !!waitingUsers[userId];
     yield put(DrinkupActions.drinkupRequestSuccessful(drinkup, joined, waitingInvite, waitingUsers, userId));
-    console.log('drinkupRequestSuccessful', drinkup, joined, waitingInvite, waitingUsers, userId);
     yield call([DrinkUp, DrinkUp.unsubscribe], drinkupId);
     yield call(watch, drinkupSubscribe, DrinkUp, drinkupId);
   } catch (error) {

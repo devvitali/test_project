@@ -26,6 +26,16 @@
 	<string>ecA7zEEfwrP58tqFAG0eAWa78KPRa065dcdc-8b6a-4077-8542-8057ac867034</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+  <key>LSApplicationCategoryType</key>
+  <string></string>
+  <key>LSApplicationQueriesSchemes</key>
+  <array>
+    <string>tel</string>
+    <string>telprompt</string>
+    <string>mailto</string>
+    <string>googlegmail</string>
+    <string>comgooglemaps</string>
+  </array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
