@@ -82,7 +82,7 @@ class WaitingScreen extends Component {
     }
   }
   render() {
-    const { bar: { specialId }, users, waitingInvite, fetching } = this.props;
+    const { bar: { specialId }, users } = this.props;
     return (
       <View style={[styles.mainContainer, styles.container]}>
         {specialId &&

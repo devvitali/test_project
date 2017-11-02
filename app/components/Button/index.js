@@ -9,12 +9,12 @@ import ButtonTheme from './theme';
 const Button = (props) => {
   const theme = ButtonTheme[props.theme];
   const {
-    style, gradient, gradientColors, disabled, disabledStyle, onPress, textStyle,
+    style, gradient, gradientColors, disabled, disabledStyle, onPress, textStyle, clickable = true,
   } = applyComponentTheme(theme, props);
   const ButtonView = gradient ? LinearGradient : View;
   const ButtonProps = {
-    activeOpacity: disabled ? 1 : 0.7,
-    onPress: disabled ? null : onPress,
+    activeOpacity: clickable ? 0.7 : 1,
+    onPress: clickable ? onPress : null,
   };
   const ButtonViewProps = {
     style: [styles.btn, style, disabled ? disabledStyle : null],
@@ -22,9 +22,8 @@ const Button = (props) => {
   if (gradient) {
     ButtonViewProps.colors = gradientColors;
   }
-
   return (
-    <TouchableOpacity activeOpacity={disabled ? 1 : 0.7} {...ButtonProps}>
+    <TouchableOpacity activeOpacity={clickable ? 0.7 : 1} {...ButtonProps}>
       <ButtonView {...ButtonViewProps}>
         <Text style={[styles.btnText, textStyle]}>{props.text.toUpperCase()}</Text>
       </ButtonView>

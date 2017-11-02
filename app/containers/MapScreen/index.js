@@ -71,6 +71,9 @@ class MapScreen extends Component {
     }
     let newDrinkupId = newProps.drinkupBar ? newProps.drinkupBar.id : '';
     if (newDrinkupId.length > 0 && (this.barClicked || newProps.drinkup.joined || newProps.drinkup.waitingInvite)) {
+      if (this.barClicked) {
+        this.navigatedBarId = '';
+      }
       this.barClicked = false;
       if (newDrinkupId !== this.navigatedBarId) {
         this.props.navigation.navigate('JoinDrinkUpScreen', { barId: newDrinkupId });
@@ -246,7 +249,7 @@ class MapScreen extends Component {
 const location$ = state => state.location;
 const drinkupBar$ = state => state.drinkup;
 const selector = createSelector(location$, drinkupBar$, (location, drinkup) => {
-  // location.coords = boulderPosition;
+  location.coords = boulderPosition;
   let region = { ...boulderPosition, longitudeDelta: 0.02, latitudeDelta: 0.01 };
   if (location.coords) {
     region = { ...location.coords, longitudeDelta: 0.02, latitudeDelta: 0.01 };
@@ -259,7 +262,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   startBackgroundGeoLocation: () => dispatch(LocationActions.startBackgroundGeoLocation()),
-  setDrinkupBar: bar => dispatch(DrinkupActions.barRequestSuccessful(bar)),
+  setDrinkupBar: bar => dispatch(DrinkupActions.initDrinkupBar(bar)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MapScreen);

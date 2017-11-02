@@ -46,7 +46,7 @@ class EditProfileScreen extends Component {
 
   render() {
     const { user, isProfileComplete, fetching, navigation } = this.props;
-    const { routeName, params } = this.props.navigation.state;
+    const { routeName } = this.props.navigation.state;
     const { firstName, showPicDialog } = this.state;
     const source = user.photoURL ? { uri: user.photoURL } : avatar;
     const opacity = fetching ? 0.3 : 1.0;
@@ -110,8 +110,10 @@ class EditProfileScreen extends Component {
             {routeName === 'CompleteProfileScene' &&
             <View style={Styles.footer}>
               <Button
-                theme="primary"
-                disabled={!isProfileComplete}
+                theme={fetching ? 'disallow' : 'primary'}
+                clickable={isProfileComplete}
+                disabledStyle={{ opacity: 0.5 }}
+                disabled={fetching}
                 text="Save profile"
                 onPress={this.completeProfile}
               />
