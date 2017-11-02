@@ -9,15 +9,6 @@ const DRINKUP_USER_PROPERTIES = ['photoURL', 'firstName', 'icon', 'message', 'in
 function drinkupSubscribe(Drinkup, key) {
   return eventChannel(emit => Drinkup.subscribe(emit, key));
 }
-export function* getBar({ barId }) {
-  try {
-    const drinkupBar = yield call([Bar, Bar.get], barId);
-    drinkupBar.id = barId;
-    yield put(DrinkupActions.barRequestSuccessful(drinkupBar));
-  } catch (error) {
-    yield put(DrinkupActions.barRequestFailure(error));
-  }
-}
 
 export function* getDrinkup({ drinkupId, userId }) {
   try {
@@ -80,13 +71,13 @@ export function* sendRequestDrinkUp({ bar, user }) {
     waitingUsers[user.uid] = user;
     yield call([DrinkUp, DrinkUp.update], bar.currentDrinkUp, { waitingUsers });
 
+    yield put(DrinkupActions.sendRequestDrinkupSuccessful());
     const notification = {
       type: 'JOIN_DRINKUP_REQUEST',
       drinkupId: bar.currentDrinkUp,
       user,
     };
     yield call([Notification, Notification.push], notification);
-    yield put(DrinkupActions.sendRequestDrinkupSuccessful());
   } catch (err) {
     yield put(DrinkupActions.sendRequestDrinkupFailure(err));
   }

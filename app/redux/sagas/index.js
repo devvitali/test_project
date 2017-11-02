@@ -21,7 +21,6 @@ import {
 
 import {
   getDrinkup,
-  getBar,
   startDrinkUp,
   leaveDrinkUp,
   sendRequestDrinkUp,
@@ -56,7 +55,6 @@ export default function* root() {
     takeLatest(LocationTypes.START_BACKGROUND_GEO_LOCATION, startBackgroundGeoLocation),
     takeEvery(BarTypes.UPDATE_MAP_BAR, updateMapBar),
     takeLatest(BarTypes.BARS_REQUEST, getBars),
-    takeLatest(DrinkupTypes.BAR_REQUEST, getBar),
     takeLatest(DrinkupTypes.DRINKUP_REQUEST, getDrinkup),
     takeLatest(DrinkupTypes.START_DRINKUP, startDrinkUp),
     takeLatest(DrinkupTypes.LEAVE_DRINKUP, leaveDrinkUp),

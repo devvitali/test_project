@@ -91,7 +91,6 @@ const mapStateToProps = state => ({
 
 // eslint-disable-next-line
 const mapDispatchToProps = dispatch => ({
-  getBar: barId => dispatch(DrinkupActions.barRequest(barId)),
   getUsers: barId => dispatch(DrinkupActions.usersRequest(barId)),
   setDrinkupBar: bar => dispatch(DrinkupActions.barRequestSuccessful(bar)),
 });

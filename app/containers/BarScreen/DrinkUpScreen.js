@@ -17,15 +17,10 @@ class DrinkUp extends Component {
     };
   }
   componentDidMount() {
-    let barId = this.props.barId;
     if (this.props.bar) {
-      barId = this.props.bar.id;
       if (!this.props.users) {
         this.props.getUsers(this.props.bar.currentDrinkUp);
       }
-    }
-    if (barId) {
-      this.props.getBar(barId);
     }
   }
   componentWillReceiveProps(newProps) {
@@ -97,7 +92,6 @@ const mapStateToProps = state => ({
 
 //eslint-disable-next-line
 const mapDispatchToProps = dispatch => ({
-  getBar: barId => dispatch(DrinkupActions.barRequest(barId)),
   getUsers: drinkUpId => dispatch(DrinkupActions.drinkupRequest(drinkUpId)),
   clearDrinkupUsers: () => dispatch(DrinkupActions.clearDrinkupUsers()),
   setDrinkupBar: bar => dispatch(DrinkupActions.barRequestSuccessful(bar)),

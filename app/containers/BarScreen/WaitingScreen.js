@@ -23,11 +23,7 @@ class WaitingScreen extends Component {
     };
   }
   componentDidMount() {
-    if (!this.props.bar) {
-      if (this.props.barId) {
-        this.props.getBar(this.props.barId);
-      }
-    } else if (this.props.bar.currentDrinkUp) {
+    if (this.props.bar.currentDrinkUp) {
       this.props.getDrinkup(this.props.bar.currentDrinkUp, this.props.uid);
     }
     if (this.props.joined) {
@@ -65,8 +61,7 @@ class WaitingScreen extends Component {
     this.props.cancelRequestDrinkup(bar, currentUser);
   };
   render() {
-    const { bar: { specialId }, users, waitingInvite } = this.props;
-    console.log('specialId', specialId);
+    const { bar: { specialId }, users, waitingInvite, fetching } = this.props;
     return (
       <View style={[styles.mainContainer, styles.container]}>
         {specialId &&
@@ -75,21 +70,20 @@ class WaitingScreen extends Component {
         <AvatarList users={users} iconOnly />
         {waitingInvite ? (
           <View>
-            <Animation.View animation="fadeIn" delay={1000} duration={500}>
-              <Button theme={'disallow'} onPress={this.onCancelRequest} text={I18n.t('Drinkup_CancelRequest')} />
-            </Animation.View>
+            <Button theme={'disallow'} onPress={this.onCancelRequest} text={I18n.t('Drinkup_CancelRequest')} />
             <Text style={styles.waitingInviteText}>{I18n.t('Drinkup_WaitingInvite')}</Text>
           </View>
         ) : (
+          !fetching &&
           <Button onPress={this.onSendRequestDrinkup} text={I18n.t('Drinkup_JoinDrinkUp')} />
         )}
-
       </View>
     );
   }
 }
 
 const mapStateToProps = state => ({
+  fetching: state.drinkup.fetching,
   joined: state.drinkup.joined,
   waitingInvite: state.drinkup.waitingInvite,
   users: state.drinkup.users,
@@ -100,7 +94,6 @@ const mapStateToProps = state => ({
 
 // eslint-disable-next-line
 const mapDispatchToProps = dispatch => ({
-  getBar: barId => dispatch(DrinkupActions.barRequest(barId)),
   getDrinkup: (drinkupId, userId) => dispatch(DrinkupActions.drinkupRequest(drinkupId, userId)),
   sendRequestDrinkup: (bar, user) => dispatch(DrinkupActions.sendRequestDrinkup(bar, user)),
   cancelRequestDrinkup: (bar, user) => dispatch(DrinkupActions.cancelRequestDrinkup(bar, user)),
