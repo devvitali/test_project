@@ -17,6 +17,7 @@ export default StyleSheet.create({
     backgroundColor: Colors.transparent,
     fontFamily: Fonts.type.primary,
     fontSize: 14,
+    textAlign: 'center',
     textShadowColor: Colors.brand.shadow.orange,
     textShadowOffset: { width: 0, height: 2 },
   },

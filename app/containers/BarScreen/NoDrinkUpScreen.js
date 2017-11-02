@@ -27,7 +27,7 @@ class NoDrinkUpScreen extends Component {
     }
   };
   render() {
-    const { special } = this.props;
+    const { special, waitingInvite, waitingBar } = this.props;
     return (
       <View style={Styles.mainContainer}>
         {special &&
@@ -51,7 +51,10 @@ class NoDrinkUpScreen extends Component {
           }
         </View>
         <View style={Styles.footer}>
-          <Button onPress={this.onDraftJoined} text={I18n.t('Bar_StartADrinkUp')} />
+          {waitingInvite ?
+            <Button clickable={false} theme="disallow" text={`waiting for invite at ${waitingBar.name}`} /> :
+            <Button onPress={this.onDraftJoined} text={I18n.t('Bar_StartADrinkUp')} />
+          }
         </View>
       </View>
     );

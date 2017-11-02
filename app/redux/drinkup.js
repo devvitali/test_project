@@ -1,6 +1,7 @@
 import { createReducer, createActions } from 'reduxsauce';
 /* ------------- Types and Action Creators ------------- */
 const { Types, Creators } = createActions({
+  initDrinkupBar: ['bar'],
   barRequestSuccessful: ['bar'],
   barRequestFailure: ['error'],
   updateDrinkupSuccess: ['drinkup'],
@@ -50,6 +51,15 @@ const requestFailure = (state, { error }) => ({
   fetching: false,
   error,
 });
+const initDrinkupBar = (state, { bar }) => {
+  if (state.bar && state.waitingInvite) {
+    return ({
+      ...state,
+      draftBar: bar,
+    });
+  }
+  return { ...state, bar, draftBar: bar };
+};
 const barRequestSuccessful = (state, { bar }) => ({
   ...state,
   fetching: false,
@@ -120,6 +130,7 @@ const clearDrinkupData = () => defaultState;
 
 /* ------------- Hookup Reducers To Types ------------- */
 export const drinkupReducer = createReducer(defaultState, {
+  [Types.INIT_DRINKUP_BAR]: initDrinkupBar,
   [Types.BAR_REQUEST_SUCCESSFUL]: barRequestSuccessful,
   [Types.BAR_REQUEST_FAILURE]: barRequestFailure,
   [Types.DRINKUP_REQUEST]: request,

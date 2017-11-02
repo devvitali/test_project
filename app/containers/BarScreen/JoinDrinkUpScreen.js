@@ -23,24 +23,37 @@ class JoinDrinkUp extends Component {
     this.props.navigation.navigate('MapScreen');
   };
   getTitle() {
-    if (this.props.bar) {
-      return this.props.bar.name;
+    if (this.props.draftBar) {
+      return this.props.draftBar.name;
     }
     return 'Join DrinkUp';
   }
   getRightNavBarButton() {
-    if (this.props.bar) {
+    if (this.props.draftBar) {
       return NavItems.mapButton(this.onShowDirectionDialog);
     }
     return null;
   }
   renderScreen() {
-    if (this.props.bar) {
-      if (this.props.bar.currentDrinkUp) {
-        return <WaitingScreen navigation={this.props.navigation} />;
+    if (this.props.draftBar) {
+      if (this.props.draftBar.currentDrinkUp) {
+        return (
+          <WaitingScreen
+            navigation={this.props.navigation}
+            oldWaitingInvite={this.props.waitingInvite}
+            oldWaitingBar={this.props.bar}
+          />
+        );
       }
-      const special = this.props.bar.specialId;
-      return <NoDrinkUp special={special} navigation={this.props.navigation} />;
+      const special = this.props.draftBar.specialId;
+      return (
+        <NoDrinkUp
+          special={special}
+          navigation={this.props.navigation}
+          waitingInvite={this.props.waitingInvite}
+          waitingBar={this.props.bar}
+        />
+      );
     }
     return null;
   }
@@ -82,6 +95,8 @@ const auth$ = state => state.auth;
 const drinkupBar$ = state => state.drinkup;
 const selector = createSelector(auth$, drinkupBar$, (auth, drinkup) => ({
   bar: drinkup.bar,
+  draftBar: drinkup.draftBar,
+  waitingInvite: drinkup.waitingInvite,
   isUserValid: isUserValid(auth.profile),
 }));
 
@@ -92,7 +107,6 @@ const mapStateToProps = state => ({
 // eslint-disable-next-line
 const mapDispatchToProps = dispatch => ({
   getUsers: barId => dispatch(DrinkupActions.usersRequest(barId)),
-  setDrinkupBar: bar => dispatch(DrinkupActions.barRequestSuccessful(bar)),
 });
 
 

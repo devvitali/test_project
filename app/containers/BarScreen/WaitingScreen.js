@@ -60,6 +60,27 @@ class WaitingScreen extends Component {
     const currentUser = { ...user, uid };
     this.props.cancelRequestDrinkup(bar, currentUser);
   };
+  renderButton() {
+    const { oldWaitingBar, oldWaitingInvite, fetching, waitingInvite } = this.props;
+    if (oldWaitingInvite) {
+      return (
+        <Button clickable={false} theme="disallow" text={`waiting for invite at ${oldWaitingBar.name}`} />
+      );
+    }
+    if (waitingInvite) {
+      return (
+        <View>
+          <Button theme={'disallow'} onPress={this.onCancelRequest} text={I18n.t('Drinkup_CancelRequest')} />
+          <Text style={styles.waitingInviteText}>{I18n.t('Drinkup_WaitingInvite')}</Text>
+        </View>
+      );
+    }
+    if (!fetching) {
+      return (
+        <Button onPress={this.onSendRequestDrinkup} text={I18n.t('Drinkup_JoinDrinkUp')} />
+      );
+    }
+  }
   render() {
     const { bar: { specialId }, users, waitingInvite, fetching } = this.props;
     return (
@@ -68,15 +89,7 @@ class WaitingScreen extends Component {
         <Banner theme="info" text={I18n.t('Drinkup_JoinDrinkUpAndGet2For1Drinks')} onPress={this.onWaiting} />
         }
         <AvatarList users={users} iconOnly />
-        {waitingInvite ? (
-          <View>
-            <Button theme={'disallow'} onPress={this.onCancelRequest} text={I18n.t('Drinkup_CancelRequest')} />
-            <Text style={styles.waitingInviteText}>{I18n.t('Drinkup_WaitingInvite')}</Text>
-          </View>
-        ) : (
-          !fetching &&
-          <Button onPress={this.onSendRequestDrinkup} text={I18n.t('Drinkup_JoinDrinkUp')} />
-        )}
+        {this.renderButton()}
       </View>
     );
   }
