@@ -29,16 +29,23 @@ NSString *const kGCMMessageIDKey = @"gcm.message_id";
                                                       moduleName:@"ALKO"
                                                initialProperties:nil
                                                    launchOptions:launchOptions];
-  rootView.backgroundColor = [[UIColor alloc] initWithRed:1.0f green:1.0f blue:1.0f alpha:1];
+  UIView *backgroundView = [[[NSBundle mainBundle] loadNibNamed:@"LaunchScreen" owner:self options:nil] firstObject];
+  
+  rootView.backgroundColor = [UIColor clearColor];
+  
   [GMSServices provideAPIKey:@"AIzaSyAnQdY1dgtyDDFTGHtpYoqVHQxiVQ0c4xU"];
   [FIRApp configure];
   [FIRMessaging messaging].delegate = self;
   
   self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
   UIViewController *rootViewController = [UIViewController new];
-  rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
+  rootViewController.view = backgroundView;
   [self.window makeKeyAndVisible];
+  [backgroundView addSubview:rootView];
+  rootView.frame = backgroundView.frame;
+//  rootViewController.view = rootView;
+//  [self.window makeKeyAndVisible];
   
   if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_9_x_Max) {
     UIUserNotificationType allNotificationTypes =
