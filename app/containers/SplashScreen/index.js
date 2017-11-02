@@ -1,17 +1,25 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import { isUserValid } from '../../utils/auth';
 import { Connect } from '../../redux';
+import { Colors } from '../../themes';
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Colors.brand.dark,
+  },
+});
 
 class SplashScreen extends Component {
   constructor(props) {
     super(props);
     this.routedScene = '';
   }
-  componentDidUpdate() {
+  componentWillReceiveProps(newProps) {
     if (this.routedScene === '') {
-      this.redirect();
+      this.redirect(newProps);
     }
   }
 
@@ -29,13 +37,11 @@ class SplashScreen extends Component {
     }
     this.routedScene = route;
   }
-  redirect() {
-    const { joined, user, isUserValid } = this.props;
+  redirect(newProps) {
+    const { joined, user, isUserValid } = newProps;
     console.log('SplashScreen', user, joined, isUserValid);
     if (!user && this.routedScene !== 'OnBoardingStep1') {
       this.navigate('OnBoardingStep1');
-    } else if (!isUserValid && user.onboardingComplete && Object.keys(user).length > 0) {
-      this.navigate('EditProfileScreenWithoutSignIn');
     } else if (joined) {
       this.navigate('DrawerNavigation', 'DrinkUpScreen');
       console.log('goto drinkUp');
@@ -45,10 +51,9 @@ class SplashScreen extends Component {
       this.navigate('OnBoardingStep1');
     }
   }
-
   render() {
     return (
-      <View />
+      <View style={styles.container} />
     );
   }
 }

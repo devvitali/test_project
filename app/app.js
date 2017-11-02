@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-import { AppState } from 'react-native';
+import { AppState, NativeModules } from 'react-native';
 import { Provider } from 'react-redux';
 import codePush from 'react-native-code-push';
 import Instabug from 'instabug-reactnative';
@@ -30,6 +30,10 @@ class App extends Component {
     FCM.requestPermissions(); // for iOS
     Instabug.startWithToken('20b5579b22c3616afeeed631ace29330', Instabug.invocationEvent.shake);
     trackEvent('test', 'testevent');
+    // setTimeout(() => {
+      // NativeModules.DevMenu.show();
+    // }, 1000);
+    updateCodePush();
   }
   // onHandleOpenURL = (event) => {
   //   // const route = event.url.replace(/.*?:\/\//g, '');

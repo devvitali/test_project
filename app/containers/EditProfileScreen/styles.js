@@ -14,10 +14,10 @@ export default StyleSheet.create({
   },
   photoContainer: {
     position: 'absolute',
-    top: 0,
-    right: 0,
-    left: 0,
-    bottom: 0,
+    alignSelf: 'center',
+    top: Metrics.doubleBaseMargin,
+    width: 128,
+    height: 128,
     alignItems: 'center',
     justifyContent: 'center'
   },
