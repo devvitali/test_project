@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
 import { connect } from 'react-redux';
+import { NavigationActions } from 'react-navigation'
 import AppContainer from '../AppContainer';
 import { NavItems, DirectionDialog } from '../../components';
 import styles from './styles';
+
 import DrinkUpLobby from './DrinkUpLobbyScreen';
 import { DrinkupActions } from '../../redux';
 
@@ -28,9 +30,15 @@ class DrinkUp extends Component {
   }
   componentWillReceiveProps(newProps) {
     if (this.props.joined !== newProps.joined && !newProps.joined) {
+      const resetAction = NavigationActions.reset({
+        index: 0,
+        actions: [
+          NavigationActions.navigate({ routeName: 'MapScreen'})
+        ]
+      });
+      this.props.navigation.dispatch(resetAction);
       this.props.setDrinkupBar(null);
       this.props.clearDrinkupUsers();
-      // this.props.navigation.goBack();
     }
   }
   onShowDirectionDialog = () => this.setState({ isDirectionDialogShowing: true });

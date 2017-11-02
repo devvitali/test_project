@@ -104,6 +104,7 @@ const sendRequestDrinkupSuccessful = state => ({ ...state, waitingInvite: true }
 const cancelRequestDrinkupSuccessful = state => ({ ...state, waitingInvite: false, users: null, waitingUsers: null });
 const leaveDrinkupSuccessful = state => ({
   ...state,
+  bar: null,
   joined: false,
   fetch: false,
   users: null,

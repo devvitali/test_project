@@ -30,9 +30,6 @@ class MapScreen extends Component {
     this.state = {
       googleAPIAvailable: true,
       showBackCurrentLocation: false,
-      // clusterMarkers: [],
-      // barResultItems: [],
-      // markerBarItems: [],
       forceUpdate: false,
     };
     this.criteriaTimeout = -1;
@@ -45,10 +42,11 @@ class MapScreen extends Component {
     this.eventGeoQuery = geoFire('eventLocations').query({ ...geoParam, radius: 15 });
     this.barGeoQuery.on('key_entered', BarsInformation.onBarEntered);
     this.eventGeoQuery.on('key_entered', EventsInformation.onEventEntered);
-    this.navigatedBarId = '';
     BarsInformation.setCallback(() => this.setState({ forceUpdate: !this.state.forceUpdate }));
     EventsInformation.setCallback(() => this.setState({ forceUpdate: !this.state.forceUpdate }));
     this.props.startBackgroundGeoLocation();
+    this.barClicked = false;
+    this.navigatedBarId = '';
   }
   componentDidMount() {
     if (googleAPI) {
@@ -71,11 +69,9 @@ class MapScreen extends Component {
         }, 1000);
       }
     }
-    if (!newProps.drinkupBar) {
-      this.navigatedBarId = '';
-    }
     let newDrinkupId = newProps.drinkupBar ? newProps.drinkupBar.id : '';
-    if (newDrinkupId.length > 0) {
+    if (newDrinkupId.length > 0 && (this.barClicked || newProps.drinkup.joined || newProps.drinkup.waitingInvite)) {
+      this.barClicked = false;
       if (newDrinkupId !== this.navigatedBarId) {
         this.props.navigation.navigate('JoinDrinkUpScreen', { barId: newDrinkupId });
         this.navigatedBarId = newDrinkupId;
@@ -158,7 +154,7 @@ class MapScreen extends Component {
                 bar={bar}
                 location={this.props.location}
                 currentRegion={this.currentRegion}
-                onPress={() => this.props.setDrinkupBar({ ...bar })}
+                onPress={() => { this.barClicked = true; this.props.setDrinkupBar({ ...bar }) }}
               />
             ))}
           </ScrollView>
@@ -173,7 +169,6 @@ class MapScreen extends Component {
     );
   }
   renderMap() {
-    console.log('location', this.props.location);
     if (!this.state.googleAPIAvailable) {
       return (
         <View style={styles.noMapContainer}>
@@ -214,7 +209,7 @@ class MapScreen extends Component {
           <BarMarker
             key={bar.id}
             bar={bar}
-            onPress={() => this.props.setDrinkupBar({ ...bar })}
+            onPress={() => { this.barClicked = true; this.props.setDrinkupBar({ ...bar }) }}
           />
         ))}
       </MapView>
@@ -251,12 +246,12 @@ class MapScreen extends Component {
 const location$ = state => state.location;
 const drinkupBar$ = state => state.drinkup;
 const selector = createSelector(location$, drinkupBar$, (location, drinkup) => {
-  location.coords = boulderPosition;
+  // location.coords = boulderPosition;
   let region = { ...boulderPosition, longitudeDelta: 0.02, latitudeDelta: 0.01 };
   if (location.coords) {
     region = { ...location.coords, longitudeDelta: 0.02, latitudeDelta: 0.01 };
   }
-  return { region, location: location.coords, drinkupBar: drinkup.bar };
+  return { region, location: location.coords, drinkupBar: drinkup.bar, drinkup };
 });
 const mapStateToProps = state => ({
   ...selector(state),

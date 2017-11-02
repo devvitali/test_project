@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
 import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 import AppContainer from '../AppContainer';
 import WaitingScreen from './WaitingScreen';
 import NoDrinkUp from './NoDrinkUpScreen';
@@ -16,14 +17,11 @@ class JoinDrinkUp extends Component {
       isDirectionDialogShowing: false,
     };
   }
-  componentWillReceiveProps(newProps) {
-    if (!newProps.bar) {
-      this.props.navigation.goBack();
-    }
-  }
   onShowDirectionDialog = () => this.setState({ isDirectionDialogShowing: true });
   onCloseDirectionDialog = () => this.setState({ isDirectionDialogShowing: false });
-  onGoBack = () => this.props.setDrinkupBar(null);
+  onGoBack = () => {
+    this.props.navigation.navigate('MapScreen');
+  };
   getTitle() {
     if (this.props.bar) {
       return this.props.bar.name;
@@ -80,9 +78,15 @@ class JoinDrinkUp extends Component {
   }
 }
 
+const auth$ = state => state.auth;
+const drinkupBar$ = state => state.drinkup;
+const selector = createSelector(auth$, drinkupBar$, (auth, drinkup) => ({
+  bar: drinkup.bar,
+  isUserValid: isUserValid(auth.profile),
+}));
+
 const mapStateToProps = state => ({
-  bar: state.drinkup.bar,
-  isUserValid: isUserValid(state.auth.profile),
+  ...selector(state),
 });
 
 // eslint-disable-next-line

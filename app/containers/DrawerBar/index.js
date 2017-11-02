@@ -40,7 +40,6 @@ class DrawBar extends Component {
   navigateTo = page => () => this.props.navigation.navigate(page);
   render() {
     const { activeItemKey, auth: { profile }, joined, bar } = this.props;
-    console.log('bar', bar);
     return (
       <AppContainer hideNavBar>
         <View style={styles.container}>
@@ -57,16 +56,16 @@ class DrawBar extends Component {
             {joined ? (
               <DrawerButton
                 isActive={activeItemKey !== 'EditProfileScreen' && activeItemKey !== 'FeedBackScreen'}
-                text={bar.name}
-                onPress={this.navigateTo('MapScreen')}
+                text={bar ? bar.name : ''}
+                onPress={this.navigateTo('DrinkUpScreen')}
                 iconFamily="alko"
                 iconName="mug"
               />
             ) : (
               <DrawerButton
-                isActive={activeItemKey === 'MapScreen'}
+                isActive={activeItemKey === 'MapNavigator'}
                 text={I18n.t('BARS')}
-                onPress={this.navigateTo('MapScreen')}
+                onPress={this.navigateTo('MapNavigator')}
               />
             )}
 

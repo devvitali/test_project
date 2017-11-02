@@ -10,6 +10,7 @@ class SponsoredScreen extends React.Component {
   onEnterBar = () => {
     const { event } = this.props.navigation.state.params;
     this.props.setDrinkupBar({ ...event.bar });
+    this.props.navigation.navigate('JoinDrinkUpScreen', { barId: event.bar.id });
   };
   render() {
     const { event } = this.props.navigation.state.params;

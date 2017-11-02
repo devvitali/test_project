@@ -24,7 +24,6 @@ const DrinkupNavigator = StackNavigator(
   {
     MapScreen: { screen: MapScreen },
     JoinDrinkUpScreen: { screen: JoinDrinkUpScreen },
-    DrinkUpScreen: { screen: DrinkUpScreen },
     SponsoredScreen: { screen: SponsoredScreen },
     CompleteProfileScene: { screen: EditProfileScreen },
   },
@@ -40,10 +39,11 @@ const DrawerNavigation = DrawerNavigator(
     PushNotificationsScreen: { screen: PushNotificationsScreen },
     PrivacyPolicyScreen: { screen: PrivacyPolicyScreen },
     TermsOfServiceScreen: { screen: TermsOfServiceScreen },
-    MapScreen: { screen: DrinkupNavigator },
+    MapNavigator: { screen: DrinkupNavigator },
+    DrinkUpScreen: { screen: DrinkUpScreen },
   },
   {
-    initialRouteName: 'MapScreen',
+    initialRouteName: 'MapNavigator',
     contentComponent: props => <DrawBar {...props} />,
   }
 );
