@@ -29,11 +29,10 @@ class DrinkUp extends Component {
       const resetAction = NavigationActions.reset({
         index: 0,
         actions: [
-          NavigationActions.navigate({ routeName: 'MapScreen'})
+          NavigationActions.navigate({ routeName: 'JoinDrinkUpScreen'})
         ]
       });
       this.props.navigation.dispatch(resetAction);
-      this.props.setDrinkupBar(null);
       this.props.clearDrinkupUsers();
     }
   }

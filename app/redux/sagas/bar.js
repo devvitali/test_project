@@ -2,16 +2,7 @@ import { put, call } from 'redux-saga/effects';
 // import { eventChannel } from 'redux-saga';
 
 import BarActions from '../bar';
-import { Bar /* , BarFactory */} from '../../firebase/models';
-// import { watch } from '../../utils/sagaUtils';
-// const MAP_BAR_ACTIONS = {
-//   onUpdate: BarActions.updateBar,
-// };
-
-// const MapBar = BarFactory(MAP_BAR_ACTIONS);
-// function barSubscribe(MapBar, keys) {
-//   return eventChannel(emit => MapBar.subscribeMultiple(emit, keys));
-// }
+import { Bar } from '../../firebase/models';
 export function* getBars() {
   try {
     const bars = yield call([Bar, Bar.get]);

@@ -4,6 +4,7 @@ const { Types, Creators } = createActions({
   initDrinkupBar: ['bar'],
   barRequestSuccessful: ['bar'],
   barRequestFailure: ['error'],
+  updateDraftBar: ['bar'],
   updateDrinkupSuccess: ['drinkup'],
   drinkupRequest: ['drinkupId', 'userId'],
   drinkupRequestSuccessful: ['drinkup', 'joined', 'waitingInvite', 'waitingUsers', 'userId'],
@@ -18,7 +19,7 @@ const { Types, Creators } = createActions({
   startDrinkupSuccessful: ['drinkup', 'bar'],
   startDrinkupFailure: ['error'],
   leaveDrinkup: ['bar', 'user'],
-  leaveDrinkupSuccessful: [''],
+  leaveDrinkupSuccessful: ['active'],
   leaveDrinkupFailure: ['error'],
   acceptDrinkupInvitation: ['bar', 'uid'],
   sendDrinkupInvitation: ['bar', 'user', 'message'],
@@ -51,6 +52,7 @@ const requestFailure = (state, { error }) => ({
   fetching: false,
   error,
 });
+
 const initDrinkupBar = (state, { bar }) => {
   if (state.bar && state.waitingInvite) {
     return ({
@@ -59,6 +61,17 @@ const initDrinkupBar = (state, { bar }) => {
     });
   }
   return { ...state, bar, draftBar: bar };
+};
+const updateDraftBar = (state, { bar }) => {
+  let oldBar = { ...state.bar };
+  let draftBar = { ...state.draftBar };
+  if (oldBar.id === bar.id) {
+    oldBar = { ...bar, address: oldBar.address };
+  }
+  if (draftBar.id === bar.id) {
+    draftBar = { ...bar, address: draftBar.address };
+  }
+  return { ...state, draftBar, bar: oldBar };
 };
 const barRequestSuccessful = (state, { bar }) => ({
   ...state,
@@ -80,6 +93,16 @@ const updateDrinkupSuccess = (state, { drinkup }) => {
     if (newState.users[newState.userId]) {
       newState.waitingInvite = false;
       newState.joined = true;
+    }
+    if (!newState.users || Object.keys(newState.users).length === 0) {
+      if (newState.draftBar.id === drinkup.bar) {
+        newState.draftBar ={ ...newState.draftBar };
+        newState.draftBar.currentDrinkUp = null;
+      }
+      if (newState.bar.id === drinkup.bar) {
+        newState.bar ={ ...newState.bar };
+        newState.bar.currentDrinkUp = null;
+      }
     }
     return newState;
   }
@@ -106,20 +129,28 @@ const startDrinkupSuccessful = (state, { drinkup: { users }, bar }) => ({
 const drinkupRequestFailure = (state, { error }) => ({
   ...state,
   fetching: false,
-  users: null,
   error,
 });
 
 const sendRequestDrinkupSuccessful = state => ({ ...state, waitingInvite: true });
 const cancelRequestDrinkupSuccessful = state => ({ ...state, waitingInvite: false, users: null, waitingUsers: null });
-const leaveDrinkupSuccessful = state => ({
-  ...state,
-  bar: null,
-  joined: false,
-  fetch: false,
-  users: null,
-  waitingUsers: null,
-});
+const leaveDrinkupSuccessful = (state, { active }) => {
+  const draftBar = { ...state.draftBar };
+  const bar = { ...state.bar };
+  if (!active) {
+    bar.currentDrinkUp = draftBar.currentDrinkUp = null;
+  }
+  return ({
+    ...state,
+    waitingInvite: false,
+    joined: false,
+    fetch: false,
+    users: null,
+    waitingUsers: null,
+    draftBar,
+    bar,
+  });
+};
 const sendDrinkupInvitationSucessful = (state, { users, waitingUsers }) => ({
   ...state,
   users,
@@ -131,6 +162,7 @@ const clearDrinkupData = () => defaultState;
 /* ------------- Hookup Reducers To Types ------------- */
 export const drinkupReducer = createReducer(defaultState, {
   [Types.INIT_DRINKUP_BAR]: initDrinkupBar,
+  [Types.UPDATE_DRAFT_BAR]: updateDraftBar,
   [Types.BAR_REQUEST_SUCCESSFUL]: barRequestSuccessful,
   [Types.BAR_REQUEST_FAILURE]: barRequestFailure,
   [Types.DRINKUP_REQUEST]: request,

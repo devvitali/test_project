@@ -5,6 +5,7 @@ import { createSelector } from 'reselect';
 import AppContainer from '../AppContainer';
 import WaitingScreen from './WaitingScreen';
 import NoDrinkUp from './NoDrinkUpScreen';
+import { BarFactory } from '../../firebase/models';
 import { NavItems, DirectionDialog } from '../../components';
 import { isUserValid } from '../../utils/auth';
 import { DrinkupActions } from '../../redux';
@@ -16,7 +17,20 @@ class JoinDrinkUp extends Component {
     this.state = {
       isDirectionDialogShowing: false,
     };
+    this.barActions = {
+      onUpdate: this.onUpdate,
+    };
+    this.barSubscribeModel = new BarFactory(this.barActions);
   }
+  componentDidMount() {
+    this.barSubscribeModel.subscribe(() => {}, this.props.draftBar.id);
+  }
+  componentWillUnmount() {
+    this.barSubscribeModel.unsubscribe(this.props.draftBar.id);
+  }
+  onUpdate = (bar, id) => {
+    this.props.updateDraftBar({ ...bar, id });
+  };
   onShowDirectionDialog = () => this.setState({ isDirectionDialogShowing: true });
   onCloseDirectionDialog = () => this.setState({ isDirectionDialogShowing: false });
   onGoBack = () => {
@@ -95,6 +109,7 @@ const mapStateToProps = state => ({
 // eslint-disable-next-line
 const mapDispatchToProps = dispatch => ({
   getUsers: barId => dispatch(DrinkupActions.usersRequest(barId)),
+  updateDraftBar: bar => dispatch(DrinkupActions.updateDraftBar(bar)),
 });
 
 

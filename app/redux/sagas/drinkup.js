@@ -7,7 +7,7 @@ import { Bar, DrinkUp, Notification } from '../../firebase/models';
 
 const DRINKUP_USER_PROPERTIES = ['photoURL', 'firstName', 'icon', 'message', 'invitedBy', 'messagesRead', 'fcmToken'];
 
-function drinkupSubscribe(Drinkup, key) {
+function* drinkupSubscribe(Drinkup, key) {
   return eventChannel(emit => Drinkup.subscribe(emit, key));
 }
 
@@ -67,7 +67,7 @@ export function* leaveDrinkUp({ bar, user }) {
     }
     leavedUsers[user.uid] = '';
     yield call([DrinkUp, DrinkUp.update], bar.currentDrinkUp, { users, leavedUsers, active });
-    yield put(DrinkupActions.leaveDrinkupSuccessful());
+    yield put(DrinkupActions.leaveDrinkupSuccessful(active));
     yield call([DrinkUp, DrinkUp.unsubscribe], bar.currentDrinkUp);
   } catch (error) {
     yield put(DrinkupActions.leaveDrinkupFailure(error));
