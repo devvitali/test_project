@@ -22,21 +22,26 @@ export const BarMarker = ({ bar, onPress }) => {
     return null;
   }
   const { address, currentDrinkUp, specialId } = bar;
+  let zIndex = 0;
   if (!address) {
     return null;
   }
   let image = '';
   if (currentDrinkUp && specialId) {
     image = Images.pinMugSeal;
+    zIndex = 4;
   } else if (currentDrinkUp) {
     image = Images.pinMug;
+    zIndex = 3;
   } else if (specialId) {
     image = Images.pinSeal;
+    zIndex = 2;
   } else {
     image = Images.pin;
+    zIndex = 1;
   }
   return (
-    <MapView.Marker onPress={onPress} coordinate={address}>
+    <MapView.Marker onPress={onPress} coordinate={address} zIndex={zIndex}>
       <Image source={image} />
     </MapView.Marker>
   );

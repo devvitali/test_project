@@ -10,14 +10,16 @@ const { width } = Dimensions.get('window');
 export const AvatarList = ({ users, columns, columnPadding, style, iconOnly, onShowMessage }) => {
   const avatarWidth = ((width - (Metrics.doubleBaseMargin * 2)) / columns) - (columnPadding * 2);
   const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
-  // users.test = users[Object.keys(users)[0]];
-  // users.test1 = users[Object.keys(users)[0]];
-  // users.test2 = users[Object.keys(users)[0]];
-  // users.test3 = users[Object.keys(users)[0]];
-  // users.test11 = users[Object.keys(users)[0]];
-  // users.test12 = users[Object.keys(users)[0]];
-  // users.test13 = users[Object.keys(users)[0]];
-  // users.t14 = users[Object.keys(users)[0]];
+  // if (users) {
+  //   users.test = users[Object.keys(users)[0]];
+  //   users.test1 = users[Object.keys(users)[0]];
+  //   users.test2 = users[Object.keys(users)[0]];
+  //   users.test3 = users[Object.keys(users)[0]];
+  //   users.test11 = users[Object.keys(users)[0]];
+  //   users.test12 = users[Object.keys(users)[0]];
+  //   users.test13 = users[Object.keys(users)[0]];
+  //   users.t14 = users[Object.keys(users)[0]];
+  // }
   if (!users) {
     return null;
   }
