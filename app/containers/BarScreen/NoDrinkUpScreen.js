@@ -24,18 +24,23 @@ class NoDrinkUpScreen extends Component {
   }
   // this function is only use for demo
   onDraftJoined = () => {
-    const { bar, uid, user, startDrinkup } = this.props;
-    const currentUser = { ...user, uid };
-    if (isProfileComplete(user)) {
-      startDrinkup(bar.id, currentUser);
-    } else {
-      this.props.navigation.navigate('CompleteProfileScene', {
-        type: 'Start', barId: bar.id,
-      });
+    if (!this.props.waitingInvite) {
+      const { draftBar, uid, user, startDrinkup } = this.props;
+      const currentUser = { ...user, uid };
+      if (isProfileComplete(user)) {
+        startDrinkup(draftBar.id, currentUser);
+      } else {
+        this.props.navigation.navigate('CompleteProfileScene', {
+          type: 'Start', barId: draftBar.id,
+        });
+      }
     }
   };
+  onWaitingBar = () => {
+    this.props.initDrinkupBar(this.props.bar);
+  };
   render() {
-    const { special, waitingInvite, draftBar } = this.props;
+    const { special, waitingInvite, bar } = this.props;
     return (
       <View style={Styles.mainContainer}>
         {special &&
@@ -60,7 +65,7 @@ class NoDrinkUpScreen extends Component {
         </View>
         <View style={Styles.footer}>
           {waitingInvite ?
-            <Button clickable={false} theme="disallow" text={`waiting for invite at ${draftBar.name}`} /> :
+            <Button onPress={this.onWaitingBar} theme="disallow" text={`waiting for invite at ${bar.name}`} /> :
             <Button onPress={this.onDraftJoined} text={I18n.t('Bar_StartADrinkUp')} />
           }
         </View>
@@ -79,6 +84,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   startDrinkup: (barId, user) => dispatch(DrinkupActions.startDrinkup(barId, user)),
+  initDrinkupBar: bar => dispatch(DrinkupActions.initDrinkupBar(bar)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(NoDrinkUpScreen);

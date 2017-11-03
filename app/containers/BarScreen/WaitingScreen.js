@@ -23,45 +23,48 @@ class WaitingScreen extends Component {
     };
   }
   componentDidMount() {
-    if (this.props.bar.currentDrinkUp) {
-      this.props.getDrinkup(this.props.bar.currentDrinkUp, this.props.uid);
+    if (this.props.draftBar.currentDrinkUp) {
+      this.props.getDrinkup(this.props.draftBar.currentDrinkUp, this.props.uid);
     }
     if (this.props.joined) {
-      this.props.navigation.navigate('DrinkUpScreen', { barId: this.props.bar.id });
+      this.props.navigation.navigate('DrinkUpScreen', { barId: this.props.draftBar.id });
     }
   }
   componentWillReceiveProps(newProps) {
     if (!this.props.joined && newProps.joined) {
       console.log('Waiting screen navigate DrinkUpScreen');
-      this.props.navigation.navigate('DrinkUpScreen', { barId: this.props.bar.id });
+      this.props.navigation.navigate('DrinkUpScreen', { barId: this.props.draftBar.id });
     }
   }
   componentDidUpdate() {
-    const { bar, users, getDrinkup, uid } = this.props;
-    if (bar && bar.currentDrinkUp && !users) {
-      getDrinkup(bar.currentDrinkUp, uid);
+    const { draftBar, users, getDrinkup, uid } = this.props;
+    if (draftBar && draftBar.currentDrinkUp && !users) {
+      getDrinkup(draftBar.currentDrinkUp, uid);
     }
   }
 
   // this function is only use for demo
   onSendRequestDrinkup = () => {
-    const { user, uid, bar } = this.props;
+    const { user, uid, draftBar } = this.props;
     const currentUser = { ...user, uid };
     if (isProfileComplete(user)) {
-      this.props.sendRequestDrinkup(bar, currentUser);
+      this.props.sendRequestDrinkup(draftBar, currentUser);
     } else {
       this.props.navigation.navigate('CompleteProfileScene', {
-        type: 'Join', bar,
+        type: 'Join', draftBar,
       });
     }
   };
   onCancelRequest = () => {
-    const { user, uid, bar } = this.props;
+    const { user, uid, draftBar } = this.props;
     const currentUser = { ...user, uid };
-    this.props.cancelRequestDrinkup(bar, currentUser);
+    this.props.cancelRequestDrinkup(draftBar, currentUser);
+  };
+  onWaitingBar = () => {
+    this.props.initDrinkupBar(this.props.bar);
   };
   renderButton() {
-    const { draftBar, oldWaitingInvite, fetching, waitingInvite } = this.props;
+    const { oldWaitingInvite, fetching, waitingInvite, bar } = this.props;
     if (waitingInvite) {
       return (
         <View>
@@ -72,7 +75,7 @@ class WaitingScreen extends Component {
     }
     if (oldWaitingInvite) {
       return (
-        <Button clickable={false} theme="disallow" text={`waiting for invite at ${draftBar.name}`} />
+        <Button onPress={this.onWaitingBar} theme="disallow" text={`waiting for invite at ${bar.name}`} />
       );
     }
     if (!fetching) {
@@ -82,7 +85,7 @@ class WaitingScreen extends Component {
     }
   }
   render() {
-    const { bar: { specialId }, users } = this.props;
+    const { draftBar: { specialId }, users } = this.props;
     return (
       <View style={[styles.mainContainer, styles.container]}>
         {specialId &&
@@ -108,6 +111,7 @@ const mapStateToProps = state => ({
 
 // eslint-disable-next-line
 const mapDispatchToProps = dispatch => ({
+  initDrinkupBar: bar => dispatch(DrinkupActions.initDrinkupBar(bar)),
   getDrinkup: (drinkupId, userId) => dispatch(DrinkupActions.drinkupRequest(drinkupId, userId)),
   sendRequestDrinkup: (bar, user) => dispatch(DrinkupActions.sendRequestDrinkup(bar, user)),
   cancelRequestDrinkup: (bar, user) => dispatch(DrinkupActions.cancelRequestDrinkup(bar, user)),

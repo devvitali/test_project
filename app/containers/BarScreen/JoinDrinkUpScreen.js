@@ -35,22 +35,18 @@ class JoinDrinkUp extends Component {
     return null;
   }
   renderScreen() {
-    if (this.props.draftBar) {
-      if (this.props.draftBar.currentDrinkUp) {
-        return (
-          <WaitingScreen
-            navigation={this.props.navigation}
-            oldWaitingInvite={this.props.waitingInvite}
-          />
-        );
+    const { draftBar, bar, waitingInvite, navigation } = this.props;
+    if (draftBar) {
+      if (draftBar.currentDrinkUp) {
+        if (!waitingInvite || bar.id === draftBar.id) {
+          return (
+            <WaitingScreen navigation={navigation} oldWaitingInvite={waitingInvite} />
+          );
+        }
       }
-      const special = this.props.draftBar.specialId;
+      const special = draftBar.specialId;
       return (
-        <NoDrinkUp
-          special={special}
-          navigation={this.props.navigation}
-          waitingInvite={this.props.waitingInvite}
-        />
+        <NoDrinkUp special={special} navigation={navigation} waitingInvite={waitingInvite} />
       );
     }
     return null;
