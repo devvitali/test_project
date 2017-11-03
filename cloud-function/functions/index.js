@@ -8,7 +8,7 @@ exports.sendPush = functions.database.ref('/notification/{notificationId}')
     if (notification) {
       if (notification.type === 'JOIN_DRINKUP_REQUEST') {
         admin.database().ref(`/drinkUps_sand/${notification.drinkupId}`)
-          .once('value', function(drinkupOnce) {
+        .once('value', function(drinkupOnce) {
           const drinkup = drinkupOnce.val();
           const users = drinkup.users;
           console.log('notification', notification, drinkup);
@@ -20,9 +20,21 @@ exports.sendPush = functions.database.ref('/notification/{notificationId}')
           };
           Object.keys(users).forEach((userId) => {
             const fcmToken = users[userId].fcmToken;
-            return admin.messaging().sendToDevice(fcmToken, payload);
+            if (fcmToken && fcmToken.length > 0) {
+              return admin.messaging().sendToDevice(fcmToken, payload);
+            }
           });
         });
+      } else if (notification.type === 'ACCEPT_DRINKUP_REQUEST') {
+          const payload = {
+            notification: {
+              title: `You have been invited to ${notification.barName}`,
+              body: `You have been invited to ${notification.barName}`,
+            }
+          };
+          if (notification.fcmToken && notification.fcmToken.length > 0) {
+            return admin.messaging().sendToDevice(notification.fcmToken, payload);
+          }
       }
     }
   });

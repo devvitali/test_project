@@ -23,7 +23,7 @@ const requestPermission = (...args) => (
         }
 
         Permissions
-          .requestPermission(...args)
+          .check(...args)
           .then((permissionResponse) => {
             console.log({
               name: 'PermissionResponse',

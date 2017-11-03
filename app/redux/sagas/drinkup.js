@@ -6,6 +6,7 @@ import DrinkupActions from '../drinkup';
 import { Bar, DrinkUp, Notification } from '../../firebase/models';
 
 const DRINKUP_USER_PROPERTIES = ['photoURL', 'firstName', 'icon', 'message', 'invitedBy', 'messagesRead', 'fcmToken'];
+
 function drinkupSubscribe(Drinkup, key) {
   return eventChannel(emit => Drinkup.subscribe(emit, key));
 }
@@ -64,7 +65,7 @@ export function* leaveDrinkUp({ bar, user }) {
       users = {};
       yield call([Bar, Bar.update], bar.id, { currentDrinkUp: null });
     }
-    leavedUsers[user.uid] = user;
+    leavedUsers[user.uid] = '';
     yield call([DrinkUp, DrinkUp.update], bar.currentDrinkUp, { users, leavedUsers, active });
     yield put(DrinkupActions.leaveDrinkupSuccessful());
     yield call([DrinkUp, DrinkUp.unsubscribe], bar.currentDrinkUp);
@@ -110,7 +111,14 @@ export function* sendDrinkupInvitation({ bar, user }) {
     const users = drinkup.users ? { ...drinkup.users } : {};
     users[user.uid] = pick(user, DRINKUP_USER_PROPERTIES);
     yield call([DrinkUp, DrinkUp.update], bar.currentDrinkUp, { waitingUsers, users });
+    const notification = {
+      type: 'ACCEPT_DRINKUP_REQUEST',
+      barName: bar.name,
+      fcmToken: user.fcmToken,
+    };
+    yield call([Notification, Notification.push], notification);
     yield put(DrinkupActions.sendDrinkupInvitationSucessful(users, waitingUsers));
+
   } catch (err) {
     yield put(DrinkupActions.sendDrinkupInvitationFailure(err));
   }

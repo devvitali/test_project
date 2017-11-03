@@ -17,14 +17,15 @@ const requestLocationPermission = (props) => {
     })
     .catch((e) => {
       console.log('requestLocationPermission err', e);
-      Alert.alert(
-        'Location data permissions',
-        'Your device does not support location services.',
-        [
-          { text: 'Cancel', style: 'cancel' },
-          { text: 'Continue', onPress: () => props.navigation.navigate('OnBoardingStep4') },
-        ]
-      );
+      props.navigation.navigate('OnBoardingStep4');
+      // Alert.alert(
+      //   'Location data permissions',
+      //   'Your device does not support location services.',
+      //   [
+      //     { text: 'Cancel', style: 'cancel' },
+      //     { text: 'Continue', onPress: () => props.navigation.navigate('OnBoardingStep4') },
+      //   ]
+      // );
     });
 };
 
