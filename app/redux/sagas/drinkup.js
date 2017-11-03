@@ -115,6 +115,7 @@ export function* sendDrinkupInvitation({ bar, user }) {
       type: 'ACCEPT_DRINKUP_REQUEST',
       barName: bar.name,
       fcmToken: user.fcmToken,
+      message: user.message,
     };
     yield call([Notification, Notification.push], notification);
     yield put(DrinkupActions.sendDrinkupInvitationSucessful(users, waitingUsers));

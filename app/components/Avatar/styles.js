@@ -13,6 +13,10 @@ export default StyleSheet.create({
   iconContainer: {
     backgroundColor: Colors.brand.black,
   },
+  list: {
+    flexDirection: 'row',
+    flexWrap: 'wrap'
+  },
   name: {
     textAlign: 'center',
     color: Colors.snow,

@@ -3,3 +3,5 @@ code-push release-react ALKO ios
 
 production: 'VZEssjiXyw3pa4Tcy00ZD8W8Y-Hda065dcdc-8b6a-4077-8542-8057ac867034'
 staging: 'ecA7zEEfwrP58tqFAG0eAWa78KPRa065dcdc-8b6a-4077-8542-8057ac867034'
+
+ firebase deploy --only functions

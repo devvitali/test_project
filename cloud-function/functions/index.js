@@ -29,7 +29,7 @@ exports.sendPush = functions.database.ref('/notification/{notificationId}')
           const payload = {
             notification: {
               title: `You have been invited to ${notification.barName}`,
-              body: `You have been invited to ${notification.barName}`,
+              body: notification.message,
             }
           };
           if (notification.fcmToken && notification.fcmToken.length > 0) {
