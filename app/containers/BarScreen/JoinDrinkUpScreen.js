@@ -55,13 +55,7 @@ class JoinDrinkUp extends Component {
   renderDirectionDialog() {
     return (
       <DirectionDialog
-        bar={{
-          name: 'Bohemian Biergarten',
-          address: {
-            city: 'Boulder',
-            state: 'CO',
-          },
-        }}
+        bar={this.props.draftBar}
         onClose={this.onCloseDirectionDialog}
         onGoogleMapsPress={this.onCloseDirectionDialog}
         onAppleMapsPress={this.onCloseDirectionDialog}

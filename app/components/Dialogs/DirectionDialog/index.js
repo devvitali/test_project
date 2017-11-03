@@ -23,14 +23,14 @@ export default class DirectionsDialogWrapper extends Component {
 
   getGoogleMapsURL() {
     const { bar } = this.props;
-    const { address: { city, state } } = bar;
-    return `comgooglemaps://?q=${bar.name}, ${city} ${state}`;
+    const { address, name } = bar;
+    return `comgooglemaps://?q=${name}&center=${address.latitude},${address.longitude}`;
   }
 
   getAppleMapsURL() {
     const { bar } = this.props;
-    const { address: { city, state } } = bar;
-    return `http://maps.apple.com/?q=${bar.name}, ${city} ${state}`;
+    const { address, name } = bar;
+    return `http://maps.apple.com/?q=${name}&ll=${address.latitude},${address.longitude}`;
   }
 
   checkForGoogleMaps = () => {
