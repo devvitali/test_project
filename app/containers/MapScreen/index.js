@@ -133,6 +133,7 @@ class MapScreen extends Component {
       return (
         <View style={styles.bannerContainer}>
           <Banner
+            showGradient
             theme="alert"
             text={eventContent.metadata.header}
             iconFamily="alko"

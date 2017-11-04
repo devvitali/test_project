@@ -25,20 +25,29 @@ function getIconFamilyComponent(iconFamily) {
   }
   return Icon;
 }
+const renderButtonContent = (Icon, text, textStyle, iconColor, iconSize, iconName) => (
+  <View style={styles.body}>
+    <Icon style={styles.icon} name={iconName} size={iconSize} color={iconColor} />
+    <Text style={[styles.bodyText, textStyle]}>{text}</Text>
+  </View>
+);
+
 const Banner = (props) => {
   const theme = BannerTheme[props.theme];
   const {
-    style, gradientColors, onPress, textStyle, iconColor, iconSize, iconName,
+    style, gradientColors, onPress, showGradient, textStyle, iconColor, iconSize, iconName
   } = applyComponentTheme(theme, props);
   const Icon = getIconFamilyComponent(props.iconFamily);
   return (
     <TouchableOpacity activeOpacity={0.7} onPress={onPress}>
-      <LinearGradient colors={gradientColors} style={[styles.btn, style]}>
-        <View style={styles.body}>
-          <Icon style={styles.icon} name={iconName} size={iconSize} color={iconColor} />
-          <Text style={[styles.bodyText, textStyle]}>{props.text}</Text>
+      {showGradient ?
+        <LinearGradient colors={gradientColors} style={[styles.btn, style]}>
+          {renderButtonContent(Icon, props.text, textStyle, iconColor, iconSize, iconName)}
+        </LinearGradient> :
+        <View style={[styles.btn, style, { backgroundColor: '#FFB900' }]}>
+          {renderButtonContent(Icon, props.text, textStyle, iconColor, iconSize, iconName)}
         </View>
-      </LinearGradient>
+      }
     </TouchableOpacity>
   );
 };
