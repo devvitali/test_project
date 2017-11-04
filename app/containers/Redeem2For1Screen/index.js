@@ -71,8 +71,8 @@ export default class Redeem2For1Screen extends Component {
           </ScrollView>
           <View styles={styles.footer}>
             <Button
-              onPress={() => { /* NavigationActions.pop() */ }}
-              theme={'disallow'}
+              onPress={() => this.props.navigation.goBack()}
+              theme={'primary'}
               text={I18n.t('close')}
               style={styles.closeButton}
             />
