@@ -2,6 +2,7 @@ import React from 'react';
 import { View, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import { DrinkupActions } from '../../redux';
+import { BarImages } from '../BarScreen/BarImages';
 import AppContainer from '../AppContainer';
 import { NavItems, MarkDown, parseFile, Button } from '../../components';
 import styles from './styles';
@@ -14,6 +15,11 @@ class SponsoredScreen extends React.Component {
   };
   render() {
     const { event } = this.props.navigation.state.params;
+    const images = [
+      'https://alkoapp.com/cdn/bars/bohemian-biergarten/one.jpg',
+      'https://alkoapp.com/cdn/bars/bohemian-biergarten/two.jpg',
+      'https://alkoapp.com/cdn/bars/bohemian-biergarten/three.jpg'
+    ]
     if (event) {
       const eventContent = parseFile(event.content);
       return (
@@ -21,6 +27,7 @@ class SponsoredScreen extends React.Component {
           title={eventContent.metadata.title}
           renderLeftButton={NavItems.backButton(this.props.navigation)}
         >
+          <BarImages images={images} />
           <View style={styles.mainContainer}>
             <ScrollView>
               <MarkDown content={eventContent.content} style={styles} />

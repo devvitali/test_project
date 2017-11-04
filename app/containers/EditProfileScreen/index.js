@@ -51,7 +51,6 @@ class EditProfileScreen extends Component {
     const { firstName, showPicDialog } = this.state;
     const source = user.photoURL ? { uri: user.photoURL } : avatar;
     const opacity = fetching ? 0.3 : 1.0;
-    console.log('this.props.navigation.state', this.props.navigation.state);
     return (
       <AppContainer
         title={routeName !== 'CompleteProfileScene' ? 'Edit Profile' : 'Complete Profile'}
