@@ -3,6 +3,7 @@ import { Image, Text, TextInput, TouchableOpacity, View, Keyboard, ActivityIndic
 import I18n from 'react-native-i18n';
 import { debounce, map } from 'lodash';
 import { connect } from 'react-redux';
+import { CachedImage } from 'react-native-cached-image';
 import AppContainer from '../AppContainer';
 import { DrinkupActions, AuthActions } from '../../redux';
 import { Button, PicPhotoSourceDialog, NavItems } from '../../components';
@@ -60,7 +61,7 @@ class EditProfileScreen extends Component {
           <View style={Styles.formContainer}>
             <View style={Styles.selectPhotoContainer}>
               <TouchableOpacity activeOpacity={0.7} onPress={this.doShowPicDialog}>
-                <Image source={source} style={[Styles.photo, { opacity }]} />
+                <CachedImage source={source} style={[Styles.photo, { opacity }]} />
                 <View style={Styles.photoContainer}>
                   <ActivityIndicator size="large" animating={fetching} />
                 </View>
