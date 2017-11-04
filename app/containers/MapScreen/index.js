@@ -21,8 +21,8 @@ import mapStyle from './mapStyle';
 const googleAPI = Platform.OS === 'android' ? require('react-native-google-api-availability-bridge') : null;
 
 const boulderPosition = {
-  latitude: 39.984,
-  longitude: -105.249,
+  latitude: 43.69642438,
+  longitude: 7.2753846,
 };
 class MapScreen extends Component {
   constructor(props) {
@@ -249,7 +249,7 @@ class MapScreen extends Component {
 const location$ = state => state.location;
 const drinkupBar$ = state => state.drinkup;
 const selector = createSelector(location$, drinkupBar$, (location, drinkup) => {
-  // location.coords = boulderPosition;
+  location.coords = boulderPosition;
   let region = { ...boulderPosition, longitudeDelta: 0.02, latitudeDelta: 0.01 };
   if (location.coords) {
     region = { ...location.coords, longitudeDelta: 0.02, latitudeDelta: 0.01 };

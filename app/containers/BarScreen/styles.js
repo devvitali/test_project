@@ -10,11 +10,16 @@ export default StyleSheet.create({
     padding: Metrics.doubleBaseMargin,
     paddingTop: 0,
   },
-
+  bannerContainer: {
+    position: 'absolute',
+    top: Metrics.doubleBaseMargin,
+    left: Metrics.doubleBaseMargin,
+    right: Metrics.doubleBaseMargin,
+    alignItems: 'center',
+  },
   contentContainer: {
     flex: 1,
   },
-
   banner: {
     margin: Metrics.doubleBaseMargin,
   },

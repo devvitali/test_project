@@ -3,6 +3,7 @@ import { Text, View } from 'react-native';
 import I18n from 'react-native-i18n';
 import { connect } from 'react-redux';
 import { Button, Banner } from '../../components';
+import { BarImages } from './BarImages';
 import { DrinkupActions } from '../../redux';
 import { isProfileComplete } from '../../utils/auth';
 import Styles from './styles';
@@ -43,13 +44,11 @@ class NoDrinkUpScreen extends Component {
     const { special, waitingInvite, bar } = this.props;
     return (
       <View style={Styles.mainContainer}>
+        <BarImages images={bar.images} />
         {special &&
-        <Banner
-          theme="info"
-          text={I18n.t('Bar_StartADrinkUpForSpecial')}
-          style={Styles.banner}
-          onPress={this.onDraftJoined}
-        />
+        <View style={Styles.bannerContainer}>
+          <Banner theme="info" text={I18n.t('Drinkup_JoinDrinkUpAndGet2For1Drinks')} onPress={this.onWaiting} />
+        </View>
         }
         <View style={Styles.contentContainer}>
           <View style={Styles.section}>

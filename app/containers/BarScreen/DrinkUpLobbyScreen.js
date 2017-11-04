@@ -13,6 +13,7 @@ import {
   AvatarList,
   CheersDialog,
 } from '../../components';
+import { BarImages } from './BarImages';
 import { DrinkupActions } from '../../redux';
 import styles from './styles';
 
@@ -152,21 +153,26 @@ class DrinkupLobbyScreen extends React.Component {
       special = bar.specialId;
     }
     return (
-      <View style={[styles.mainContainer, styles.container]}>
+      <View style={[styles.mainContainer]}>
+        <BarImages images={bar.images} />
         {special &&
+        <View style={styles.bannerContainer}>
           <Banner
             onPress={this.onRedeem}
             theme="info"
             text={I18n.t('Drinkup_ClickToGet2For1ALKOSpecial')}
           />
+        </View>
         }
-        <AvatarList users={users} />
-        <Button onPress={this.onLeave} theme="disallow" text={I18n.t('Drinkup_LeaveTheDrinkUp')} />
-        {this.renderMessageDialog()}
-        {this.renderRequestToJoinDialog()}
-        {this.renderRedeemWarningDialog()}
-        {this.renderComposeMessageDialog()}
-        {this.renderCheerDialog()}
+        <View style={styles.container}>
+          <AvatarList users={users} />
+          <Button onPress={this.onLeave} theme="disallow" text={I18n.t('Drinkup_LeaveTheDrinkUp')} />
+          {this.renderMessageDialog()}
+          {this.renderRequestToJoinDialog()}
+          {this.renderRedeemWarningDialog()}
+          {this.renderComposeMessageDialog()}
+          {this.renderCheerDialog()}
+        </View>
       </View>
     );
   }

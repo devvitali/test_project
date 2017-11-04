@@ -33,6 +33,7 @@
 		"react-native-maps": "0.17.1",
 		"react-native-permissions": "1.0.1",
 		"react-native-push-notification": "3.0.1",
+		"react-native-swiper": "^1.5.13",
 		"react-native-vector-icons": "4.4.0",
 		"react-navigation": "1.0.0-beta.15",
 		"react-redux": "5.0.6",

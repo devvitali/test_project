@@ -24,6 +24,7 @@ class JoinDrinkUp extends Component {
   }
   componentDidMount() {
     this.barSubscribeModel.subscribe(() => {}, this.props.draftBar.id);
+    console.log('bar name', this.props.draftBar.name);
   }
   componentWillUnmount() {
     this.barSubscribeModel.unsubscribe(this.props.draftBar.id);

@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { View, Text } from 'react-native';
 import I18n from 'react-native-i18n';
 import { connect } from 'react-redux';
-import * as Animation from 'react-native-animatable';
 import { Button, Banner, AvatarList } from '../../components';
+import { BarImages } from './BarImages';
 import { isProfileComplete } from '../../utils/auth';
 import { DrinkupActions } from '../../redux';
 import { requestingMember } from '../../fixture/drinkupMembers';
@@ -85,14 +85,19 @@ class WaitingScreen extends Component {
     }
   }
   render() {
-    const { draftBar: { specialId }, users } = this.props;
+    const { draftBar: { specialId, images }, users } = this.props;
     return (
-      <View style={[styles.mainContainer, styles.container]}>
+      <View style={[styles.mainContainer]}>
+        <BarImages images={images} />
         {specialId &&
-        <Banner theme="info" text={I18n.t('Drinkup_JoinDrinkUpAndGet2For1Drinks')} onPress={this.onWaiting} />
+        <View style={styles.bannerContainer}>
+          <Banner theme="info" text={I18n.t('Drinkup_JoinDrinkUpAndGet2For1Drinks')} onPress={this.onWaiting} />
+        </View>
         }
-        <AvatarList users={users} iconOnly />
-        {this.renderButton()}
+        <View style={styles.container}>
+          <AvatarList users={users} iconOnly />
+          {this.renderButton()}
+        </View>
       </View>
     );
   }
