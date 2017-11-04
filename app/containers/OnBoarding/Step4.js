@@ -43,7 +43,7 @@ class OnboardingPushNotifications extends Component {
           important: true,
         });
 
-        this.props.actions.updateProfile({ fcm_token: token });
+        this.props.actions.updateProfile({ fcmToken: token });
         this.doCompleteProfile();
       })
       .catch((e) => {
