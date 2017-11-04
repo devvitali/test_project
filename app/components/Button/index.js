@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity, Text, View } from 'react-native';
+import { TouchableOpacity, Text, View, ActivityIndicator } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
 import { applyComponentTheme } from '../../utils/common';
@@ -9,7 +9,7 @@ import ButtonTheme from './theme';
 const Button = (props) => {
   const theme = ButtonTheme[props.theme];
   const {
-    style, gradient, gradientColors, disabled, disabledStyle, onPress, textStyle, clickable = true,
+    style, gradient, gradientColors, disabled, disabledStyle, onPress, textStyle, clickable = true, showIndicator
   } = applyComponentTheme(theme, props);
   const ButtonView = gradient ? LinearGradient : View;
   const ButtonProps = {
@@ -25,6 +25,7 @@ const Button = (props) => {
   return (
     <TouchableOpacity activeOpacity={clickable ? 0.7 : 1} {...ButtonProps}>
       <ButtonView {...ButtonViewProps}>
+        {showIndicator && <ActivityIndicator size="small" animating style={styles.indicator} />}
         <Text style={[styles.btnText, textStyle]}>{props.text.toUpperCase()}</Text>
       </ButtonView>
     </TouchableOpacity>

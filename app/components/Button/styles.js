@@ -1,9 +1,10 @@
 // @flow
 import { StyleSheet } from 'react-native';
-import { Colors, Fonts } from '../../themes';
+import { Colors, Fonts, Metrics } from '../../themes';
 
 export default StyleSheet.create({
   btn: {
+    flexDirection: 'row',
     height: 40,
     alignItems: 'center',
     justifyContent: 'center',
@@ -35,4 +36,7 @@ export default StyleSheet.create({
     color: '#707070',
     textShadowColor: 'rgb(50,50,50)',
   },
+  indicator: {
+    marginRight: Metrics.baseMargin,
+  }
 });

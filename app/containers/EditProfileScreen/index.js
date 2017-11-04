@@ -110,10 +110,9 @@ class EditProfileScreen extends Component {
             {routeName === 'CompleteProfileScene' &&
             <View style={Styles.footer}>
               <Button
-                theme={fetching ? 'disallow' : 'primary'}
+                showIndicator={fetching}
+                theme={!isProfileComplete ? 'disallow' : 'primary'}
                 clickable={isProfileComplete}
-                disabledStyle={{ opacity: 0.5 }}
-                disabled={fetching}
                 text="Save profile"
                 onPress={this.completeProfile}
               />
