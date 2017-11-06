@@ -65,7 +65,11 @@ class NoDrinkUpScreen extends Component {
         <View style={Styles.footer}>
           {waitingInvite ?
             <Button onPress={this.onWaitingBar} theme="disallow" text={`waiting for invite at ${bar.name}`} /> :
-            <Button onPress={this.onDraftJoined} text={I18n.t('Bar_StartADrinkUp')} />
+            <Button
+              onPress={this.onDraftJoined}
+              text={I18n.t('Bar_StartADrinkUp')}
+              showIndicator={this.props.fetching}
+            />
           }
         </View>
       </View>
@@ -79,6 +83,7 @@ const mapStateToProps = state => ({
   draftBar: state.drinkup.draftBar,
   user: state.auth.profile,
   uid: state.auth.uid,
+  fetching: state.drinkup.fetching,
 });
 
 const mapDispatchToProps = dispatch => ({

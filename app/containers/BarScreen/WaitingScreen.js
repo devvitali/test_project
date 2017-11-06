@@ -68,7 +68,12 @@ class WaitingScreen extends Component {
     if (waitingInvite) {
       return (
         <View>
-          <Button theme={'disallow'} onPress={this.onCancelRequest} text={I18n.t('Drinkup_CancelRequest')} />
+          <Button
+            showIndicator={this.props.fetching}
+            theme={'disallow'}
+            onPress={this.onCancelRequest}
+            text={I18n.t('Drinkup_CancelRequest')}
+          />
           <Text style={styles.waitingInviteText}>{I18n.t('Drinkup_WaitingInvite')}</Text>
         </View>
       );
@@ -80,7 +85,11 @@ class WaitingScreen extends Component {
     }
     if (!fetching) {
       return (
-        <Button onPress={this.onSendRequestDrinkup} text={I18n.t('Drinkup_JoinDrinkUp')} />
+        <Button
+          showIndicator={this.props.fetching}
+          onPress={this.onSendRequestDrinkup}
+          text={I18n.t('Drinkup_JoinDrinkUp')}
+        />
       );
     }
   }

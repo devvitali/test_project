@@ -60,7 +60,7 @@ const initDrinkupBar = (state, { bar }) => {
       draftBar: bar,
     });
   }
-  return { ...state, bar, draftBar: bar };
+  return { ...state, bar, draftBar: bar, fetching: false, };
 };
 const updateDraftBar = (state, { bar }) => {
   let oldBar = { ...state.bar };
@@ -71,7 +71,7 @@ const updateDraftBar = (state, { bar }) => {
   if (draftBar.id === bar.id) {
     draftBar = { ...bar, address: draftBar.address };
   }
-  return { ...state, draftBar, bar: oldBar };
+  return { ...state, draftBar, bar: oldBar, fetching: false };
 };
 const barRequestSuccessful = (state, { bar }) => ({
   ...state,
@@ -132,8 +132,8 @@ const drinkupRequestFailure = (state, { error }) => ({
   error,
 });
 
-const sendRequestDrinkupSuccessful = state => ({ ...state, waitingInvite: true });
-const cancelRequestDrinkupSuccessful = state => ({ ...state, waitingInvite: false, users: null, waitingUsers: null });
+const sendRequestDrinkupSuccessful = state => ({ ...state, waitingInvite: true, fetching: false });
+const cancelRequestDrinkupSuccessful = state => ({ ...state, waitingInvite: false, users: null, waitingUsers: null, fetching: false });
 const leaveDrinkupSuccessful = (state, { active }) => {
   const draftBar = { ...state.draftBar };
   const bar = { ...state.bar };
@@ -144,7 +144,7 @@ const leaveDrinkupSuccessful = (state, { active }) => {
     ...state,
     waitingInvite: false,
     joined: false,
-    fetch: false,
+    fetching: false,
     users: null,
     waitingUsers: null,
     draftBar,
@@ -154,9 +154,10 @@ const leaveDrinkupSuccessful = (state, { active }) => {
 const sendDrinkupInvitationSucessful = (state, { users, waitingUsers }) => ({
   ...state,
   users,
+  fetching: false,
   waitingUsers,
 });
-const clearDrinkupUsers = state => ({ ...state, users: null });
+const clearDrinkupUsers = state => ({ ...state, users: null, fetching: false });
 const clearDrinkupData = () => defaultState;
 
 /* ------------- Hookup Reducers To Types ------------- */

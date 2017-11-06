@@ -22,10 +22,11 @@ const Button = (props) => {
   if (gradient) {
     ButtonViewProps.colors = gradientColors;
   }
+  const indicatorColor = props.theme === 'primary' ? '#FFF' : '#888';
   return (
     <TouchableOpacity activeOpacity={clickable ? 0.7 : 1} {...ButtonProps}>
       <ButtonView {...ButtonViewProps}>
-        {showIndicator && <ActivityIndicator size="small" animating style={styles.indicator} />}
+        {showIndicator && <ActivityIndicator size="small" animating style={styles.indicator} color={indicatorColor} />}
         <Text style={[styles.btnText, textStyle]}>{props.text.toUpperCase()}</Text>
       </ButtonView>
     </TouchableOpacity>

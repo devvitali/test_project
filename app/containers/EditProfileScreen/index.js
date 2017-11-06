@@ -178,7 +178,7 @@ class EditProfileScreen extends Component {
 }
 
 const mapStateToProps = state => ({
-  fetching: state.auth.fetching,
+  fetching: state.auth.fetching || state.drinkup.fetching,
   user: state.auth.profile,
   uid: state.auth.uid,
 });

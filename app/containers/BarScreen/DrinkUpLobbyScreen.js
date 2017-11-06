@@ -152,7 +152,12 @@ class DrinkupLobbyScreen extends React.Component {
         }
         <View style={styles.container}>
           <AvatarList users={users} />
-          <Button onPress={this.onLeave} theme="disallow" text={I18n.t('Drinkup_LeaveTheDrinkUp')} />
+          <Button
+            showIndicator={this.props.fetching}
+            onPress={this.onLeave}
+            theme="disallow"
+            text={I18n.t('Drinkup_LeaveTheDrinkUp')}
+          />
           {this.renderRequestToJoinDialog()}
           {this.renderRedeemWarningDialog()}
           {this.renderComposeMessageDialog()}
@@ -165,6 +170,7 @@ class DrinkupLobbyScreen extends React.Component {
 
 const mapStateToProps = state => ({
   bar: state.drinkup.bar,
+  fetching: state.drinkup.fetching,
   users: state.drinkup.users,
   waitingUsers: state.drinkup.waitingUsers,
   user: state.auth.profile,
