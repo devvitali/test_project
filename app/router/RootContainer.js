@@ -38,7 +38,7 @@ class RootContainer extends Component {
           backgroundColor={Colors.brand.dark}
           barStyle="light-content"
         />
-        <AppNavigator />
+        <AppNavigator ref={ref => this.refNavigation = ref} />
       </View>
     );
   }

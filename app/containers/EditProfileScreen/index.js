@@ -92,6 +92,7 @@ class EditProfileScreen extends Component {
     const opacity = imageUploading ? 0.3 : 1.0;
     return (
       <AppContainer
+        navigation={this.props.navigation}
         title={routeName !== 'CompleteProfileScene' ? 'Edit Profile' : 'Complete Profile'}
         renderLeftButton={routeName !== 'CompleteProfileScene' ? NavItems.hamburgerButton(navigation) : NavItems.backButton(navigation)}
       >

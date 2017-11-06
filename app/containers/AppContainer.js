@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { View, StyleSheet } from 'react-native';
+import FCM, { FCMEvent } from 'react-native-fcm';
 import { Colors } from '../themes';
 import NavigationBar from '../components/NavigationBar';
 
@@ -20,11 +21,26 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
-export default props => (
-  <View style={styles.container}>
-    {!props.hideNavBar && <NavigationBar {...props} />}
-    <View style={styles.viewContainer}>
-      {props.children}
-    </View>
-  </View>
-);
+export default class AppContainer extends Component {
+  componentDidMount() {
+    this.messageListener = FCM.on(FCMEvent.Notification, async (message) => {
+      if (this.props.navigation) {
+        this.props.navigation.navigate('DrinkUpScreen');
+      }
+    });
+  }
+  componentWillUnmount() {
+    console.log('componentWillUnmount');
+    this.messageListener.remove();
+  }
+  render() {
+    return (
+      <View style={styles.container}>
+        {!this.props.hideNavBar && <NavigationBar {...this.props} />}
+        <View style={styles.viewContainer}>
+          {this.props.children}
+        </View>
+      </View>
+    )
+  }
+}

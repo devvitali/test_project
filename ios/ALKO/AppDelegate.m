@@ -15,6 +15,7 @@
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 #import <CodePush/CodePush.h>
+#import "RNFIRMessaging.h"
 @implementation AppDelegate
 NSString *const kGCMMessageIDKey = @"gcm.message_id";
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -64,7 +65,6 @@ NSString *const kGCMMessageIDKey = @"gcm.message_id";
   if (userInfo[kGCMMessageIDKey]) {
     NSLog(@"Message ID: %@", userInfo[kGCMMessageIDKey]);
   }
-  
   // Print full message.
   NSLog(@"%@", userInfo);
 }
@@ -86,6 +86,7 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
   // Print full message.
   NSLog(@"%@", userInfo);
   
+  [RNFIRMessaging didReceiveRemoteNotification:userInfo fetchCompletionHandler:completionHandler];
   completionHandler(UIBackgroundFetchResultNewData);
 }
 
