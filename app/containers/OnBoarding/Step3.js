@@ -3,30 +3,10 @@ import { View, Text, ScrollView, Alert } from 'react-native';
 import I18n from 'react-native-i18n';
 import styles from './styles';
 import { Button } from '../../components';
-import { locationPermission } from '../../utils/permissionUtils';
 
 const requestLocationPermission = (props) => {
-  locationPermission()
-    .then(() => {
-      console.log({
-        name: 'LocationPermissionAccepted',
-        value: {},
-        important: true,
-      });
-      props.navigation.navigate('OnBoardingStep4');
-    })
-    .catch((e) => {
-      console.log('requestLocationPermission err', e);
-      props.navigation.navigate('OnBoardingStep4');
-      // Alert.alert(
-      //   'Location data permissions',
-      //   'Your device does not support location services.',
-      //   [
-      //     { text: 'Cancel', style: 'cancel' },
-      //     { text: 'Continue', onPress: () => props.navigation.navigate('OnBoardingStep4') },
-      //   ]
-      // );
-    });
+  navigator.geolocation.requestAuthorization();
+  props.navigation.navigate('OnBoardingStep4');
 };
 
 export default props => (

@@ -42,18 +42,17 @@ class OnboardingPushNotifications extends Component {
             Tilde vaporware meditation mlkshk subway tile, poutine cred 3 wolf moon four dollar toast yuccie vegan.
           </Text>
         </View>
-        <View>
+        <View style={styles.firstButton}>
           <Button
             text={I18n.t('Introduction_step4_disallow')}
-            theme="disallow"
+            theme={"disallow"}
             onPress={this.doCompleteProfile}
-            style={styles.firstButton}
-          />
-          <Button
-            text={I18n.t('Introduction_step4_btn')}
-            onPress={this.doNotificationPermissionRequest}
           />
         </View>
+        <Button
+          text={I18n.t('Introduction_step4_btn')}
+          onPress={this.doNotificationPermissionRequest}
+        />
 
       </View>
     );
