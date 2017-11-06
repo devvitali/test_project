@@ -5,10 +5,10 @@ import { debounce, map } from 'lodash';
 import { connect } from 'react-redux';
 import { CachedImage } from 'react-native-cached-image';
 import AppContainer from '../AppContainer';
+import { firebaseStorage } from '../../firebase';
 import { DrinkupActions, AuthActions } from '../../redux';
 import { Button, PicPhotoSourceDialog, NavItems } from '../../components';
 import { openPicker } from '../../utils/photoUtils';
-import { isProfileComplete } from '../../utils/auth';
 import { Colors, DrinkIcons } from '../../themes';
 import Styles from './styles';
 
@@ -20,23 +20,63 @@ class EditProfileScreen extends Component {
     super(props);
     this.state = {
       firstName: props.user.firstName,
+      image: props.user.photoURL ? { uri: props.user.photoURL } : avatar,
+      icon: props.user.icon,
       showPicDialog: false,
+      photoURL: props.user.photoURL,
+      imageUploading: false,
     };
+    this.state.isProfileComplete = this.checkProfileStatus(this.state.icon, this.state.firstName, this.state.photoURL);
   }
-
-  onFirstNameChange = e => this.setState({ firstName: e.nativeEvent.text });
-  onSelectIcon = icon => this.props.updateProfile({ icon });
+  checkProfileStatus(icon, firstName, photoURL) {
+    if (!firstName || firstName.length === 0) {
+      return false;
+    }
+    if (!icon || !photoURL) {
+      return false;
+    }
+    return true;
+  }
+  onFirstNameChange = e => {
+    const isProfileComplete = this.checkProfileStatus(this.state.icon, e.nativeEvent.text, this.state.photoURL);
+    this.setState({ firstName: e.nativeEvent.text, isProfileComplete });
+  };
+  onSelectIcon = icon => {
+    const isProfileComplete = this.checkProfileStatus(icon, this.state.firstName, this.state.photoURL);
+    this.setState({ icon, isProfileComplete });
+  };
+  onImageSelected = async (photo) => {
+    this.setState({ image: { uri: photo.path }, imageUploading: true, isProfileComplete : false });
+    let photoURL = '';
+    try {
+      const filename = photo.path.replace(/^.*[\\/]/, '');
+      const storageRef = firebaseStorage.ref(`photos/${this.props.uid}/${filename}`);
+      const storageOpts = { contentType: 'image/jpeg', contentEncoding: 'base64' };
+      const res = await storageRef.put(photo.path, storageOpts);
+      photoURL = res.downloadURL;
+    } catch (err) {
+      console.log('err', err);
+    }
+    const isProfileComplete = this.checkProfileStatus(this.state.icon, this.state.firstName, photoURL);
+    this.setState({ photoURL, imageUploading: false, isProfileComplete });
+  };
   doShowPicDialog = () =>
     openPicker({ width: 512, height: 512, cropping: true })
-      .then(this.props.uploadProfilePhoto)
-      .catch(this.isNotLoading);
-  saveProfile = () => this.props.updateProfile({ firstName: this.state.firstName });
-  saveProfileDelayed = debounce(this.saveProfile, 1000);
-  completeProfile = () => {
+      .then(this.onImageSelected);
+  saveProfile = () => {
+    const { icon, firstName, photoURL } = this.state;
+    const { routeName } = this.props.navigation.state;
+    this.props.updateProfile({ firstName, icon, photoURL });
     Keyboard.dismiss();
+    if (routeName === 'CompleteProfileScene') {
+      this.completeProfile();
+    }
+  };
+  completeProfile = () => {
     const { user, uid, navigation } = this.props;
+    const { icon, firstName, photoURL } = this.state;
     const { params } = navigation.state;
-    const currentUser = { ...user, uid };
+    const currentUser = { ...user, uid, icon, firstName, photoURL };
     if (params.type === 'Join') {
       this.props.sendRequestDrinkup(params.bar, currentUser);
       navigation.goBack();
@@ -46,11 +86,10 @@ class EditProfileScreen extends Component {
   };
 
   render() {
-    const { user, isProfileComplete, fetching, navigation } = this.props;
+    const { navigation, fetching } = this.props;
     const { routeName } = this.props.navigation.state;
-    const { firstName, showPicDialog } = this.state;
-    const source = user.photoURL ? { uri: user.photoURL } : avatar;
-    const opacity = fetching ? 0.3 : 1.0;
+    const { firstName, showPicDialog, isProfileComplete, imageUploading } = this.state;
+    const opacity = imageUploading ? 0.3 : 1.0;
     return (
       <AppContainer
         title={routeName !== 'CompleteProfileScene' ? 'Edit Profile' : 'Complete Profile'}
@@ -61,10 +100,10 @@ class EditProfileScreen extends Component {
             <View style={Styles.selectPhotoContainer}>
               <TouchableOpacity activeOpacity={0.7} onPress={this.doShowPicDialog}>
                 <View style={[Styles.photoContainer, { opacity }]}>
-                  <CachedImage source={source} style={Styles.photo} />
+                  <CachedImage source={this.state.image} style={Styles.photo} />
                 </View>
                 <View style={Styles.waitingContainer}>
-                  <ActivityIndicator size="large" animating={fetching} />
+                  <ActivityIndicator size="large" animating={imageUploading} />
                 </View>
               </TouchableOpacity>
               <TouchableOpacity activeOpacity={0.7} onPress={this.doChoosePhoto}>
@@ -81,7 +120,6 @@ class EditProfileScreen extends Component {
                 returnKeyType="done"
                 onSubmitEditing={() => Keyboard.dismiss()}
                 onChange={this.onFirstNameChange}
-                onChangeText={this.saveProfileDelayed}
                 underlineColorAndroid={Colors.transparent}
                 selectionColor={Colors.brand.clear.orange}
               />
@@ -95,7 +133,7 @@ class EditProfileScreen extends Component {
                 <TouchableOpacity
                   key={icon}
                   activeOpacity={0.7}
-                  onPress={this.onSelectIcon.bind(null, icon)}
+                  onPress={() => this.onSelectIcon(icon)}
                   style={Styles.iconButton}
                 >
                   <Image
@@ -103,24 +141,22 @@ class EditProfileScreen extends Component {
                     style={[Styles.drinkIcon, {
                       width: 64,
                       height: 64,
-                      opacity: icon === user.icon ? 1.0 : 0.4,
+                      opacity: icon === this.state.icon ? 1.0 : 0.4,
                     }]}
                   />
                 </TouchableOpacity>
               ))}
             </View>
-            {routeName === 'CompleteProfileScene' &&
             <View style={Styles.footer}>
               <Button
                 showIndicator={fetching}
                 theme={!isProfileComplete ? 'disallow' : 'primary'}
                 clickable={isProfileComplete}
                 text="Save profile"
-                onPress={this.completeProfile}
+                onPress={this.saveProfile}
               />
             </View>
-            }
-            {(routeName === 'EditProfileScreen' && !isProfileComplete) &&
+            {(routeName !== 'EditProfileScreen' && !isProfileComplete) &&
             <View style={Styles.footer}>
               <Text style={Styles.incompleteProfileText}>{I18n.t('Profile_IncompleteWarning')}</Text>
             </View>
@@ -144,7 +180,6 @@ const mapStateToProps = state => ({
   fetching: state.auth.fetching,
   user: state.auth.profile,
   uid: state.auth.uid,
-  isProfileComplete: isProfileComplete(state.auth.profile) && !state.auth.fetching,
 });
 const mapDispatchToProps = dispatch => ({
   startDrinkup: (barId, user) => dispatch(DrinkupActions.startDrinkup(barId, user)),
