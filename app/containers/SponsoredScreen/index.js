@@ -15,13 +15,11 @@ class SponsoredScreen extends React.Component {
   };
   render() {
     const { event } = this.props.navigation.state.params;
-    const images = [
-      'https://alkoapp.com/cdn/bars/bohemian-biergarten/one.jpg',
-      'https://alkoapp.com/cdn/bars/bohemian-biergarten/two.jpg',
-      'https://alkoapp.com/cdn/bars/bohemian-biergarten/three.jpg'
-    ]
     if (event) {
       const eventContent = parseFile(event.content);
+      const images = [
+        eventContent.metadata.image
+      ];
       return (
         <AppContainer
           title={eventContent.metadata.title}
