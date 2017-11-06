@@ -37,9 +37,9 @@ class EditProfileScreen extends Component {
     }
     return true;
   }
-  onFirstNameChange = e => {
-    const isProfileComplete = this.checkProfileStatus(this.state.icon, e.nativeEvent.text, this.state.photoURL);
-    this.setState({ firstName: e.nativeEvent.text, isProfileComplete });
+  onFirstNameChange = firstName => {
+    const isProfileComplete = this.checkProfileStatus(this.state.icon, firstName, this.state.photoURL);
+    this.setState({ firstName, isProfileComplete });
   };
   onSelectIcon = icon => {
     const isProfileComplete = this.checkProfileStatus(icon, this.state.firstName, this.state.photoURL);
@@ -78,7 +78,7 @@ class EditProfileScreen extends Component {
     const { params } = navigation.state;
     const currentUser = { ...user, uid, icon, firstName, photoURL };
     if (params.type === 'Join') {
-      this.props.sendRequestDrinkup(params.bar, currentUser);
+      this.props.sendRequestDrinkup(params.draftBar, currentUser);
       navigation.goBack();
     } else if (params.type === 'Start') {
       this.props.startDrinkup(params.barId, currentUser);
@@ -119,7 +119,7 @@ class EditProfileScreen extends Component {
                 maxLength={15}
                 returnKeyType="done"
                 onSubmitEditing={() => Keyboard.dismiss()}
-                onChange={this.onFirstNameChange}
+                onChangeText={this.onFirstNameChange}
                 underlineColorAndroid={Colors.transparent}
                 selectionColor={Colors.brand.clear.orange}
               />
@@ -147,6 +147,11 @@ class EditProfileScreen extends Component {
                 </TouchableOpacity>
               ))}
             </View>
+            {(routeName !== 'EditProfileScreen' && !isProfileComplete) &&
+            <View style={Styles.footer}>
+              <Text style={Styles.incompleteProfileText}>{I18n.t('Profile_IncompleteWarning')}</Text>
+            </View>
+            }
             <View style={Styles.footer}>
               <Button
                 showIndicator={fetching}
@@ -156,11 +161,6 @@ class EditProfileScreen extends Component {
                 onPress={this.saveProfile}
               />
             </View>
-            {(routeName !== 'EditProfileScreen' && !isProfileComplete) &&
-            <View style={Styles.footer}>
-              <Text style={Styles.incompleteProfileText}>{I18n.t('Profile_IncompleteWarning')}</Text>
-            </View>
-            }
           </View>
           {showPicDialog &&
             <PicPhotoSourceDialog

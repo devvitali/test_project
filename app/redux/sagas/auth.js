@@ -25,6 +25,7 @@ export function* signOut(navigation) {
     yield call([User, User.unsubscribe], authData.uid);
     yield call([User, User.remove], authData.uid);
     yield put(authActions.signOutFulfilled(navigation));
+    yield call(signIn);
   } catch (error) {
     yield put(authActions.signOutFailed(error, navigation));
   }
