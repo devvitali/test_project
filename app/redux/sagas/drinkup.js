@@ -5,7 +5,7 @@ import { watch } from '../../utils/sagaUtils';
 import DrinkupActions from '../drinkup';
 import { Bar, DrinkUp, Notification } from '../../firebase/models';
 
-const DRINKUP_USER_PROPERTIES = ['photoURL', 'firstName', 'icon', 'message', 'invitedBy', 'messagesRead', 'fcmToken'];
+const DRINKUP_USER_PROPERTIES = ['photoURL', 'firstName', 'icon', 'message', 'invitedBy', 'messagesRead', 'fcmToken', 'joinTime'];
 
 function* drinkupSubscribe(Drinkup, key) {
   return eventChannel(emit => Drinkup.subscribe(emit, key));
@@ -36,6 +36,7 @@ export function* getDrinkup({ drinkupId, userId }) {
 
 export function* startDrinkUp({ barId, user }) {
   try {
+    user.joinTime = new Date().getTime();
     const drinkup = {
       active: true,
       bar: barId,
@@ -45,7 +46,6 @@ export function* startDrinkUp({ barId, user }) {
     yield call([Bar, Bar.update], barId, { currentDrinkUp: drinkupSnap.key });
     const bar = yield call([Bar, Bar.get], barId);
     bar.id = barId;
-    console.log('startDrinkUp', drinkupSnap.val(), bar);
     yield put(DrinkupActions.startDrinkupSuccessful(drinkupSnap.val(), bar));
     yield call(watch, drinkupSubscribe, DrinkUp, drinkupSnap.key);
   } catch (error) {
@@ -109,6 +109,7 @@ export function* sendDrinkupInvitation({ bar, user }) {
     const waitingUsers = drinkup.waitingUsers ? { ...drinkup.waitingUsers } : {};
     delete waitingUsers[user.uid];
     const users = drinkup.users ? { ...drinkup.users } : {};
+    user.joinTime = new Date().getTime();
     users[user.uid] = pick(user, DRINKUP_USER_PROPERTIES);
     yield call([DrinkUp, DrinkUp.update], bar.currentDrinkUp, { waitingUsers, users });
     const notification = {

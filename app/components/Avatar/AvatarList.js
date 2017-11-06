@@ -10,24 +10,16 @@ const { width } = Dimensions.get('window');
 export const AvatarList = ({ users, columns, columnPadding, style, iconOnly, onShowMessage }) => {
   const avatarWidth = ((width - (Metrics.doubleBaseMargin * 2)) / columns) - (columnPadding * 2);
   const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
-  // if (users) {
-  //   users.test = users[Object.keys(users)[0]];
-  //   users.test1 = users[Object.keys(users)[0]];
-  //   users.test2 = users[Object.keys(users)[0]];
-  //   users.test3 = users[Object.keys(users)[0]];
-  //   users.test11 = users[Object.keys(users)[0]];
-  //   users.test12 = users[Object.keys(users)[0]];
-  //   users.test13 = users[Object.keys(users)[0]];
-  //   users.t14 = users[Object.keys(users)[0]];
-  // }
   if (!users) {
     return null;
   }
+  let sortedArray = Object.keys(users).map(key => users[key]);
+  sortedArray.sort((user1, user2) => user1.joinTime - user2.joinTime);
   return (
     <ListView
       enableEmptySections
       contentContainerStyle={[styles.list, style]}
-      dataSource={ds.cloneWithRows(users)}
+      dataSource={ds.cloneWithRows(sortedArray)}
       renderRow={user => (
         <View style={[styles.avatarContainer, { padding: columnPadding }]}>
           {(user.photoURL && !iconOnly) ? (
