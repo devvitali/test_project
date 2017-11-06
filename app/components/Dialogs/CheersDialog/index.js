@@ -7,7 +7,7 @@ import Dialog from '../';
 import styles from './styles';
 import { Images } from '../../../themes';
 
-const CheersDialog = ({ onClose, visible }) => (
+const CheersDialog = ({ onClose, visible, invitedBy, message }) => (
   <Dialog closeButton closeOnBackdropPress onClose={onClose} visible={visible}>
     <Text style={styles.title}>{I18n.t('Drinkup_AcceptedInviteMessage')}</Text>
     <View style={styles.imageWrapper}>
@@ -17,6 +17,8 @@ const CheersDialog = ({ onClose, visible }) => (
     <View style={styles.overlay}>
       <Image style={styles.image} resizeMode="contain" source={Images.cheers} />
     </View>
+    <Text style={styles.name}>{invitedBy} {I18n.t('Drinkup_Says')}</Text>
+    <Text style={styles.message}>{message}</Text>
     <Button text={I18n.t('Drinkup_MeetNewPeople')} onPress={onClose} />
   </Dialog>
 );

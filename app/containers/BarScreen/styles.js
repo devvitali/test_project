@@ -64,16 +64,4 @@ export default StyleSheet.create({
     textAlign: 'center',
   },
 
-  name: {
-    color: Colors.snow,
-    fontSize: Fonts.size.regular,
-    fontFamily: Fonts.type.primary,
-    marginBottom: Metrics.baseMargin,
-  },
-
-  message: {
-    color: Colors.brand.gray,
-    fontSize: Fonts.size.regular,
-    fontFamily: Fonts.type.primary,
-  },
 });

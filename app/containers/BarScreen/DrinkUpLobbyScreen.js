@@ -26,13 +26,12 @@ class DrinkupLobbyScreen extends React.Component {
       showRedeemWarning: false,
       showComposeMessage: false,
       showCheerDialog: true,
-      showMessageDialog: true,
       composedMessage: ' ',
     };
   }
   onCloseMessage = () => {
     const { bar, uid, acceptDrinkupInvitation } = this.props;
-    this.setState({ showMessageDialog: false });
+    this.setState({ showCheerDialog: false });
     acceptDrinkupInvitation(bar, uid);
   };
   onRedeem = () => {
@@ -101,28 +100,15 @@ class DrinkupLobbyScreen extends React.Component {
   renderCheerDialog() {
     const { uid, users } = this.props;
     if (users[uid] && users[uid].invitedBy && !users[uid].messagesRead) {
+      const { invitedBy, message } = users[uid];
       return (
         <CheersDialog
-          onClose={() => this.setState({ showCheerDialog: false, showMessageDialog: true })}
+          onClose={this.onCloseMessage}
           visible={this.state.showCheerDialog}
+          invitedBy={invitedBy}
+          message={message}
         />
       );
-    }
-    return null;
-  }
-  renderMessageDialog() {
-    const { uid, users } = this.props;
-    if (users[uid]) {
-      const { invitedBy, messagesRead, message } = users[uid];
-      const { showMessageDialog, showCheerDialog } = this.state;
-      if (invitedBy && !messagesRead && !showCheerDialog && showMessageDialog) {
-        return (
-          <Dialog closeButton closeOnBackdropPress onClose={this.onCloseMessage} visible>
-            <Text style={styles.name}>{invitedBy} {I18n.t('Drinkup_Says')}</Text>
-            <Text style={styles.message}>{message}</Text>
-          </Dialog>
-        );
-      }
     }
     return null;
   }
@@ -167,7 +153,6 @@ class DrinkupLobbyScreen extends React.Component {
         <View style={styles.container}>
           <AvatarList users={users} />
           <Button onPress={this.onLeave} theme="disallow" text={I18n.t('Drinkup_LeaveTheDrinkUp')} />
-          {this.renderMessageDialog()}
           {this.renderRequestToJoinDialog()}
           {this.renderRedeemWarningDialog()}
           {this.renderComposeMessageDialog()}
