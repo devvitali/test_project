@@ -12,7 +12,7 @@ export default StyleSheet.create({
   selectPhotoContainer: {
     marginBottom: Metrics.doubleBaseMargin * 2,
   },
-  photoContainer: {
+  waitingContainer: {
     position: 'absolute',
     alignSelf: 'center',
     top: Metrics.doubleBaseMargin,
@@ -21,7 +21,7 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
-  photo: {
+  photoContainer: {
     alignSelf: 'center',
     width: 128,
     height: 128,
@@ -29,6 +29,12 @@ export default StyleSheet.create({
     borderColor: Colors.snow,
     borderRadius: Metrics.avatarBorderRadius,
     marginTop: Metrics.doubleBaseMargin,
+    overflow: 'hidden',
+  },
+  photo: {
+    width: 128,
+    height: 128,
+    overflow: 'hidden',
   },
 
   updatePhoto: {

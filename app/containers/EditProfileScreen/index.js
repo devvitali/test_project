@@ -60,8 +60,10 @@ class EditProfileScreen extends Component {
           <View style={Styles.formContainer}>
             <View style={Styles.selectPhotoContainer}>
               <TouchableOpacity activeOpacity={0.7} onPress={this.doShowPicDialog}>
-                <CachedImage source={source} style={[Styles.photo, { opacity }]} />
-                <View style={Styles.photoContainer}>
+                <View style={[Styles.photoContainer, { opacity }]}>
+                  <CachedImage source={source} style={Styles.photo} />
+                </View>
+                <View style={Styles.waitingContainer}>
                   <ActivityIndicator size="large" animating={fetching} />
                 </View>
               </TouchableOpacity>
