@@ -2,6 +2,7 @@ import { call, put } from 'redux-saga/effects';
 import { eventChannel } from 'redux-saga';
 
 import authActions from '../auth';
+import drinkupActions from '../drinkup';
 import { firebaseAuth, firebaseStorage } from '../../firebase';
 import { User } from '../../firebase/models';
 import { watch } from '../../utils/sagaUtils';
@@ -19,9 +20,11 @@ export function* signIn() {
   }
 }
 
-export function* signOut(navigation) {
+export function* signOut({ navigation, uid, bar }) {
   try {
     const authData = firebaseAuth.currentUser;
+    yield put(drinkupActions.cancelRequestDrinkup(bar, authData));
+    yield put(drinkupActions.leaveDrinkup(bar, authData));
     yield call([User, User.unsubscribe], authData.uid);
     yield call([User, User.remove], authData.uid);
     yield put(authActions.signOutFulfilled(navigation));
@@ -31,8 +34,8 @@ export function* signOut(navigation) {
   }
 }
 
-export function* signOutSuccess(navigation) {
-  yield call([navigation, navigation.navigation.navigation.navigate], 'OnBoardingStep1');
+export function* signOutSuccess({ navigation }) {
+  yield call([navigation, navigation.navigate], 'OnBoardingStep1');
 }
 
 export function* getOrCreateProfile() {
