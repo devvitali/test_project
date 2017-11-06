@@ -1,11 +1,10 @@
 // @flow
 
 import React, { Component } from 'react';
-import { AppState, NativeModules } from 'react-native';
+import { AppState, NativeModules, View } from 'react-native';
 import { Provider } from 'react-redux';
 import codePush from 'react-native-code-push';
 import Instabug from 'instabug-reactnative';
-import FCM from 'react-native-fcm';
 import './i18n'; // keep before root container
 import createStore from './redux';
 import applyConfigSettings from './config';
@@ -27,12 +26,11 @@ class App extends Component {
 
   componentDidMount() {
     AppState.addEventListener('change', this.onAppStateChanged);
-    FCM.requestPermissions(); // for iOS
     Instabug.startWithToken('20b5579b22c3616afeeed631ace29330', Instabug.invocationEvent.shake);
     trackEvent('test', 'testevent');
-    // setTimeout(() => {
-      // NativeModules.DevMenu.show();
-    // }, 1000);
+    setTimeout(() => {
+      NativeModules.DevMenu.show();
+    }, 1000);
     updateCodePush();
   }
   // onHandleOpenURL = (event) => {

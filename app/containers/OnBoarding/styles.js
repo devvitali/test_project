@@ -19,13 +19,11 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  scrollContainer: {
-    flex: 1,
-  },
   section: {
     marginBottom: 50,
   },
   topSection: {
+    flex: 1,
     paddingTop: Metrics.largeMargin,
     marginBottom: Metrics.doubleBaseMargin,
   },

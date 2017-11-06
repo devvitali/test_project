@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import FCM, { FCMEvent } from 'react-native-fcm';
 
 import AppNavigator from './AppNavigator';
-import { StartupActions, AuthActions, LocationActions } from '../redux';
+import { StartupActions, AuthActions } from '../redux';
 import ReduxPersist from '../config/reduxPersist';
 import styles from './styles';
 import { Colors } from '../themes';

@@ -11,7 +11,6 @@ const requestPermission = (...args) => (
           value: { args, response },
           important: true,
         });
-
         //  Access was already granted
         if (response === 'authorized') {
           return resolve();
@@ -52,9 +51,8 @@ export const locationPermission = () => requestPermission('location', 'whenInUse
 
 export const notificationPermission = () => (
   new Promise((resolve, reject) => {
-    requestPermission('notification')
+    FCM.requestPermissions()
       .then(() => {
-        FCM.requestPermissions();
         FCM.getFCMToken()
           .then((token) => {
             console.log({
@@ -63,9 +61,7 @@ export const notificationPermission = () => (
               important: true,
             });
             resolve(token);
-          })
-          .catch(reject);
-
+          }).catch(reject);
       })
       .catch(reject);
   })
