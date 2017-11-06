@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, ScrollView } from 'react-native';
 import I18n from 'react-native-i18n';
 import { connect } from 'react-redux';
 import { Button, Banner } from '../../components';
@@ -45,22 +45,25 @@ class NoDrinkUpScreen extends Component {
     return (
       <View style={Styles.mainContainer}>
         <BarImages images={bar.images} />
-        {special &&
-        <View style={Styles.bannerContainer}>
-          <Banner theme="info" text={I18n.t('Drinkup_JoinDrinkUpAndGet2For1Drinks')} onPress={this.onWaiting} />
-        </View>
-        }
         <View style={Styles.contentContainer}>
-          <View style={Styles.section}>
-            <Text style={Styles.header}>{I18n.t('Bar_OkayLetsDoThis_Header')}</Text>
-            <Text style={Styles.body}>{I18n.t('Bar_OkayLetsDoThis_Body')}</Text>
-          </View>
-          {special &&
-          <View style={Styles.section}>
-            <Text style={Styles.header}>{I18n.t('Bar_WheresMyTwoForOne_Header')}</Text>
-            <Text style={Styles.body}>{I18n.t('Bar_WheresMyTwoForOne_Body')}</Text>
-          </View>
+          {
+            special &&
+            <View style={Styles.bannerContainer}>
+              <Banner theme="info" text={I18n.t('Drinkup_JoinDrinkUpAndGet2For1Drinks')} onPress={this.onWaiting} />
+            </View>
           }
+          <ScrollView>
+            <View style={Styles.section}>
+              <Text style={Styles.header}>{I18n.t('Bar_OkayLetsDoThis_Header')}</Text>
+              <Text style={Styles.body}>{I18n.t('Bar_OkayLetsDoThis_Body')}</Text>
+            </View>
+            {special &&
+            <View style={Styles.section}>
+              <Text style={Styles.header}>{I18n.t('Bar_WheresMyTwoForOne_Header')}</Text>
+              <Text style={Styles.body}>{I18n.t('Bar_WheresMyTwoForOne_Body')}</Text>
+            </View>
+            }
+          </ScrollView>
         </View>
         <View style={Styles.footer}>
           {waitingInvite ?
