@@ -12,18 +12,22 @@ const styles = StyleSheet.create({
     flex: -1,
   },
   dotStyle: {
-    backgroundColor: 'rgba(255,255,255,.3)',
-    width: 13,
-    height: 13,
-    borderRadius: 7,
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    width: 10,
+    height: 10,
+    borderRadius: 5,
     marginLeft: 7,
     marginRight: 7,
+    borderColor: '#333',
+    borderWidth: 1,
   },
   activeDotStyle: {
     backgroundColor: '#fff',
-    width: 13,
-    height: 13,
-    borderRadius: 7,
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    borderColor: '#333',
+    borderWidth: 1,
     marginLeft: 7,
     marginRight: 7,
   },
@@ -95,6 +99,7 @@ export class BarImages extends Component {
         <Swiper
           containerStyle={styles.swiper}
           height={200}
+          paginationStyle={{ bottom: 10 }}
           dot={<View style={styles.dotStyle} />}
           activeDot={<View style={styles.activeDotStyle} />}
         >
