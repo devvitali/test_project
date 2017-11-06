@@ -10,17 +10,35 @@ export default class Bar extends Base {
 
   static getBarsSortedByDistance(locationCoords, bars, asc = true) {
     const barDistances = {};
+    const arrayBars = [];
     _.each(bars, (bar, key) => {
-      const { latitude, longitude, accuracy } = locationCoords;
-      const start = { latitude, longitude };
-      barDistances[key] = (bar.address && bar.address.latitude) ? getDistance(start, bar.address, accuracy) : 0;
+      arrayBars.push({ ...bar, key });
     });
-
-    const barDistancePairs = _.sortBy(_.toPairs(barDistances), x => x[1]);
-    if (!asc) {
-      barDistancePairs.reverse();
-    }
-    return barDistancePairs.map(item => bars[item[0]]);
+    const getBarValue = (bar) => {
+      if (bar.currentDrinkUp && bar.specialId) {
+        return 0;
+      }
+      if (bar.currentDrinkUp) {
+        return 1;
+      }
+      if (bar.specialId) {
+        return 2;
+      }
+      return 3;
+    };
+    arrayBars.sort((bar1, bar2) => {
+      let bar1Value = getBarValue(bar1);
+      let bar2Value = getBarValue(bar2);
+      if (bar1Value === bar2Value) {
+        const { latitude, longitude, accuracy } = locationCoords;
+        const start = { latitude, longitude };
+        const bar1Distance = getDistance(start, bar1.address, accuracy);
+        const bar2Distance = getDistance(start, bar2.address, accuracy);
+        return bar1Distance - bar2Distance;
+      }
+      return bar1Value - bar2Value;
+    });
+    return arrayBars.map(item => bars[item.key]);
   }
 
 }

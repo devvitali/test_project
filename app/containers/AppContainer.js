@@ -30,7 +30,6 @@ export default class AppContainer extends Component {
     });
   }
   componentWillUnmount() {
-    console.log('componentWillUnmount');
     this.messageListener.remove();
   }
   render() {
