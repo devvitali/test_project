@@ -39,7 +39,7 @@ class DrawBar extends Component {
 
   navigateTo = page => () => this.props.navigation.navigate(page);
   render() {
-    const { activeItemKey, auth: { profile }, joined, bar } = this.props;
+    const { activeItemKey, auth: { profile = {} }, joined, bar } = this.props;
     return (
       <AppContainer hideNavBar>
         <View style={styles.container}>
