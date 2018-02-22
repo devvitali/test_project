@@ -38,8 +38,10 @@ const Banner = (props) => {
     style, gradientColors, onPress, showGradient, textStyle, iconColor, iconSize, iconName
   } = applyComponentTheme(theme, props);
   const Icon = getIconFamilyComponent(props.iconFamily);
+  const Component = onPress ? TouchableOpacity : View;
+  const componentProps = { onPress, activeOpacity: 0.7 };
   return (
-    <TouchableOpacity activeOpacity={0.7} onPress={onPress}>
+    <Component {...componentProps}>
       {showGradient ?
         <LinearGradient colors={gradientColors} style={[styles.btn, style]}>
           {renderButtonContent(Icon, props.text, textStyle, iconColor, iconSize, iconName)}
@@ -48,7 +50,7 @@ const Banner = (props) => {
           {renderButtonContent(Icon, props.text, textStyle, iconColor, iconSize, iconName)}
         </View>
       }
-    </TouchableOpacity>
+    </Component>
   );
 };
 

@@ -42,6 +42,7 @@ class NoDrinkUpScreen extends Component {
   };
   render() {
     const { special, waitingInvite, bar } = this.props;
+    const description = `${I18n.t('Bar_OkayLetsDoThis_Body_Start')} ${bar.name} ${I18n.t('Bar_OkayLetsDoThis_Body_End')}`;
     return (
       <View style={Styles.mainContainer}>
         <BarImages images={bar.images} />
@@ -49,13 +50,13 @@ class NoDrinkUpScreen extends Component {
           {
             special &&
             <View style={Styles.bannerContainer}>
-              <Banner theme="info" text={I18n.t('Drinkup_JoinDrinkUpAndGet2For1Drinks')} onPress={this.onWaiting} />
+              <Banner theme="info" text={I18n.t('Drinkup_StartDrinkUpAndGet2For1Drinks')} />
             </View>
           }
           <ScrollView>
             <View style={Styles.section}>
               <Text style={Styles.header}>{I18n.t('Bar_OkayLetsDoThis_Header')}</Text>
-              <Text style={Styles.body}>{I18n.t('Bar_OkayLetsDoThis_Body')}</Text>
+              <Text style={Styles.body}>{description}</Text>
             </View>
             {special &&
             <View style={Styles.section}>
