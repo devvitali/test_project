@@ -47,6 +47,7 @@ const defaultState = {
 /* ------------- Reducers ------------- */
 
 const request = state => ({ ...state, fetching: true });
+const emptyFunction = state => state;
 const requestFailure = (state, { error }) => ({
   ...state,
   fetching: false,
@@ -184,7 +185,7 @@ export const drinkupReducer = createReducer(defaultState, {
   [Types.LEAVE_DRINKUP_FAILURE]: requestFailure,
   [Types.SEND_DRINKUP_INVITATION]: request,
   [Types.SEND_DRINKUP_INVITATION_SUCCESSFUL]: sendDrinkupInvitationSucessful,
-  [Types.ACCEPT_DRINKUP_INVITATION]: request,
+  [Types.ACCEPT_DRINKUP_INVITATION]: emptyFunction,
   [Types.SEND_DRINKUP_INVITATION_FAILURE]: requestFailure,
   [Types.CLEAR_DRINKUP_DATA]: clearDrinkupData,
   [Types.CLEAR_DRINKUP_USERS]: clearDrinkupUsers,

@@ -28,9 +28,9 @@ class App extends Component {
     AppState.addEventListener('change', this.onAppStateChanged);
     Instabug.startWithToken('20b5579b22c3616afeeed631ace29330', Instabug.invocationEvent.shake);
     trackEvent('test', 'testevent');
-    setTimeout(() => {
-      NativeModules.DevMenu.show();
-    }, 1000);
+    // setTimeout(() => {
+    // NativeModules.DevMenu.show();
+    // }, 1000);
     updateCodePush();
   }
   // onHandleOpenURL = (event) => {

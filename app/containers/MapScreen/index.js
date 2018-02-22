@@ -11,10 +11,11 @@ import {
 } from '../../components';
 import { DrinkupActions, LocationActions } from '../../redux';
 import { geoFire } from '../../firebase';
-import { Colors, Images } from '../../themes';
 import { calculateDistanceByRegion, hasLocation } from '../../utils/mapUtils';
 import { BarsInformation } from './barsInformation';
 import { EventsInformation } from './eventInformation';
+import appConfig from '../../config/appConfig';
+import { Colors, Images } from '../../themes';
 import styles from './styles';
 import mapStyle from './mapStyle';
 
@@ -250,9 +251,10 @@ class MapScreen extends Component {
 const location$ = state => state.location;
 const drinkupBar$ = state => state.drinkup;
 const selector = createSelector(location$, drinkupBar$, (location, drinkup) => {
-  location.coords = boulderPosition;
   let region = { ...boulderPosition, longitudeDelta: 0.02, latitudeDelta: 0.01 };
-  if (location.coords) {
+  if (appConfig.isSimulator || appConfig.isDebug) {
+    location.coords = boulderPosition;
+  } else if (location.coords) {
     region = { ...location.coords, longitudeDelta: 0.02, latitudeDelta: 0.01 };
   }
   return { region, location: location.coords, drinkupBar: drinkup.bar, drinkup };

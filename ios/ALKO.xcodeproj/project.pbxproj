@@ -87,6 +87,7 @@
 		B4E87BFF35A642818F0C5EB5 /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0EC904F0FE9A4E8B982E79AC /* Feather.ttf */; };
 		C2E63FDD2581492BB84DE520 /* libRNVectorIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 805CE7A932444DF9BC9809FF /* libRNVectorIcons.a */; };
 		C4501CC7E24F42FA856BE270 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E190DEE73A1040C58E558D61 /* SimpleLineIcons.ttf */; };
+		D7AEF307203EB69D00FE7E6C /* RNUeno.m in Sources */ = {isa = PBXBuildFile; fileRef = D7AEF306203EB69D00FE7E6C /* RNUeno.m */; };
 		EA3C1ABA79E54FC7A0BBECA3 /* libBVLinearGradient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E16A50F047547BC93AF16F8 /* libBVLinearGradient.a */; };
 		F5F0FAC1FC6E44598519E1C2 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = B0A06B0C251042FA9306C80F /* libsqlite3.tbd */; };
 		FA34F660C1024C6EA8108F0D /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E0BC4A8B25DB4E5ABF4B5005 /* libsqlite3.0.tbd */; };
@@ -630,6 +631,8 @@
 		C77B1CD2519E422EB47105FA /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
 		D1BBEF4D13AF4C3D9AE1DA76 /* RNBackgroundFetch+AppDelegate.m */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.objc; name = "RNBackgroundFetch+AppDelegate.m"; path = "../node_modules/react-native-background-fetch/ios/RNBackgroundFetch/RNBackgroundFetch+AppDelegate.m"; sourceTree = "<group>"; };
 		D2ECC00840EE4CC28EB8EDA6 /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
+		D7AEF2C9203EB69D00FE7E6C /* RNUeno.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RNUeno.h; path = ALKO/RNUeno.h; sourceTree = "<group>"; };
+		D7AEF306203EB69D00FE7E6C /* RNUeno.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RNUeno.m; path = ALKO/RNUeno.m; sourceTree = "<group>"; };
 		D815F7F462B74E18A8B3CE14 /* libRNBackgroundFetch.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNBackgroundFetch.a; sourceTree = "<group>"; };
 		DAFFC1FB4A72E550F6E19496 /* Pods-ALKO.staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ALKO.staging.xcconfig"; path = "Pods/Target Support Files/Pods-ALKO/Pods-ALKO.staging.xcconfig"; sourceTree = "<group>"; };
 		DCFCFEA3A6BB913FD6FB7940 /* libPods-ALKO.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ALKO.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -784,6 +787,8 @@
 		13B07FAE1A68108700A75B9A /* ALKO */ = {
 			isa = PBXGroup;
 			children = (
+				D7AEF2C9203EB69D00FE7E6C /* RNUeno.h */,
+				D7AEF306203EB69D00FE7E6C /* RNUeno.m */,
 				85C2A6EB1F2F7F98009A6914 /* AirGoogleMaps */,
 				852870091F2912F5002A2D7C /* ALKO.entitlements */,
 				85C18D9E1F19236E0006F46F /* GoogleService-Info.plist */,
@@ -1853,7 +1858,9 @@
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleMaps.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/QBImagePicker.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/RSKImageCropperStrings.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1912,6 +1919,7 @@
 				85C2A7191F2F7F98009A6914 /* AIRGoogleMapCircleManager.m in Sources */,
 				85C2A7151F2F7F98009A6914 /* AIRGoogleMap.m in Sources */,
 				85C2A7221F2F7F98009A6914 /* AIRGoogleMapURLTileManager.m in Sources */,
+				D7AEF307203EB69D00FE7E6C /* RNUeno.m in Sources */,
 				85C2A7121F2F7F98009A6914 /* AIRGMSMarker.m in Sources */,
 				85C2A7201F2F7F98009A6914 /* AIRGoogleMapPolylineManager.m in Sources */,
 				85C2A71D1F2F7F98009A6914 /* AIRGoogleMapPolygon.m in Sources */,
@@ -1955,7 +1963,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = HV9UL6SJC7;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -1981,7 +1989,7 @@
 					"$(SRCROOT)/../node_modules/react-native-google-analytics-bridge/ios/RCTGoogleAnalyticsBridge/**",
 				);
 				INFOPLIST_FILE = ALKO/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -2005,7 +2013,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution: ALKO LLC (HV9UL6SJC7)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = HV9UL6SJC7;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -2031,7 +2039,7 @@
 					"$(SRCROOT)/../node_modules/react-native-google-analytics-bridge/ios/RCTGoogleAnalyticsBridge/**",
 				);
 				INFOPLIST_FILE = ALKO/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -2296,7 +2304,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution: ALKO LLC (HV9UL6SJC7)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = HV9UL6SJC7;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -2321,7 +2329,7 @@
 					"$(SRCROOT)/../node_modules/react-native-google-analytics-bridge/ios/RCTGoogleAnalyticsBridge/**",
 				);
 				INFOPLIST_FILE = ALKO/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)/**";
 				OTHER_LDFLAGS = (
