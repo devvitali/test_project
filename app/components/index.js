@@ -9,6 +9,7 @@ export {
   JoinDialog,
   DirectionDialog,
   PicPhotoSourceDialog,
+  MessageDialog,
 } from './Dialogs';
 export { default as DrawerButton } from './DrawerButton';
 export { default as IconAlko } from './IconAlko';

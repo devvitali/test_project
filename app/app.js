@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-import { AppState, NativeModules, View } from 'react-native';
+import { AppState, processColor } from 'react-native';
 import { Provider } from 'react-redux';
 import codePush from 'react-native-code-push';
 import Instabug from 'instabug-reactnative';
@@ -26,7 +26,8 @@ class App extends Component {
 
   componentDidMount() {
     AppState.addEventListener('change', this.onAppStateChanged);
-    Instabug.startWithToken('20b5579b22c3616afeeed631ace29330', Instabug.invocationEvent.shake);
+    Instabug.startWithToken('350cd7e5d499ced551b26651779a17ec', Instabug.invocationEvent.shake);
+    Instabug.setPrimaryColor(processColor('#FF7604'));
     trackEvent('test', 'testevent');
     // setTimeout(() => {
     // NativeModules.DevMenu.show();

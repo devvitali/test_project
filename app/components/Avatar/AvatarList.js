@@ -3,7 +3,7 @@ import { View, ListView, Dimensions } from 'react-native';
 
 import { Metrics, DrinkIcons } from '../../themes';
 import styles from './styles';
-import { Avatar } from '../';
+import { Avatar } from '../index';
 
 const { width } = Dimensions.get('window');
 
@@ -30,7 +30,7 @@ export const AvatarList = ({ users, columns, columnPadding, style, iconOnly, onS
               name={user.firstName}
               message={user.message}
               messagesRead={user.messagesRead}
-              onPress={user.message && onShowMessage}
+              onPress={user.message && (() => onShowMessage(user))}
             />
           ) : (
             <Avatar image={DrinkIcons[user.icon]} width={avatarWidth} height={avatarWidth - 15} name={user.firstName} />

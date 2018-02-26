@@ -26,7 +26,7 @@ function renderImage(props) {
           <Icon name="envelope"
             size={Metrics.icons.small}
             color={Colors.snow}
-            style={{ opacity: messagesRead ? 0.5 : 1 }}
+            style={{ opacity: messagesRead ? 0.8 : 1 }}
           />
         </View>
       }

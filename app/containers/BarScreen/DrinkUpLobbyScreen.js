@@ -6,6 +6,7 @@ import moment from 'moment';
 import {
   Button,
   Dialog,
+  MessageDialog,
   AlkoSpecialWarningDialog,
   JoinDialog,
   ComposeMessageDialog,
@@ -26,6 +27,7 @@ class DrinkupLobbyScreen extends React.Component {
       showRedeemWarning: false,
       showComposeMessage: false,
       showCheerDialog: true,
+      showMessageDialog: false,
       composedMessage: ' ',
     };
   }
@@ -41,6 +43,9 @@ class DrinkupLobbyScreen extends React.Component {
     } else {
       this.redeem();
     }
+  };
+  onShowMessage = (user) => {
+    this.setState({ showMessageDialog: true, user })
   };
   onLeave = () => {
     const { bar, user, uid, leaveDrinkup } = this.props;
@@ -112,6 +117,21 @@ class DrinkupLobbyScreen extends React.Component {
     }
     return null;
   }
+  renderMessageDialog() {
+    const { showMessageDialog, user } = this.state;
+    if (showMessageDialog) {
+      return (
+        <MessageDialog
+          onClose={() => this.setState({ showMessageDialog: false, user: null })}
+          visible
+          message={user.message}
+          name={user.firstName}
+          avatarSrc={user.photoURL}
+        />
+      );
+    }
+    return null;
+  }
   renderRequestToJoinDialog() {
     const { waitingUsers } = this.props;
     if (waitingUsers && Object.keys(waitingUsers).length > 0) {
@@ -138,20 +158,24 @@ class DrinkupLobbyScreen extends React.Component {
     if (bar) {
       special = bar.specialId;
     }
+    const userCount = Object.keys(users).length;
     return (
       <View style={[styles.mainContainer]}>
         <BarImages images={bar.images} />
         {special &&
         <View style={styles.bannerContainer}>
           <Banner
-            onPress={this.onRedeem}
+            onPress={userCount > 1 ? this.onRedeem : null}
             theme="info"
-            text={I18n.t('Drinkup_ClickToGet2For1ALKOSpecial')}
+            text={userCount > 1 ? I18n.t('Drinkup_ClickToGet2For1ALKOSpecial') : I18n.t('Drinkup_Need2UsersForALKOSpecial')}
           />
         </View>
         }
         <View style={styles.container}>
-          <AvatarList users={users} />
+          <AvatarList
+            users={users}
+            onShowMessage={this.onShowMessage}
+          />
           <Button
             showIndicator={this.props.fetching}
             onPress={this.onLeave}
@@ -161,6 +185,7 @@ class DrinkupLobbyScreen extends React.Component {
           {this.renderRequestToJoinDialog()}
           {this.renderRedeemWarningDialog()}
           {this.renderComposeMessageDialog()}
+          {this.renderMessageDialog()}
           {this.renderCheerDialog()}
         </View>
       </View>

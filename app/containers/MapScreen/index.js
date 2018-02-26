@@ -86,6 +86,21 @@ class MapScreen extends Component {
     this.barGeoQuery.cancel();
     this.eventGeoQuery.cancel();
   }
+  onHandleRef = (ref) => {
+    this.map = ref;
+    if (!this.map) {
+      return;
+    }
+    // eslint-disable-next-line no-undef
+    requestAnimationFrame(() => {
+      if (!this.map) {
+        return;
+      }
+      console.log('this.props.region', this.props.region);
+      this.map.animateToRegion(this.props.region, 1);
+    });
+  }
+
   onBackCurrentLocation = ({ longitudeDelta = 0.16, latitudeDelta = 0.08 }) => {
     const position = this.props.location ? this.props.location : boulderPosition;
     this.currentRegion = { ...position, longitudeDelta, latitudeDelta };
@@ -201,7 +216,7 @@ class MapScreen extends Component {
         rotateEnabled={false}
         onRegionChangeComplete={this.onRegionChange}
         showsUserLocation
-        ref={ref => this.map = ref}
+        ref={this.onHandleRef}
       >
         {barMarkers.clusterMarkers.map(marker => (
           <ClusterMarker

@@ -17,6 +17,7 @@ end
 ].each do |lib|
   pod lib
   pod ‘GoogleMaps’
+  pod ‘GooglePlaces’
 end
 post_install do
   `rm -rf Pods/leveldb-library/port/win`
