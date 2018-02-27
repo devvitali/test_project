@@ -37,7 +37,9 @@ class EventInformation {
   onEventEntered = async (eventId, location) => {
     const event = await this.eventModel.get(eventId, true);
     const contentUrl = event.content_url;
-    event.content = await download(contentUrl);
+    if (contentUrl) {
+      event.content = await download(contentUrl);
+    }
     event.location = {
       latitude: location[0],
       longitude: location[1],

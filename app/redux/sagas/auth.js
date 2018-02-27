@@ -13,8 +13,8 @@ function subscribe(key) {
 
 export function* signIn() {
   try {
-    const authData = yield call([firebaseAuth, firebaseAuth.signInAnonymously]);
-    yield put(authActions.signInFulfilled(authData));
+    const authData = yield call([firebaseAuth, firebaseAuth.signInAnonymouslyAndRetrieveData]);
+    yield put(authActions.signInFulfilled(authData.user));
   } catch (error) {
     yield put(authActions.signInFailed(error));
   }
@@ -74,9 +74,12 @@ export function* createProfile() {
 
 export function* updateProfile({ diff }) {
   try {
-    const authData = yield call([firebaseAuth, firebaseAuth.signInAnonymously]);
-    yield call([User, User.update], authData.uid, diff);
-    yield call(watch, subscribe, authData.uid);
+    const authData = yield call([firebaseAuth, firebaseAuth.signInAnonymouslyAndRetrieveData]);
+    const { user } = authData;
+    if (user) {
+      yield call([User, User.update], user.uid, diff);
+      yield call(watch, subscribe, user.uid);
+    }
   } catch (error) {
     yield put(authActions.updateProfileFailed(error));
   }
@@ -85,13 +88,16 @@ export function* updateProfile({ diff }) {
 export function* uploadProfilePhoto({ photo }) {
   try {
     yield put(authActions.updateProfileFulfilled({ photoURL: photo.path }));
-    const authData = yield call([firebaseAuth, firebaseAuth.signInAnonymously]);
-    const storageOpts = { contentType: 'image/jpeg', contentEncoding: 'base64' };
-    const filename = photo.path.replace(/^.*[\\/]/, '');
-    const storageRef = firebaseStorage.ref(`photos/${authData.uid}/${filename}`);
-    const res = yield call([storageRef, storageRef.put], photo.path, storageOpts);
-    yield call([User, User.update], authData.uid, { photoURL: res.downloadURL });
-    yield put(authActions.uploadProfilePhotoFulfilled());
+    const authData = yield call([firebaseAuth, firebaseAuth.signInAnonymouslyAndRetrieveData]);
+    const { user } = authData;
+    if (user) {
+      const storageOpts = { contentType: 'image/jpeg', contentEncoding: 'base64' };
+      const filename = photo.path.replace(/^.*[\\/]/, '');
+      const storageRef = firebaseStorage.ref(`photos/${user.uid}/${filename}`);
+      const res = yield call([storageRef, storageRef.put], photo.path, storageOpts);
+      yield call([User, User.update], user.uid, { photoURL: res.downloadURL });
+      yield put(authActions.uploadProfilePhotoFulfilled());
+    }
   } catch (error) {
     yield put(authActions.uploadProfilePhotoFailed(error));
   }

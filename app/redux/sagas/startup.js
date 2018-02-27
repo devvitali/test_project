@@ -22,7 +22,7 @@ function initAuth() {
 }
 
 /* eslint no-unused-vars: 0 */
-export function* startup(action) {
+export function* startup() {
   try {
     const authData = yield call(initAuth);
     yield put(authActions.signInFulfilled(authData));

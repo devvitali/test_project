@@ -22,8 +22,8 @@ import mapStyle from './mapStyle';
 const googleAPI = Platform.OS === 'android' ? require('react-native-google-api-availability-bridge') : null;
 
 const boulderPosition = {
-  latitude: 43.69642438,
-  longitude: 7.2753846,
+  latitude: 40.017900,
+  longitude: -105.280009,
 };
 class MapScreen extends Component {
   constructor(props) {
@@ -92,14 +92,10 @@ class MapScreen extends Component {
       return;
     }
     // eslint-disable-next-line no-undef
-    requestAnimationFrame(() => {
-      if (!this.map) {
-        return;
-      }
-      console.log('this.props.region', this.props.region);
-      this.map.animateToRegion(this.props.region, 1);
-    });
-  }
+    setTimeout(() => {
+      // this.map.animateToRegion(this.props.region, 1);
+    }, 200);
+  };
 
   onBackCurrentLocation = ({ longitudeDelta = 0.16, latitudeDelta = 0.08 }) => {
     const position = this.props.location ? this.props.location : boulderPosition;

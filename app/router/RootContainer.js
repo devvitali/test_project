@@ -10,7 +10,7 @@ import { Colors } from '../themes';
 
 class RootContainer extends Component {
   componentDidMount() {
-    // if redux persist is not active fire startup action
+    this.props.startup();
     FCM.getFCMToken().then((fcmToken) => {
       this.props.updateProfile({ fcmToken });
       // store fcm token in your server

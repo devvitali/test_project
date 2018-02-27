@@ -1,4 +1,3 @@
-import { combineReducers } from 'redux';
 import { connect } from 'react-redux';
 import storage from 'redux-persist/lib/storage';
 import { persistCombineReducers } from 'redux-persist';
@@ -9,6 +8,7 @@ import LocationActions, { locationReducer as location } from './location';
 import AlertActions, { alertReducer as alert } from './alert';
 import DrinkupActions, { drinkupReducer as drinkup } from './drinkup';
 import BarActions, { barReducer as bar } from './bar';
+import StartupActions from './startup';
 import { isUserValid } from '../utils/auth';
 
 const config = {
@@ -54,3 +54,4 @@ export { AlertActions };
 export { LocationActions };
 export { DrinkupActions };
 export { BarActions };
+export { StartupActions };
