@@ -91,10 +91,9 @@ class MapScreen extends Component {
     if (!this.map) {
       return;
     }
-    // eslint-disable-next-line no-undef
     setTimeout(() => {
-      // this.map.animateToRegion(this.props.region, 1);
-    }, 200);
+      this.map.animateToRegion(this.props.region, 1);
+    }, 50);
   };
 
   onBackCurrentLocation = ({ longitudeDelta = 0.16, latitudeDelta = 0.08 }) => {
@@ -140,7 +139,7 @@ class MapScreen extends Component {
   renderAlert() {
     const position = this.props.location ? this.props.location : boulderPosition;
     const event = EventsInformation.getEvent(position);
-    if (event) {
+    if (event && event.content) {
       const eventContent = parseFile(event.content);
       return (
         <View style={styles.bannerContainer}>
