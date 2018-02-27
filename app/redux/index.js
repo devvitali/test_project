@@ -1,17 +1,24 @@
 import { combineReducers } from 'redux';
 import { connect } from 'react-redux';
+import storage from 'redux-persist/lib/storage';
+import { persistCombineReducers } from 'redux-persist';
 import configureStore from './createStore';
 import rootSaga from './sagas';
-
 import AuthActions, { authReducer as auth } from './auth';
 import LocationActions, { locationReducer as location } from './location';
 import AlertActions, { alertReducer as alert } from './alert';
 import DrinkupActions, { drinkupReducer as drinkup } from './drinkup';
 import BarActions, { barReducer as bar } from './bar';
 import { isUserValid } from '../utils/auth';
+
+const config = {
+  key: 'root',
+  storage,
+  blacklist: ['login', 'search'],
+};
 export default () => {
   /* ------------- Assemble The Reducers ------------- */
-  const rootReducer = combineReducers({
+  const rootReducer = persistCombineReducers(config, {
     alert,
     auth,
     location,

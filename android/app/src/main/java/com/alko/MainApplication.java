@@ -3,6 +3,34 @@ package com.alko;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.oblador.vectoricons.VectorIconsPackage;
+import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
+import com.airbnb.android.react.maps.MapsPackage;
+import com.BV.LinearGradient.LinearGradientPackage;
+import com.reactnative.ivpusic.imagepicker.PickerPackage;
+import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
+import com.ivanwu.googleapiavailabilitybridge.ReactNativeGooglePlayServicesPackage;
+import com.idehub.GoogleAnalyticsBridge.GoogleAnalyticsBridgePackage;
+import io.invertase.firebase.RNFirebasePackage;
+import com.RNFetchBlob.RNFetchBlobPackage;
+import com.evollu.react.fcm.FIRMessagingPackage;
+import com.transistorsoft.rnbackgroundgeolocation.RNBackgroundGeolocation;
+import com.transistorsoft.rnbackgroundfetch.RNBackgroundFetchPackage;
+import com.instabug.reactlibrary.RNInstabugReactnativePackage;
+import com.oblador.vectoricons.VectorIconsPackage;
+import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
+import com.airbnb.android.react.maps.MapsPackage;
+import com.BV.LinearGradient.LinearGradientPackage;
+import com.reactnative.ivpusic.imagepicker.PickerPackage;
+import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
+import com.ivanwu.googleapiavailabilitybridge.ReactNativeGooglePlayServicesPackage;
+import com.idehub.GoogleAnalyticsBridge.GoogleAnalyticsBridgePackage;
+import io.invertase.firebase.RNFirebasePackage;
+import com.RNFetchBlob.RNFetchBlobPackage;
+import com.evollu.react.fcm.FIRMessagingPackage;
+import com.transistorsoft.rnbackgroundgeolocation.RNBackgroundGeolocation;
+import com.transistorsoft.rnbackgroundfetch.RNBackgroundFetchPackage;
+import com.instabug.reactlibrary.RNInstabugReactnativePackage;
 import io.invertase.firebase.RNFirebasePackage;
 import com.idehub.GoogleAnalyticsBridge.GoogleAnalyticsBridgePackage;
 import com.microsoft.codepush.react.CodePush;
@@ -44,6 +72,44 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new VectorIconsPackage(),
+            new ReactNativePushNotificationPackage(),
+            new MapsPackage(),
+            new LinearGradientPackage(),
+            new PickerPackage(),
+            new RNI18nPackage(),
+            new ReactNativeGooglePlayServicesPackage(),
+            new GoogleAnalyticsBridgePackage(),
+            new RNFirebasePackage(),
+            new RNFetchBlobPackage(),
+            new FIRMessagingPackage(),
+            new RNBackgroundGeolocation(),
+            new RNBackgroundFetchPackage(),
+            		new RNInstabugReactnativePackage.Builder("YOUR_ANDROID_APPLICATION_TOKEN",MainApplication.this)
+							.setInvocationEvent("shake")
+							.setPrimaryColor("#1D82DC")
+							.setFloatingEdge("left")
+							.setFloatingButtonOffsetFromTop(250)
+							.build(),
+            new VectorIconsPackage(),
+            new ReactNativePushNotificationPackage(),
+            new MapsPackage(),
+            new LinearGradientPackage(),
+            new PickerPackage(),
+            new RNI18nPackage(),
+            new ReactNativeGooglePlayServicesPackage(),
+            new GoogleAnalyticsBridgePackage(),
+            new RNFirebasePackage(),
+            new RNFetchBlobPackage(),
+            new FIRMessagingPackage(),
+            new RNBackgroundGeolocation(),
+            new RNBackgroundFetchPackage(),
+            		new RNInstabugReactnativePackage.Builder("YOUR_ANDROID_APPLICATION_TOKEN",MainApplication.this)
+							.setInvocationEvent("shake")
+							.setPrimaryColor("#1D82DC")
+							.setFloatingEdge("left")
+							.setFloatingButtonOffsetFromTop(250)
+							.build(),
             new RNFirebasePackage(),
             new GoogleAnalyticsBridgePackage(),
             new CodePush(null, getApplicationContext(), BuildConfig.DEBUG),

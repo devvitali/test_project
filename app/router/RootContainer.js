@@ -5,17 +5,12 @@ import FCM, { FCMEvent } from 'react-native-fcm';
 
 import AppNavigator from './AppNavigator';
 import { StartupActions, AuthActions } from '../redux';
-import ReduxPersist from '../config/reduxPersist';
 import styles from './styles';
 import { Colors } from '../themes';
 
 class RootContainer extends Component {
   componentDidMount() {
     // if redux persist is not active fire startup action
-    if (!ReduxPersist.active) {
-      this.props.startup();
-    }
-
     FCM.getFCMToken().then((fcmToken) => {
       this.props.updateProfile({ fcmToken });
       // store fcm token in your server

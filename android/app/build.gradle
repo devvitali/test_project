@@ -134,6 +134,38 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-vector-icons')
+    compile project(':react-native-push-notification')
+    compile project(':react-native-maps')
+    compile project(':react-native-linear-gradient')
+    compile project(':react-native-image-crop-picker')
+    compile project(':react-native-i18n')
+    compile project(':react-native-google-api-availability-bridge')
+    compile project(':react-native-google-analytics-bridge')
+    compile(project(':react-native-firebase')) {
+        transitive = false
+    }
+    compile project(':react-native-fetch-blob')
+    compile project(':react-native-fcm')
+    compile project(':react-native-background-geolocation')
+    compile project(':react-native-background-fetch')
+    compile project(':instabug-reactnative')
+    compile project(':react-native-vector-icons')
+    compile project(':react-native-push-notification')
+    compile project(':react-native-maps')
+    compile project(':react-native-linear-gradient')
+    compile project(':react-native-image-crop-picker')
+    compile project(':react-native-i18n')
+    compile project(':react-native-google-api-availability-bridge')
+    compile project(':react-native-google-analytics-bridge')
+    compile(project(':react-native-firebase')) {
+        transitive = false
+    }
+    compile project(':react-native-fetch-blob')
+    compile project(':react-native-fcm')
+    compile project(':react-native-background-geolocation')
+    compile project(':react-native-background-fetch')
+    compile project(':instabug-reactnative')
     compile project(':react-native-firebase')
     compile project(':react-native-google-analytics-bridge')
     compile project(':react-native-code-push')
