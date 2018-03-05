@@ -21,7 +21,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>6</string>
+	<string>7</string>
 	<key>CodePushDeploymentKey</key>
 	<string>VZEssjiXyw3pa4Tcy00ZD8W8Y-Hda065dcdc-8b6a-4077-8542-8057ac867034</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
@@ -49,6 +49,8 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>Music usage</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
 	<string>Bluetooth</string>
 	<key>NSCalendarsUsageDescription</key>
@@ -103,7 +105,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>kTCCServiceMediaLibrary</key>
-	<string>Music usage</string>
 </dict>
 </plist>
