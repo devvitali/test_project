@@ -58,11 +58,9 @@
 	<key>NSCameraUsageDescription</key>
 	<string>to take a pic</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>CHANGEME: Location Always And When In Use Usage Description</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>CHANGEME: Location Always Usage Description</string>
+	<string>To find bars near you</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>To find nearby Drink-ups and free drinks</string>
+	<string>To find bars near you</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>to use Microphone</string>
 	<key>NSMotionUsageDescription</key>
