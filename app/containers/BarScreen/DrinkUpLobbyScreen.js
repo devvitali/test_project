@@ -132,18 +132,19 @@ class DrinkupLobbyScreen extends React.Component {
     return null;
   }
   renderRequestToJoinDialog() {
-    const { waitingUsers } = this.props;
+    const { waitingUsers, location } = this.props;
     if (waitingUsers && Object.keys(waitingUsers).length > 0) {
       if (this.state.showJoinDialog) {
         const user = waitingUsers[Object.keys(waitingUsers)[0]];
-        const { firstName, distance = 0, photoURL } = user;
+        const { firstName, distance = 0, photoURL, uid } = user;
         return (
           <JoinDialog
             onClose={() => this.onCloseJoiningDialog(user)}
             visible
+            uid={uid}
             name={firstName}
             avatarSrc={photoURL}
-            distance={distance}
+            location={location.coords}
           />
         );
       }
@@ -199,6 +200,7 @@ const mapStateToProps = state => ({
   waitingUsers: state.drinkup.waitingUsers,
   user: state.auth.profile,
   uid: state.auth.uid,
+  location: state.location,
 });
 
 const mapDispatchToProps = dispatch => ({

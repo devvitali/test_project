@@ -28,6 +28,9 @@ export default class AppContainer extends Component {
         this.props.navigation.navigate('DrinkUpScreen');
       }
     });
+    FCM.on(FCMEvent.DirectChannelConnectionChanged, (data)=>{
+      console.log('direct channel connected' + data);
+    });
   }
   componentWillUnmount() {
     this.messageListener.remove();

@@ -6,11 +6,11 @@ import drinkupActions from '../drinkup';
 import { firebaseAuth, firebaseStorage } from '../../firebase';
 import { User } from '../../firebase/models';
 import { watch } from '../../utils/sagaUtils';
+import { geoFire } from '../../firebase';
 
 function subscribe(key) {
   return eventChannel(emit => User.subscribe(emit, key));
 }
-
 export function* signIn() {
   try {
     const authData = yield call([firebaseAuth, firebaseAuth.signInAnonymouslyAndRetrieveData]);
@@ -72,6 +72,14 @@ export function* createProfile() {
   }
 }
 export function* updateLocation({ location }) {
+  // if (location.coords) {
+  //   const { latitude, longitude } = location.coords;
+  //   const authData = yield call([firebaseAuth, firebaseAuth.signInAnonymouslyAndRetrieveData]);
+  //   const { user } = authData;
+  //   if (user) {
+  //     geoFire('userLocations').set(user.uid, [latitude, longitude]);
+  //   }
+  // }
   console.log('updateLocation', location);
 }
 export function* updateProfile({ diff }) {

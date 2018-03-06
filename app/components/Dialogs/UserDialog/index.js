@@ -28,9 +28,4 @@ const UserDialog = ({ name, avatarSrc, message, onClose, joinTime }) => (
     }
   </Dialog>
 );
-UserDialog.defaultProps = {
-  message: 'test',
-  joinTime: new Date(),
-};
-
 export default UserDialog;
