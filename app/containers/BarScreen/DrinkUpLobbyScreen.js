@@ -5,8 +5,7 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import {
   Button,
-  Dialog,
-  MessageDialog,
+  UserDialog,
   AlkoSpecialWarningDialog,
   JoinDialog,
   ComposeMessageDialog,
@@ -27,7 +26,7 @@ class DrinkupLobbyScreen extends React.Component {
       showRedeemWarning: false,
       showComposeMessage: false,
       showCheerDialog: true,
-      showMessageDialog: false,
+      showUserDialog: false,
       composedMessage: ' ',
     };
   }
@@ -44,8 +43,8 @@ class DrinkupLobbyScreen extends React.Component {
       this.redeem();
     }
   };
-  onShowMessage = (user) => {
-    this.setState({ showMessageDialog: true, user })
+  onShowUserImage = (user) => {
+    this.setState({ showUserDialog: true, user })
   };
   onLeave = () => {
     const { bar, user, uid, leaveDrinkup } = this.props;
@@ -118,11 +117,11 @@ class DrinkupLobbyScreen extends React.Component {
     return null;
   }
   renderMessageDialog() {
-    const { showMessageDialog, user } = this.state;
-    if (showMessageDialog) {
+    const { showUserDialog, user } = this.state;
+    if (showUserDialog) {
       return (
-        <MessageDialog
-          onClose={() => this.setState({ showMessageDialog: false, user: null })}
+        <UserDialog
+          onClose={() => this.setState({ showUserDialog: false, user: null })}
           visible
           message={user.message}
           name={user.firstName}
@@ -174,7 +173,7 @@ class DrinkupLobbyScreen extends React.Component {
         <View style={styles.container}>
           <AvatarList
             users={users}
-            onShowMessage={this.onShowMessage}
+            onShowUserImage={this.onShowUserImage}
           />
           <Button
             showIndicator={this.props.fetching}

@@ -4,9 +4,15 @@ import { StyleSheet } from 'react-native';
 import { Metrics, Colors, Fonts } from '../../../themes';
 
 export default StyleSheet.create({
+  dialogStyle: {
+    width: Metrics.screenWidth - 50,
+  },
+  dialogContainer: {
+    width: Metrics.screenWidth - 30,
+  },
   title: {
     color: Colors.snow,
-    fontSize: Fonts.size.input,
+    fontSize: Fonts.size.h4,
     fontFamily: Fonts.type.primary,
     marginBottom: 25,
     textAlign: 'center',
@@ -27,4 +33,10 @@ export default StyleSheet.create({
     marginTop: Metrics.baseMargin,
     marginBottom: Metrics.baseMargin,
   },
+  time: {
+    color: Colors.brand.gray,
+    fontFamily: Fonts.type.primary,
+    fontSize: Fonts.size.regular,
+    marginBottom: Metrics.baseMargin,
+  }
 });

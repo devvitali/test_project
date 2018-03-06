@@ -17,6 +17,7 @@ import {
   getProfile,
   updateProfile,
   uploadProfilePhoto,
+  updateLocation,
 } from './auth';
 
 import {
@@ -53,6 +54,7 @@ export default function* root() {
     takeLatest(AuthTypes.UPLOAD_PROFILE_PHOTO, uploadProfilePhoto),
     takeEvery(AuthTypes.UPDATE_PROFILE, updateProfile),
     takeLatest(LocationTypes.START_BACKGROUND_GEO_LOCATION, startBackgroundGeoLocation),
+    takeLatest(LocationTypes.ON_LOCATION_CHANGE, updateLocation),
     takeEvery(BarTypes.UPDATE_MAP_BAR, updateMapBar),
     takeLatest(BarTypes.BARS_REQUEST, getBars),
     takeLatest(DrinkupTypes.DRINKUP_REQUEST, getDrinkup),

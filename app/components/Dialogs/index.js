@@ -29,7 +29,7 @@ const Dialog = props => (
       >
         <View />
       </TouchableHighlight>
-      <View style={Styles.dialogContainer}>
+      <View style={[Styles.dialogContainer, props.dialogContainer]}>
         <View style={[Styles.contentContainer, props.dialogStyle]}>{props.children}</View>
         {props.closeButton && renderCloseButton(props.onClose)}
       </View>
@@ -53,4 +53,4 @@ export { default as ComposeMessageDialog } from './ComposeMessageDialog';
 export { default as DirectionDialog } from './DirectionDialog';
 export { default as JoinDialog } from './JoinDialog';
 export { default as PicPhotoSourceDialog } from './PicPhotoSourceDialog';
-export { default as MessageDialog } from './MessageDialog';
+export { default as UserDialog } from './UserDialog';

@@ -71,7 +71,9 @@ export function* createProfile() {
     yield put(authActions.createProfileFailed(error));
   }
 }
-
+export function* updateLocation({ location }) {
+  console.log('updateLocation', location);
+}
 export function* updateProfile({ diff }) {
   try {
     const authData = yield call([firebaseAuth, firebaseAuth.signInAnonymouslyAndRetrieveData]);

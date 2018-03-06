@@ -19,6 +19,7 @@ class EditProfileScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      update: false,
       firstName: props.user.firstName,
       image: props.user.photoURL ? { uri: props.user.photoURL } : avatar,
       icon: props.user.icon,
@@ -64,13 +65,17 @@ class EditProfileScreen extends Component {
     openPicker({ width: 512, height: 512, cropping: true })
       .then(this.onImageSelected);
   saveProfile = () => {
-    const { icon, firstName, photoURL } = this.state;
-    const { routeName } = this.props.navigation.state;
-    this.props.updateProfile({ firstName, icon, photoURL });
-    Keyboard.dismiss();
-    if (routeName === 'CompleteProfileScene') {
-      this.completeProfile();
-    }
+    this.setState({ update: true });
+    setTimeout(() => {
+      const {icon, firstName, photoURL} = this.state;
+      const {routeName} = this.props.navigation.state;
+      this.props.updateProfile({firstName, icon, photoURL});
+      Keyboard.dismiss();
+      if (routeName === 'CompleteProfileScene') {
+        this.completeProfile();
+      }
+      this.setState({ update: false });
+    }, 1000);
   };
   completeProfile = () => {
     const { user, uid, navigation } = this.props;
@@ -155,7 +160,7 @@ class EditProfileScreen extends Component {
             }
             <View style={Styles.footer}>
               <Button
-                showIndicator={fetching}
+                showIndicator={this.state.update || fetching}
                 theme={!isProfileComplete ? 'disallow' : 'primary'}
                 clickable={isProfileComplete}
                 text="Save profile"

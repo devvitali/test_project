@@ -88,10 +88,10 @@ class MapScreen extends Component {
   }
   onHandleRef = (ref) => {
     this.map = ref;
-    if (!this.map) {
-      return;
-    }
     setTimeout(() => {
+      if (!this.map) {
+        return;
+      }
       this.map.animateToRegion(this.props.region, 1);
     }, 50);
   };

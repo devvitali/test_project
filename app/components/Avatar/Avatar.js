@@ -20,16 +20,13 @@ function renderImage(props) {
   return (
     <View style={[styles.innerContainer, { width }]}>
       <CachedImage source={props.image} style={[styles.image, imageStyle, { width, height: width }]} />
-      {
-        message &&
-        <View style={styles.btnMessage}>
-          <Icon name="envelope"
-            size={Metrics.icons.small}
-            color={Colors.snow}
-            style={{ opacity: messagesRead ? 0.8 : 1 }}
-          />
-        </View>
-      }
+      <View style={styles.btnMessage}>
+        <Icon name="envelope"
+          size={Metrics.icons.small}
+          color={Colors.snow}
+          style={{ opacity: 1 }}
+        />
+      </View>
       {disabled && <View style={styles.imageBackdrop} />}
     </View>
   );
