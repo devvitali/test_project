@@ -12,6 +12,7 @@ import {
   AvatarList,
   CheersDialog,
 } from '../index';
+import { Special } from '../../firebase/models';
 import { BarImages } from '../../containers/BarScreen/BarImages';
 import styles from '../../containers/BarScreen/styles';
 
@@ -25,6 +26,7 @@ export default class DrinkupLobbyScreen extends React.Component {
       showComposeMessage: false,
       showCheerDialog: true,
       showUserDialog: false,
+      showWarningDialog: false,
       composedMessage: ' ',
     };
   }
@@ -33,11 +35,22 @@ export default class DrinkupLobbyScreen extends React.Component {
     this.setState({ showCheerDialog: false });
     acceptDrinkupInvitation(bar, uid);
   };
-  onRedeem = () => {
+  onRedeem = async () => {
+    const special = await Special.get(this.props.bar.specialId);
+    let firstTime = false;
+    const { startDate } = special;
+    const now = moment();
+    const specialDate = moment(new Date(startDate));
+    if (!startDate || now.diff(specialDate, 'days') !== 0) {
+      firstTime = true;
+    } else if (now.diff(specialDate, 'seconds') > 180) {
+      this.setState({ showWarningDialog: true });
+      return;
+    }
     if (firstTime) {
       this.setState({ showRedeemWarning: true });
     } else {
-      this.redeem();
+      this.redeem(startDate, false);
     }
   };
   onLeave = () => {
@@ -61,17 +74,20 @@ export default class DrinkupLobbyScreen extends React.Component {
     invitedUser.message = composedMessage;
     this.props.sendDrinkupInvitation(this.props.bar, invitedUser);
   };
-  onAcceptRedeemWarning = () => {
+  onAcceptRedeemWarning = async () => {
     this.setState({ showRedeemWarning: false });
-    this.redeem();
+    const startDate = new Date();
+    await this.redeem(startDate.getTime(), true);
   };
-  redeem() {
+  redeem = async (startDate, updateDate) => {
+    if (updateDate) {
+      await Special.update(this.props.bar.specialId, { startDate });
+    }
     this.props.navigation.navigate('Redeem2For1Screen', {
       bar: this.props.bar.name,
-      redeemDate: moment(),
-      expiryDate: moment().add(3, 'minutes'),
+      redeemDate: moment(new Date(startDate)),
     });
-  }
+  };
   renderDialogs() {
     const { invitedUser, showComposeMessage, composedMessage, showUserDialog, user } = this.state;
     const { uid, users, waitingUsers, location } = this.props;
@@ -125,6 +141,16 @@ export default class DrinkupLobbyScreen extends React.Component {
       }
       setTimeout(() => this.setState({ showJoinDialog: true }), 100);
     }
+    if (this.state.showWarningDialog) {
+      return (
+        <AlkoSpecialWarningDialog
+          onButtonPress={() => this.setState({ showWarningDialog: false })}
+          onClose={() => this.setState({ showWarningDialog: false })}
+          visible={this.state.showWarningDialog}
+          expired
+        />
+      );
+    }
     return (
       <AlkoSpecialWarningDialog
         onButtonPress={this.onAcceptRedeemWarning}
@@ -138,7 +164,6 @@ export default class DrinkupLobbyScreen extends React.Component {
     let special = null;
     if (bar) {
       special = bar.specialId;
-      console.log('drinkup lobby bar', bar);
     }
     const userCount = Object.keys(users).length;
     return (

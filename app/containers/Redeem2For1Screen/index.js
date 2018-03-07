@@ -10,7 +10,6 @@ import { Images } from '../../themes';
 export default class Redeem2For1Screen extends Component {
   static defaultProps = {
     redeemDate: moment(),
-    expiryDate: moment().add(3, 'minutes'),
   };
 
   constructor(props) {
@@ -25,13 +24,12 @@ export default class Redeem2For1Screen extends Component {
   }
 
   componentWillUpdate(props, state) {
-    if (state.currentDate.diff(props.expiryDate, 'seconds') === 0) {
+    const { navigation } = props;
+    const { params } = navigation.state;
+    const { redeemDate } = params;
+    if (state.currentDate.diff(redeemDate, 'seconds') > 180) {
       clearInterval(this.interval);
-      if (props.onExpire) {
-        props.onExpire();
-      } else {
-        // NavigationActions.pop();
-      }
+      this.props.navigation.goBack()
     }
   }
 
@@ -40,10 +38,12 @@ export default class Redeem2For1Screen extends Component {
   }
 
   render() {
-    const { expiryDate } = this.props;
-    const secondsToExpire = expiryDate.diff(this.state.currentDate, 'seconds');
-    const minutes = Math.floor(secondsToExpire / 60);
-    const seconds = secondsToExpire - (minutes * 60);
+    const { navigation } = this.props;
+    const { params } = navigation.state;
+    const { redeemDate } = params;
+    const secondsToExpire = 180 - this.state.currentDate.diff(redeemDate, 'seconds');
+    const minutes = secondsToExpire < 0 ? Math.floor(secondsToExpire / 60) : 0;
+    const seconds = secondsToExpire < 0 ? secondsToExpire - (minutes * 60) : 0;
 
     return (
       <AppContainer hideNavBar>

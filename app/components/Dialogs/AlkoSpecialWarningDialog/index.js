@@ -6,7 +6,7 @@ import Button from '../../Button';
 import Dialog from '../';
 import styles from './styles';
 
-const AlkoSpecialWarningDialog = ({ onClose, onButtonPress, visible }) => (
+const AlkoSpecialWarningDialog = ({ onClose, onButtonPress, visible, expired }) => (
   <Dialog
     closeButton
     closeOnBackdropPress
@@ -14,8 +14,8 @@ const AlkoSpecialWarningDialog = ({ onClose, onButtonPress, visible }) => (
     visible={visible}
   >
     <Text style={styles.title}>{I18n.t('Redeem_WarningTitle')}</Text>
-    <Text style={styles.body}>{I18n.t('Redeem_WarningBody')}</Text>
-    <Button onPress={onButtonPress} text={I18n.t('Redeem_WarningDismiss')} />
+    <Text style={styles.body}>{I18n.t(!expired ? 'Redeem_WarningBody' : 'Redeem_Expired')}</Text>
+    {!expired && <Button onPress={onButtonPress} text={I18n.t('Redeem_WarningDismiss')} />}
   </Dialog>
 );
 export default AlkoSpecialWarningDialog;

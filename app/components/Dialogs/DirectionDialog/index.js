@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Linking } from 'react-native';
+import { geoFire } from '../../../firebase'
 import { DirectionsDialog } from './DirectionsDialog';
 
 export default class DirectionsDialogWrapper extends Component {
@@ -21,39 +22,41 @@ export default class DirectionsDialogWrapper extends Component {
     }
   }
 
-  getGoogleMapsURL() {
+  async getGoogleMapsURL() {
     const { bar } = this.props;
-    const { address, name } = bar;
-    return `comgooglemaps://?q=${name}&center=${address.latitude},${address.longitude}`;
+    const { name, id } = bar;
+    const location = await geoFire('barLocations').get(id);
+    return `comgooglemaps://?q=${name}&center=${location[0]},${location[1]}`;
   }
 
-  getAppleMapsURL() {
+  async getAppleMapsURL() {
     const { bar } = this.props;
-    const { address, name } = bar;
-    return `http://maps.apple.com/?q=${name}&ll=${address.latitude},${address.longitude}`;
+    const { name, id } = bar;
+    const location = await geoFire('barLocations').get(id);
+    return `http://maps.apple.com/?q=${name}&ll=${location[0]},${location[1]}`;
   }
 
   checkForGoogleMaps = () => {
     Linking
       .canOpenURL('comgooglemaps://')
-      .then((isSupported) => {
+      .then(async (isSupported) => {
         if (isSupported) {
           this.setState({ visible: true });
         } else {
-          this.openAppleMaps();
+          await this.openAppleMaps();
           this.props.onClose();
         }
       });
   }
 
-  openGoogleMaps = () => {
-    const googleMapsURL = this.getGoogleMapsURL();
+  openGoogleMaps = async () => {
+    const googleMapsURL = await this.getGoogleMapsURL();
     Linking.openURL(googleMapsURL);
     this.props.onClose();
   };
 
-  openAppleMaps = () => {
-    const appleMapsURL = this.getAppleMapsURL();
+  openAppleMaps = async () => {
+    const appleMapsURL = await this.getAppleMapsURL();
     Linking.openURL(appleMapsURL);
     this.props.onClose();
   };

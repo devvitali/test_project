@@ -3,6 +3,7 @@ import UserModel from './user';
 import EventModel from './event';
 import BarModel from './bar';
 import DrinkUpModel from './drinkup';
+import SpecialModel from './special';
 import NotificationModel from './notification';
 import authActions from '../../redux/auth';
 import barsActions from '../../redux/bar';
@@ -30,8 +31,9 @@ export const UserFactory = (actions = userActions) => new UserModel(firebaseDb, 
 export const BarFactory = (actions = barActions) => new BarModel(firebaseDb, actions);
 export const DrinkUpFactory = (actions = drinkupActions) => new DrinkUpModel(firebaseDb, actions);
 export const EventFactory = actions => new EventModel(firebaseDb, actions);
-
 export const User = new UserModel(firebaseDb, userActions);
 export const Bar = new BarModel(firebaseDb, barActions);
 export const DrinkUp = new DrinkUpModel(firebaseDb, drinkupActions);
 export const Notification = new NotificationModel(firebaseDb);
+export const Special = new SpecialModel(firebaseDb);
+
