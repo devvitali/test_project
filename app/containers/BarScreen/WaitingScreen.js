@@ -100,7 +100,7 @@ class WaitingScreen extends Component {
         <BarImages images={images} />
         {specialId &&
         <View style={styles.bannerContainer}>
-          <Banner theme="info" text={I18n.t('Drinkup_JoinDrinkUpAndGet2For1Drinks')} onPress={this.onWaiting} />
+          <Banner showGradient theme="info" text={I18n.t('Drinkup_JoinDrinkUpAndGet2For1Drinks')} onPress={this.onSendRequestDrinkup} />
         </View>
         }
         <View style={styles.container}>

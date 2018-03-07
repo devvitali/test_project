@@ -26,14 +26,14 @@ export default class DirectionsDialogWrapper extends Component {
     const { bar } = this.props;
     const { name, id } = bar;
     const location = await geoFire('barLocations').get(id);
-    return `comgooglemaps://?q=${name}&center=${location[0]},${location[1]}`;
+    return `comgooglemaps://?q=${name.replace('&', ' ')}&center=${location[0]},${location[1]}`;
   }
 
   async getAppleMapsURL() {
     const { bar } = this.props;
     const { name, id } = bar;
     const location = await geoFire('barLocations').get(id);
-    return `http://maps.apple.com/?q=${name}&ll=${location[0]},${location[1]}`;
+    return `http://maps.apple.com/?q=${name.replace('&', ' ')}&ll=${location[0]},${location[1]}`;
   }
 
   checkForGoogleMaps = () => {
