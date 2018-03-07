@@ -14,21 +14,21 @@ export default class JoinDialog extends Component {
       userLocation: null
     };
     setTimeout(async () => {
-      // const userLocation = await geoFire('userLocations').get(this.props.uid);
-      // this.setState({ userLocation });
+      const userLocation = await geoFire('userLocations').get(this.props.uid);
+      this.setState({ userLocation });
     });
   }
   getDistance() {
     if (this.state.userLocation && this.props.location) {
       const { latitude, longitude } = this.props.location;
       const { userLocation } = this.state;
-      return GeoFire.distance(userLocation, [latitude, longitude]) / 1.852;
+      return (GeoFire.distance(userLocation, [latitude, longitude]) / 1.852).toFixed(2);
     }
     return 0;
   }
   render() {
     const { name, avatarSrc, onClose } = this.props;
-    // const distance = this.getDistance();
+    const distance = this.getDistance();
     return (
       <Dialog
         subcontent={
@@ -47,6 +47,7 @@ export default class JoinDialog extends Component {
           imageStyle={styles.avatarImage}
           width={128}
         />
+        <Text style={styles.distance}>{`${distance}mi away`}</Text>
         <Button onPress={onClose} text={I18n.t('Drinkup_SendInvite')} />
       </Dialog>
     );

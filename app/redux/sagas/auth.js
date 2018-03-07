@@ -72,14 +72,14 @@ export function* createProfile() {
   }
 }
 export function* updateLocation({ location }) {
-  // if (location.coords) {
-  //   const { latitude, longitude } = location.coords;
-  //   const authData = yield call([firebaseAuth, firebaseAuth.signInAnonymouslyAndRetrieveData]);
-  //   const { user } = authData;
-  //   if (user) {
-  //     geoFire('userLocations').set(user.uid, [latitude, longitude]);
-  //   }
-  // }
+  if (location.coords) {
+    const { latitude, longitude } = location.coords;
+    const authData = yield call([firebaseAuth, firebaseAuth.signInAnonymouslyAndRetrieveData]);
+    const { user } = authData;
+    if (user) {
+      geoFire('userLocations').set(user.uid, [latitude, longitude]);
+    }
+  }
   console.log('updateLocation', location);
 }
 export function* updateProfile({ diff }) {
