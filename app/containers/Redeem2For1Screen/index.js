@@ -81,5 +81,4 @@ export default class Redeem2For1Screen extends Component {
       </AppContainer>
     );
   }
-
 }

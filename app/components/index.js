@@ -11,6 +11,7 @@ export {
   PicPhotoSourceDialog,
   UserDialog,
 } from './Dialogs';
+export { DrinkUpLobby } from './BarScreen';
 export { default as DrawerButton } from './DrawerButton';
 export { default as IconAlko } from './IconAlko';
 export { default as Document } from './Document';

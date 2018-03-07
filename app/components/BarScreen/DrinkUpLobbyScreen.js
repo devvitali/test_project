@@ -1,7 +1,6 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
 import I18n from 'react-native-i18n';
-import { connect } from 'react-redux';
 import moment from 'moment';
 import {
   Button,
@@ -12,12 +11,11 @@ import {
   Banner,
   AvatarList,
   CheersDialog,
-} from '../../components';
-import { BarImages } from './BarImages';
-import { DrinkupActions } from '../../redux';
-import styles from './styles';
+} from '../index';
+import { BarImages } from '../../containers/BarScreen/BarImages';
+import styles from '../../containers/BarScreen/styles';
 
-class DrinkupLobbyScreen extends React.Component {
+export default class DrinkupLobbyScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -36,15 +34,11 @@ class DrinkupLobbyScreen extends React.Component {
     acceptDrinkupInvitation(bar, uid);
   };
   onRedeem = () => {
-    const firstTime = true;
     if (firstTime) {
       this.setState({ showRedeemWarning: true });
     } else {
       this.redeem();
     }
-  };
-  onShowUserImage = (user) => {
-    this.setState({ showUserDialog: true, user })
   };
   onLeave = () => {
     const { bar, user, uid, leaveDrinkup } = this.props;
@@ -59,6 +53,7 @@ class DrinkupLobbyScreen extends React.Component {
   };
   onCloseRedeemWarningDialog = () => this.setState({ showRedeemWarning: false });
   onComposedMessageChange = composedMessage => this.setState({ composedMessage });
+  onShowUserImage = user => this.setState({ showUserDialog: true, user });
   onCloseComposeMessageDialog = () => {
     const { composedMessage, invitedUser } = this.state;
     this.setState({ showComposeMessage: false, invitedUser: null });
@@ -77,17 +72,9 @@ class DrinkupLobbyScreen extends React.Component {
       expiryDate: moment().add(3, 'minutes'),
     });
   }
-  renderRedeemWarningDialog() {
-    return (
-      <AlkoSpecialWarningDialog
-        onButtonPress={this.onAcceptRedeemWarning}
-        onClose={this.onCloseRedeemWarningDialog}
-        visible={this.state.showRedeemWarning}
-      />
-    );
-  }
-  renderComposeMessageDialog() {
-    const { invitedUser, showComposeMessage, composedMessage } = this.state;
+  renderDialogs() {
+    const { invitedUser, showComposeMessage, composedMessage, showUserDialog, user } = this.state;
+    const { uid, users, waitingUsers, location } = this.props;
     if (invitedUser && showComposeMessage) {
       return (
         <ComposeMessageDialog
@@ -99,10 +86,6 @@ class DrinkupLobbyScreen extends React.Component {
         />
       );
     }
-    return null;
-  }
-  renderCheerDialog() {
-    const { uid, users } = this.props;
     if (users[uid] && users[uid].invitedBy && !users[uid].messagesRead) {
       const { invitedBy, message } = users[uid];
       return (
@@ -114,10 +97,6 @@ class DrinkupLobbyScreen extends React.Component {
         />
       );
     }
-    return null;
-  }
-  renderMessageDialog() {
-    const { showUserDialog, user } = this.state;
     if (showUserDialog) {
       return (
         <UserDialog
@@ -129,14 +108,10 @@ class DrinkupLobbyScreen extends React.Component {
         />
       );
     }
-    return null;
-  }
-  renderRequestToJoinDialog() {
-    const { waitingUsers, location } = this.props;
     if (waitingUsers && Object.keys(waitingUsers).length > 0) {
       if (this.state.showJoinDialog) {
         const user = waitingUsers[Object.keys(waitingUsers)[0]];
-        const { firstName, distance = 0, photoURL, uid } = user;
+        const { firstName, photoURL, uid } = user;
         return (
           <JoinDialog
             onClose={() => this.onCloseJoiningDialog(user)}
@@ -150,13 +125,20 @@ class DrinkupLobbyScreen extends React.Component {
       }
       setTimeout(() => this.setState({ showJoinDialog: true }), 100);
     }
-    return null;
+    return (
+      <AlkoSpecialWarningDialog
+        onButtonPress={this.onAcceptRedeemWarning}
+        onClose={this.onCloseRedeemWarningDialog}
+        visible={this.state.showRedeemWarning}
+      />
+    );
   }
   render() {
     const { bar, users } = this.props;
     let special = null;
     if (bar) {
       special = bar.specialId;
+      console.log('drinkup lobby bar', bar);
     }
     const userCount = Object.keys(users).length;
     return (
@@ -182,31 +164,10 @@ class DrinkupLobbyScreen extends React.Component {
             theme="disallow"
             text={I18n.t('Drinkup_LeaveTheDrinkUp')}
           />
-          {this.renderRequestToJoinDialog()}
-          {this.renderRedeemWarningDialog()}
-          {this.renderComposeMessageDialog()}
-          {this.renderMessageDialog()}
-          {this.renderCheerDialog()}
+          {this.renderDialogs()}
         </View>
       </View>
     );
   }
 }
 
-const mapStateToProps = state => ({
-  bar: state.drinkup.bar,
-  fetching: state.drinkup.fetching,
-  users: state.drinkup.users,
-  waitingUsers: state.drinkup.waitingUsers,
-  user: state.auth.profile,
-  uid: state.auth.uid,
-  location: state.location,
-});
-
-const mapDispatchToProps = dispatch => ({
-  leaveDrinkup: (bar, user) => dispatch(DrinkupActions.leaveDrinkup(bar, user)),
-  sendDrinkupInvitation: (bar, user, message) => dispatch(DrinkupActions.sendDrinkupInvitation(bar, user, message)),
-  acceptDrinkupInvitation: (bar, uid) => dispatch(DrinkupActions.acceptDrinkupInvitation(bar, uid)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(DrinkupLobbyScreen);

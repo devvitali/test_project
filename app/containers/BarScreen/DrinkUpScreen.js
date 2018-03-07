@@ -3,11 +3,10 @@ import { View } from 'react-native';
 import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation'
 import AppContainer from '../AppContainer';
-import { NavItems, DirectionDialog } from '../../components';
+import { NavItems, DirectionDialog, DrinkUpLobby } from '../../components';
 import styles from './styles';
-
-import DrinkUpLobby from './DrinkUpLobbyScreen';
 import { DrinkupActions } from '../../redux';
+import { BarFactory } from '../../firebase/models';
 
 class DrinkUp extends Component {
   constructor(props) {
@@ -15,9 +14,14 @@ class DrinkUp extends Component {
     this.state = {
       isDirectionDialogShowing: false,
     };
+    this.barActions = {
+      onUpdate: this.onUpdate,
+    };
+    this.barSubscribeModel = new BarFactory(this.barActions);
   }
   componentDidMount() {
     if (this.props.bar) {
+      this.barSubscribeModel.subscribe(() => {}, this.props.bar.id);
       this.props.getDrinkup(this.props.bar.currentDrinkUp, this.props.uid);
       if (!this.props.users) {
         this.props.getUsers(this.props.bar.currentDrinkUp);
@@ -36,6 +40,12 @@ class DrinkUp extends Component {
       this.props.clearDrinkupUsers();
     }
   }
+  componentWillUnmount() {
+    this.barSubscribeModel.unsubscribe(this.props.bar.id);
+  }
+  onUpdate = (bar, id) => {
+    this.props.updateDraftBar({ ...bar, id });
+  };
   onShowDirectionDialog = () => this.setState({ isDirectionDialogShowing: true });
   onCloseDirectionDialog = () => this.setState({ isDirectionDialogShowing: false });
   getTitle() {
@@ -52,7 +62,7 @@ class DrinkUp extends Component {
   }
   renderScreen() {
     if (this.props.users && Object.keys(this.props.users).length > 0) {
-      return <DrinkUpLobby navigation={this.props.navigation} />;
+      return <DrinkUpLobby {...this.props} />;
     }
     return null;
   }
@@ -89,6 +99,10 @@ const mapStateToProps = state => ({
   bar: state.drinkup.bar,
   joined: state.drinkup.joined,
   uid: state.auth.uid,
+  fetching: state.drinkup.fetching,
+  waitingUsers: state.drinkup.waitingUsers,
+  user: state.auth.profile,
+  location: state.location,
 });
 
 //eslint-disable-next-line
@@ -97,6 +111,10 @@ const mapDispatchToProps = dispatch => ({
   getUsers: drinkUpId => dispatch(DrinkupActions.drinkupRequest(drinkUpId)),
   clearDrinkupUsers: () => dispatch(DrinkupActions.clearDrinkupUsers()),
   setDrinkupBar: bar => dispatch(DrinkupActions.barRequestSuccessful(bar)),
+  updateDraftBar: bar => dispatch(DrinkupActions.updateDraftBar(bar)),
+  leaveDrinkup: (bar, user) => dispatch(DrinkupActions.leaveDrinkup(bar, user)),
+  sendDrinkupInvitation: (bar, user, message) => dispatch(DrinkupActions.sendDrinkupInvitation(bar, user, message)),
+  acceptDrinkupInvitation: (bar, uid) => dispatch(DrinkupActions.acceptDrinkupInvitation(bar, uid)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(DrinkUp);

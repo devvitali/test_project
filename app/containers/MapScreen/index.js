@@ -25,6 +25,8 @@ const boulderPosition = {
   latitude: 40.017900,
   longitude: -105.280009,
 };
+let lastMapLocation = null;
+
 class MapScreen extends Component {
   constructor(props) {
     super(props);
@@ -92,13 +94,18 @@ class MapScreen extends Component {
       if (!this.map) {
         return;
       }
-      this.map.animateToRegion(this.props.region, 1);
+      if (lastMapLocation) {
+        this.map.animateToRegion(lastMapLocation, 1);
+      } else {
+        this.map.animateToRegion(this.props.region, 1);
+      }
     }, 50);
   };
 
   onBackCurrentLocation = ({ longitudeDelta = 0.16, latitudeDelta = 0.08 }) => {
     const position = this.props.location ? this.props.location : boulderPosition;
     this.currentRegion = { ...position, longitudeDelta, latitudeDelta };
+    lastMapLocation = this.currentRegion;
     // this.currentRegion = { ...boulderPosition, longitudeDelta: 0.3, latitudeDelta: 0.15 };
     this.map.animateToRegion(this.currentRegion, 1000);
   };
@@ -114,6 +121,7 @@ class MapScreen extends Component {
       region.longitude -= 360;
     }
     this.currentRegion = region;
+    lastMapLocation = region;
     const geoParam = {
       center: [region.latitude, region.longitude],
       radius: calculateDistanceByRegion(region) / 1.1,
