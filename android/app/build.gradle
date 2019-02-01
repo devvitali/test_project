@@ -166,7 +166,9 @@ dependencies {
     compile project(':react-native-background-geolocation')
     compile project(':react-native-background-fetch')
     compile project(':instabug-reactnative')
-    compile project(':react-native-firebase')
+    compile(project(':react-native-firebase')) {
+        transitive = false
+    }
     compile project(':react-native-google-analytics-bridge')
     compile project(':react-native-code-push')
     compile project(':instabug-reactnative')

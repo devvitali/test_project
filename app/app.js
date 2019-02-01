@@ -5,10 +5,10 @@ import codePush from 'react-native-code-push';
 import Instabug from 'instabug-reactnative';
 import './i18n'; // keep before root container
 import createStore from './redux';
-import { trackEvent } from './utils/googleAnalytics';
 import RootContainer from './router/RootContainer';
 
 const { store } = createStore();
+
 const updateCodePush = () => {
   codePush.sync({
     updateDialog: true,
@@ -22,12 +22,13 @@ class App extends Component {
     AppState.addEventListener('change', this.onAppStateChanged);
     Instabug.startWithToken('350cd7e5d499ced551b26651779a17ec', Instabug.invocationEvent.shake);
     Instabug.setPrimaryColor(processColor('#FF7604'));
-    trackEvent('test', 'testevent');
     updateCodePush();
   }
+
   onAppStateChanged = () => {
     updateCodePush();
-  };
+  }
+
   render() {
     return (
       <Provider store={store}>
@@ -36,5 +37,9 @@ class App extends Component {
     );
   }
 }
-const codePushOptions = { checkFrequency: codePush.CheckFrequency.MANUAL };
+
+const codePushOptions = {
+  checkFrequency: codePush.CheckFrequency.MANUAL,
+};
+
 export default codePush(codePushOptions)(App);

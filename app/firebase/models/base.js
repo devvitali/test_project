@@ -87,6 +87,7 @@ export default class Base {
   gets(keys, appendKey) {
     return Promise.all(keys.map(key => this.get(key, appendKey)));
   }
+
   set(key, value: Object) {
     return this.dbRef(key).set(value);
   }
@@ -97,8 +98,8 @@ export default class Base {
       ref.once('value', (snap) => {
         console.log(snap);
         resolve(snap);
-      })
-    })
+      });
+    });
   }
 
   update(key, diff) {
@@ -116,6 +117,7 @@ export default class Base {
       });
     });
   }
+
   subscribeMultiple(emit, keys) {
     const unSubscribers = keys.forEach(key => this.subscribe(emit, key));
     return () => {
@@ -126,6 +128,7 @@ export default class Base {
       });
     };
   }
+
   subscribe(emit, key) {
     if (this.unsubscribers[key]) return false;
     let initialized = false;
@@ -191,9 +194,11 @@ export default class Base {
     this._unsubscribers[key] = () => this.dbRef(key).off();
     return this.unsubscribers[key];
   }
+
   unsubscribeKeys(keys) {
     return keys.map(key => this.unsubscribe(key));
   }
+
   unsubscribe(key) {
     if (this.unsubscribers[key]) {
       this.unsubscribers[key]();

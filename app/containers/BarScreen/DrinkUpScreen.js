@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
 import { connect } from 'react-redux';
-import { NavigationActions } from 'react-navigation'
+import { NavigationActions } from 'react-navigation';
 import AppContainer from '../AppContainer';
 import { NavItems, DirectionDialog, DrinkUpLobby } from '../../components';
 import styles from './styles';
@@ -9,6 +9,7 @@ import { DrinkupActions } from '../../redux';
 import { BarFactory } from '../../firebase/models';
 
 class DrinkUp extends Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -19,6 +20,7 @@ class DrinkUp extends Component {
     };
     this.barSubscribeModel = new BarFactory(this.barActions);
   }
+
   componentDidMount() {
     if (this.props.bar) {
       this.barSubscribeModel.subscribe(() => {}, this.props.bar.id);
@@ -28,44 +30,53 @@ class DrinkUp extends Component {
       }
     }
   }
+
   componentWillReceiveProps(newProps) {
     if (this.props.joined !== newProps.joined && !newProps.joined) {
       const resetAction = NavigationActions.reset({
         index: 0,
         actions: [
-          NavigationActions.navigate({ routeName: 'JoinDrinkUpScreen'})
-        ]
+          NavigationActions.navigate({ routeName: 'JoinDrinkUpScreen' }),
+        ],
       });
       this.props.navigation.dispatch(resetAction);
       this.props.clearDrinkupUsers();
     }
   }
+
   componentWillUnmount() {
     this.barSubscribeModel.unsubscribe(this.props.bar.id);
   }
+
   onUpdate = (bar, id) => {
     this.props.updateDraftBar({ ...bar, id });
   };
+
   onShowDirectionDialog = () => this.setState({ isDirectionDialogShowing: true });
+
   onCloseDirectionDialog = () => this.setState({ isDirectionDialogShowing: false });
+
   getTitle() {
     if (this.props.bar) {
       return this.props.bar.name;
     }
     return 'DrinkUp';
   }
+
   getRightNavBarButton() {
     if (this.props.bar) {
       return NavItems.mapButton(this.onShowDirectionDialog);
     }
     return null;
   }
+
   renderScreen() {
     if (this.props.users && Object.keys(this.props.users).length > 0) {
       return <DrinkUpLobby {...this.props} />;
     }
     return null;
   }
+
   renderDirectionDialog() {
     return (
       <DirectionDialog
@@ -105,7 +116,6 @@ const mapStateToProps = state => ({
   location: state.location,
 });
 
-//eslint-disable-next-line
 const mapDispatchToProps = dispatch => ({
   getDrinkup: (drinkupId, userId) => dispatch(DrinkupActions.drinkupRequest(drinkupId, userId)),
   getUsers: drinkUpId => dispatch(DrinkupActions.drinkupRequest(drinkUpId)),

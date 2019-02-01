@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { View, Text, Image, ScrollView } from 'react-native';
 import I18n from 'react-native-i18n';
 import moment from 'moment';
@@ -6,44 +7,61 @@ import styles from './styles';
 import AppContainer from '../AppContainer';
 import { Button } from '../../components';
 import { Images } from '../../themes';
+import { SpecialRedemption } from '../../firebase/models';
 
-export default class Redeem2For1Screen extends Component {
-  static defaultProps = {
-    redeemDate: moment(),
-  };
+class Redeem2For1Screen extends Component {
 
   constructor(props) {
     super(props);
+
     this.state = {
-      currentDate: moment(),
+      redemption: null,
+      counter: 0,
     };
   }
 
   componentDidMount() {
-    this.interval = setInterval(() => this.setState({ currentDate: moment() }), 1000);
-  }
+    const { bar, uid } = this.props;
 
-  componentWillUpdate(props, state) {
-    const { navigation } = props;
-    const { params } = navigation.state;
-    const { redeemDate } = params;
-    if (state.currentDate.diff(redeemDate, 'seconds') > 180) {
-      clearInterval(this.interval);
-      this.props.navigation.goBack()
-    }
+    SpecialRedemption
+      .getByBarAndUser(bar.id, uid)
+      .then((redemption) => {
+
+        if (!redemption) {
+          // eslint-disable-next-line no-param-reassign
+          redemption = SpecialRedemption.setByBarAndUser(bar.id, uid);
+        }
+
+        this.setState({ redemption }, this.startInterval);
+      });
   }
 
   componentWillUnmount() {
     clearInterval(this.interval);
   }
 
+  startInterval = () => {
+    const { redemption } = this.state;
+
+    this.interval = setInterval(() => {
+      if (SpecialRedemption.hasExpired(redemption.timestamp)) {
+        this.props.navigation.goBack();
+      }
+      this.setState(state => ({ counter: state.counter + 1 }));
+    }, 1000);
+  }
+
   render() {
-    const { navigation } = this.props;
-    const { params } = navigation.state;
-    const { redeemDate } = params;
-    const secondsToExpire = 180 - this.state.currentDate.diff(redeemDate, 'seconds');
-    const minutes = secondsToExpire < 0 ? Math.floor(secondsToExpire / 60) : 0;
-    const seconds = secondsToExpire < 0 ? secondsToExpire - (minutes * 60) : 0;
+    const { redemption } = this.state;
+    const { bar } = this.props;
+
+    if (!redemption) {
+      return null;
+    }
+
+    const secondsRemaining = SpecialRedemption.secondsRemaining(redemption.timestamp);
+    const seconds = Math.round(secondsRemaining % 60, 0);
+    const minutes = Math.round((secondsRemaining - seconds) / 60, 0);
 
     return (
       <AppContainer hideNavBar>
@@ -53,11 +71,11 @@ export default class Redeem2For1Screen extends Component {
               <Text style={styles.title}>{I18n.t('Redeem_ALKO')}</Text>
               <Image style={styles.image} source={Images.introStep2} />
               <Text style={styles.giftName}>{I18n.t('Redeem_2For1Special')}</Text>
-              <Text style={styles.packName}>
-                {this.props.bar && this.props.bar.toUpperCase()}
+              <Text style={styles.barName}>
+                {bar.name.toUpperCase()}
               </Text>
               <Text style={styles.date}>
-                {this.props.redeemDate && this.props.redeemDate.format('dddd, MMMM D').toUpperCase()}
+                {moment().format('dddd, MMMM D').toUpperCase()}
               </Text>
               <View style={styles.timeoutContainer}>
                 <Text style={styles.disappearTime}>
@@ -72,7 +90,7 @@ export default class Redeem2For1Screen extends Component {
           <View styles={styles.footer}>
             <Button
               onPress={() => this.props.navigation.goBack()}
-              theme={'primary'}
+              theme="primary"
               text={I18n.t('close')}
               style={styles.closeButton}
             />
@@ -82,3 +100,10 @@ export default class Redeem2For1Screen extends Component {
     );
   }
 }
+
+const mapStateToProps = state => ({
+  uid: state.auth.uid,
+  bar: state.drinkup.bar,
+});
+
+export default connect(mapStateToProps)(Redeem2For1Screen);

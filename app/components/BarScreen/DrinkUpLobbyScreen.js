@@ -1,7 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
 import I18n from 'react-native-i18n';
-import moment from 'moment';
 import {
   Button,
   UserDialog,
@@ -12,11 +11,12 @@ import {
   AvatarList,
   CheersDialog,
 } from '../index';
-import { Special } from '../../firebase/models';
+import { SpecialRedemption } from '../../firebase/models';
 import { BarImages } from '../../containers/BarScreen/BarImages';
 import styles from '../../containers/BarScreen/styles';
 
 export default class DrinkupLobbyScreen extends React.Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -30,64 +30,67 @@ export default class DrinkupLobbyScreen extends React.Component {
       composedMessage: ' ',
     };
   }
+
   onCloseMessage = () => {
     const { bar, uid, acceptDrinkupInvitation } = this.props;
     this.setState({ showCheerDialog: false });
     acceptDrinkupInvitation(bar, uid);
-  };
+  }
+
   onRedeem = async () => {
-    const special = await Special.get(this.props.bar.specialId);
-    let firstTime = false;
-    const { startDate } = special;
-    const now = moment();
-    const specialDate = moment(new Date(startDate));
-    if (!startDate || now.diff(specialDate, 'days') !== 0) {
-      firstTime = true;
-    } else if (now.diff(specialDate, 'seconds') > 180) {
-      this.setState({ showWarningDialog: true });
-      return;
-    }
-    if (firstTime) {
-      this.setState({ showRedeemWarning: true });
+    const { bar, uid } = this.props;
+    const special = await SpecialRedemption.getByBarAndUser(bar.id, uid);
+
+    const showSpecial = !special || !SpecialRedemption.hasExpired(special.timestamp);
+
+    if (showSpecial) {
+      if (!special) {
+        this.setState({ showRedeemWarning: true });
+      } else {
+        this.redeem();
+      }
     } else {
-      this.redeem(startDate, false);
+      this.setState({ showWarningDialog: true });
     }
-  };
+  }
+
   onLeave = () => {
     const { bar, user, uid, leaveDrinkup } = this.props;
     leaveDrinkup(bar, { ...user, uid });
-  };
+  }
+
   onCloseJoiningDialog = (invitedUser) => {
     this.setState({
       showComposeMessage: true,
       showJoinDialog: false,
       invitedUser,
     });
-  };
-  onCloseRedeemWarningDialog = () => this.setState({ showRedeemWarning: false });
-  onComposedMessageChange = composedMessage => this.setState({ composedMessage });
-  onShowUserImage = user => this.setState({ showUserDialog: true, user });
+  }
+
+  onCloseRedeemWarningDialog = () => this.setState({ showRedeemWarning: false })
+
+  onComposedMessageChange = composedMessage => this.setState({ composedMessage })
+
+  onShowUserImage = user => this.setState({ showUserDialog: true, user })
+
   onCloseComposeMessageDialog = () => {
     const { composedMessage, invitedUser } = this.state;
     this.setState({ showComposeMessage: false, invitedUser: null });
     invitedUser.invitedBy = this.props.user.firstName;
     invitedUser.message = composedMessage;
     this.props.sendDrinkupInvitation(this.props.bar, invitedUser);
-  };
+  }
+
   onAcceptRedeemWarning = async () => {
     this.setState({ showRedeemWarning: false });
     const startDate = new Date();
     await this.redeem(startDate.getTime(), true);
-  };
-  redeem = async (startDate, updateDate) => {
-    if (updateDate) {
-      await Special.update(this.props.bar.specialId, { startDate });
-    }
-    this.props.navigation.navigate('Redeem2For1Screen', {
-      bar: this.props.bar.name,
-      redeemDate: moment(new Date(startDate)),
-    });
-  };
+  }
+
+  redeem = async () => {
+    this.props.navigation.navigate('Redeem2For1Screen');
+  }
+
   renderDialogs() {
     const { invitedUser, showComposeMessage, composedMessage, showUserDialog, user } = this.state;
     const { uid, users, waitingUsers, location } = this.props;
@@ -159,6 +162,7 @@ export default class DrinkupLobbyScreen extends React.Component {
       />
     );
   }
+
   render() {
     const { bar, users } = this.props;
     let special = null;
@@ -169,15 +173,15 @@ export default class DrinkupLobbyScreen extends React.Component {
     return (
       <View style={[styles.mainContainer]}>
         <BarImages images={bar.images} />
-        {special &&
-        <View style={styles.bannerContainer}>
-          <Banner
-            onPress={userCount > 1 ? this.onRedeem : null}
-            theme="info"
-            text={userCount > 1 ? I18n.t('Drinkup_ClickToGet2For1ALKOSpecial') : I18n.t('Drinkup_Need2UsersForALKOSpecial')}
-          />
-        </View>
-        }
+        {special && (
+          <View style={styles.bannerContainer}>
+            <Banner
+              onPress={userCount > 1 ? this.onRedeem : null}
+              theme="info"
+              text={userCount > 1 ? I18n.t('Drinkup_ClickToGet2For1ALKOSpecial') : I18n.t('Drinkup_Need2UsersForALKOSpecial')}
+            />
+          </View>
+        )}
         <View style={styles.container}>
           <AvatarList
             users={users}
@@ -194,5 +198,5 @@ export default class DrinkupLobbyScreen extends React.Component {
       </View>
     );
   }
-}
 
+}

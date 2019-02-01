@@ -1,4 +1,3 @@
-import { Platform } from 'react-native';
 import { Colors, Metrics, Fonts } from '../../themes';
 
 const navButton = {
@@ -10,7 +9,7 @@ const navButton = {
 
 export default {
   container: {
-    paddingTop: (Platform.OS === 'ios') ? 20 : 0,
+    paddingTop: 0,
     height: Metrics.navBarHeight,
     paddingHorizontal: Metrics.baseMargin,
     backgroundColor: Colors.brand.dark,

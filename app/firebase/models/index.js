@@ -4,6 +4,7 @@ import EventModel from './event';
 import BarModel from './bar';
 import DrinkUpModel from './drinkup';
 import SpecialModel from './special';
+import SpecialRedemptionModel from './special_redemption';
 import NotificationModel from './notification';
 import authActions from '../../redux/auth';
 import barsActions from '../../redux/bar';
@@ -36,4 +37,4 @@ export const Bar = new BarModel(firebaseDb, barActions);
 export const DrinkUp = new DrinkUpModel(firebaseDb, drinkupActions);
 export const Notification = new NotificationModel(firebaseDb);
 export const Special = new SpecialModel(firebaseDb);
-
+export const SpecialRedemption = new SpecialRedemptionModel(firebaseDb);

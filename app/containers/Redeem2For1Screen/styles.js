@@ -37,13 +37,13 @@ export default StyleSheet.create({
     marginBottom: Metrics.largeMargin,
   },
   giftName: {
-    color: Colors.snow,
+    color: Colors.brand.gray,
     fontSize: 24,
     marginBottom: Metrics.smallMargin,
     fontFamily: Fonts.type.primary,
   },
-  packName: {
-    color: Colors.brand.gray,
+  barName: {
+    color: Colors.snow,
     fontSize: 24,
     marginBottom: Metrics.smallMargin,
     fontFamily: Fonts.type.primary,

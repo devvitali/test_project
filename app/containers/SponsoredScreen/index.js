@@ -18,7 +18,7 @@ class SponsoredScreen extends React.Component {
     if (event) {
       const eventContent = parseFile(event.content);
       const images = [
-        eventContent.metadata.image
+        eventContent.metadata.image,
       ];
       return (
         <AppContainer
@@ -45,4 +45,3 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default connect(null, mapDispatchToProps)(SponsoredScreen);
-

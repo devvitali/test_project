@@ -8,8 +8,7 @@ export default class Bar extends Base {
     this.ref = 'bars';
   }
 
-  static getBarsSortedByDistance(locationCoords, bars, asc = true) {
-    const barDistances = {};
+  static getBarsSortedByDistance(locationCoords, bars) {
     const arrayBars = [];
     _.each(bars, (bar, key) => {
       arrayBars.push({ ...bar, key });
@@ -27,8 +26,8 @@ export default class Bar extends Base {
       return 3;
     };
     arrayBars.sort((bar1, bar2) => {
-      let bar1Value = getBarValue(bar1);
-      let bar2Value = getBarValue(bar2);
+      const bar1Value = getBarValue(bar1);
+      const bar2Value = getBarValue(bar2);
       if (bar1Value === bar2Value) {
         const { latitude, longitude, accuracy } = locationCoords;
         const start = { latitude, longitude };

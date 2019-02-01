@@ -22,8 +22,8 @@ import mapStyle from './mapStyle';
 const googleAPI = Platform.OS === 'android' ? require('react-native-google-api-availability-bridge') : null;
 
 const boulderPosition = {
-  latitude: 40.017900,
-  longitude: -105.280009,
+  latitude: 39.762378,
+  longitude: -105.011655,
 };
 let lastMapLocation = null;
 
