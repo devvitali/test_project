@@ -27,27 +27,15 @@ class EditProfileScreen extends Component {
       photoURL: props.user.photoURL,
       imageUploading: false,
     };
-    this.state.isProfileComplete = this.checkProfileStatus(this.state.icon, this.state.firstName, this.state.photoURL);
   }
-  checkProfileStatus(icon, firstName, photoURL) {
-    if (!firstName || firstName.length === 0) {
-      return false;
-    }
-    if (!icon || !photoURL) {
-      return false;
-    }
-    return true;
-  }
-  onFirstNameChange = firstName => {
-    const isProfileComplete = this.checkProfileStatus(this.state.icon, firstName, this.state.photoURL);
-    this.setState({ firstName, isProfileComplete });
-  };
-  onSelectIcon = icon => {
-    const isProfileComplete = this.checkProfileStatus(icon, this.state.firstName, this.state.photoURL);
-    this.setState({ icon, isProfileComplete });
-  };
+
   onImageSelected = async (photo) => {
-    this.setState({ image: { uri: photo.path }, imageUploading: true, isProfileComplete : false });
+
+    this.setState({
+      image: { uri: photo.path },
+      imageUploading: true,
+    });
+
     let photoURL = '';
     try {
       const filename = photo.path.replace(/^.*[\\/]/, '');
@@ -58,25 +46,43 @@ class EditProfileScreen extends Component {
     } catch (err) {
       console.log('err', err);
     }
-    const isProfileComplete = this.checkProfileStatus(this.state.icon, this.state.firstName, photoURL);
-    this.setState({ photoURL, imageUploading: false, isProfileComplete });
-  };
-  doShowPicDialog = () =>
-    openPicker({ width: 512, height: 512, cropping: true })
+    this.setState({ photoURL, imageUploading: false });
+  }
+
+  get isProfileComplete() {
+    const { icon, firstName, photoURL } = this.state;
+    if (!firstName || firstName.length === 0) {
+      return false;
+    }
+    if (!icon || !photoURL) {
+      return false;
+    }
+    return true;
+  }
+
+  doShowPicDialog = () => {
+    openPicker({
+      width: 512,
+      height: 512,
+      cropping: true,
+    })
       .then(this.onImageSelected);
+  }
+
   saveProfile = () => {
     this.setState({ update: true });
     setTimeout(() => {
-      const {icon, firstName, photoURL} = this.state;
-      const {routeName} = this.props.navigation.state;
-      this.props.updateProfile({firstName, icon, photoURL});
+      const { icon, firstName, photoURL } = this.state;
+      const { routeName } = this.props.navigation.state;
+      this.props.updateProfile({ firstName, icon, photoURL });
       Keyboard.dismiss();
       if (routeName === 'CompleteProfileScene') {
         this.completeProfile();
       }
       this.setState({ update: false });
     }, 1000);
-  };
+  }
+
   completeProfile = () => {
     const { user, uid, navigation } = this.props;
     const { icon, firstName, photoURL } = this.state;
@@ -88,12 +94,12 @@ class EditProfileScreen extends Component {
     } else if (params.type === 'Start') {
       this.props.startDrinkup(params.barId, currentUser);
     }
-  };
+  }
 
   render() {
     const { navigation, fetching } = this.props;
     const { routeName } = this.props.navigation.state;
-    const { firstName, showPicDialog, isProfileComplete, imageUploading } = this.state;
+    const { firstName, showPicDialog, imageUploading } = this.state;
     const opacity = imageUploading ? 0.3 : 1.0;
     return (
       <AppContainer
@@ -125,7 +131,7 @@ class EditProfileScreen extends Component {
                 maxLength={15}
                 returnKeyType="done"
                 onSubmitEditing={() => Keyboard.dismiss()}
-                onChangeText={this.onFirstNameChange}
+                onChangeText={fn => this.setState({ firstName: fn })}
                 underlineColorAndroid={Colors.transparent}
                 selectionColor={Colors.brand.clear.orange}
               />
@@ -139,7 +145,7 @@ class EditProfileScreen extends Component {
                 <TouchableOpacity
                   key={icon}
                   activeOpacity={0.7}
-                  onPress={() => this.onSelectIcon(icon)}
+                  onPress={() => this.setState({ icon })}
                   style={Styles.iconButton}
                 >
                   <Image
@@ -153,29 +159,33 @@ class EditProfileScreen extends Component {
                 </TouchableOpacity>
               ))}
             </View>
-            {(routeName !== 'EditProfileScreen' && !isProfileComplete) &&
-            <View style={Styles.footer}>
-              <Text style={Styles.incompleteProfileText}>{I18n.t('Profile_IncompleteWarning')}</Text>
-            </View>
-            }
+
+            {(routeName !== 'EditProfileScreen' && !this.isProfileComplete) && (
+              <View style={Styles.footer}>
+                <Text style={Styles.incompleteProfileText}>{I18n.t('Profile_IncompleteWarning')}</Text>
+              </View>
+            )}
+
             <View style={Styles.footer}>
               <Button
                 showIndicator={this.state.update || fetching}
-                theme={!isProfileComplete ? 'disallow' : 'primary'}
-                clickable={isProfileComplete}
+                theme={!this.isProfileComplete ? 'disallow' : 'primary'}
+                clickable={this.isProfileComplete}
                 text="Save profile"
                 onPress={this.saveProfile}
               />
             </View>
           </View>
-          {showPicDialog &&
+
+          {showPicDialog && (
             <PicPhotoSourceDialog
               visible={showPicDialog}
               onClose={() => this.setState({ showPicDialog: false })}
               onUsePhotosPress={this.doSelectPhoto('Picker')}
               onUseCameraPress={this.doSelectPhoto('Camera')}
             />
-          }
+          )}
+
         </View>
       </AppContainer>
     );
@@ -187,6 +197,7 @@ const mapStateToProps = state => ({
   user: state.auth.profile,
   uid: state.auth.uid,
 });
+
 const mapDispatchToProps = dispatch => ({
   startDrinkup: (barId, user) => dispatch(DrinkupActions.startDrinkup(barId, user)),
   sendRequestDrinkup: (bar, user) => dispatch(DrinkupActions.sendRequestDrinkup(bar, user)),

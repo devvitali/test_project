@@ -17,7 +17,12 @@ const ComposeMessageDialog = (props) => {
   const { onClose, visible, messagePlaceholder, onChangeMessage, message } = props;
   const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
   return (
-    <Dialog closeOnBackdropPress={false} onClose={onClose} visible={visible} dialogStyle={styles.dialog}>
+    <Dialog
+      closeOnBackdropPress={false}
+      onClose={onClose}
+      visible={visible}
+      dialogStyle={styles.dialog}
+    >
       <TextInput
         multiline
         numberOfLines={4}

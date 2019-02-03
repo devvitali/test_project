@@ -6,22 +6,21 @@ import { Button, Banner, AvatarList } from '../../components';
 import { BarImages } from './BarImages';
 import { isProfileComplete } from '../../utils/auth';
 import { DrinkupActions } from '../../redux';
-import { requestingMember } from '../../fixture/drinkupMembers';
 import styles from './styles';
 
 class WaitingScreen extends Component {
+
   static defaultProps = {
     column: 3,
     columnPadding: 15,
   };
-  constructor(props) {
-    super(props);
-    this.state = {
-      isDirectionDialogShowing: false,
-      user: null,
-      joiningUser: requestingMember, // only use for demo
-    };
+
+  state = {
+    isDirectionDialogShowing: false,
+    user: null,
+    joiningUser: null,
   }
+
   componentDidMount() {
     if (this.props.draftBar.currentDrinkUp) {
       this.props.getDrinkup(this.props.draftBar.currentDrinkUp, this.props.uid);
@@ -30,12 +29,14 @@ class WaitingScreen extends Component {
       this.props.navigation.navigate('DrinkUpScreen', { barId: this.props.draftBar.id });
     }
   }
+
   componentWillReceiveProps(newProps) {
     if (!this.props.joined && newProps.joined) {
       console.log('Waiting screen navigate DrinkUpScreen');
       this.props.navigation.navigate('DrinkUpScreen', { barId: this.props.draftBar.id });
     }
   }
+
   componentDidUpdate() {
     const { draftBar, users, getDrinkup, uid } = this.props;
     if (draftBar && draftBar.currentDrinkUp && !users) {
@@ -54,23 +55,27 @@ class WaitingScreen extends Component {
         type: 'Join', draftBar,
       });
     }
-  };
+  }
+
   onCancelRequest = () => {
     const { user, uid, draftBar } = this.props;
     const currentUser = { ...user, uid };
     this.props.cancelRequestDrinkup(draftBar, currentUser);
-  };
+  }
+
   onWaitingBar = () => {
     this.props.initDrinkupBar(this.props.bar);
-  };
+  }
+
   renderButton() {
     const { oldWaitingInvite, fetching, waitingInvite, bar } = this.props;
+
     if (waitingInvite) {
       return (
         <View>
           <Button
             showIndicator={this.props.fetching}
-            theme={'disallow'}
+            theme="disallow"
             onPress={this.onCancelRequest}
             text={I18n.t('Drinkup_CancelRequest')}
           />
@@ -78,11 +83,17 @@ class WaitingScreen extends Component {
         </View>
       );
     }
+
     if (oldWaitingInvite) {
       return (
-        <Button onPress={this.onWaitingBar} theme="disallow" text={`waiting for invite at ${bar.name}`} />
+        <Button
+          onPress={this.onWaitingBar}
+          theme="disallow"
+          text={`waiting for invite at ${bar.name}`}
+        />
       );
     }
+
     if (!fetching) {
       return (
         <Button
@@ -92,17 +103,25 @@ class WaitingScreen extends Component {
         />
       );
     }
+
+    return null;
   }
+
   render() {
     const { draftBar: { specialId, images }, users } = this.props;
     return (
       <View style={[styles.mainContainer]}>
         <BarImages images={images} />
-        {specialId &&
-        <View style={styles.bannerContainer}>
-          <Banner showGradient theme="info" text={I18n.t('Drinkup_JoinDrinkUpAndGet2For1Drinks')} onPress={this.onSendRequestDrinkup} />
-        </View>
-        }
+        {specialId && (
+          <View style={styles.bannerContainer}>
+            <Banner
+              showGradient
+              theme="info"
+              text={I18n.t('Drinkup_JoinDrinkUpAndGet2For1Drinks')}
+              onPress={this.onSendRequestDrinkup}
+            />
+          </View>
+        )}
         <View style={styles.container}>
           <AvatarList users={users} iconOnly />
           {this.renderButton()}
@@ -120,7 +139,7 @@ const mapStateToProps = state => ({
   uid: state.auth.uid,
   user: state.auth.profile,
   bar: state.drinkup.bar,
-  draftBar: state.drinkup.draftBar
+  draftBar: state.drinkup.draftBar,
 });
 
 // eslint-disable-next-line

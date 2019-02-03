@@ -15,7 +15,7 @@ export default StyleSheet.create({
   },
   list: {
     flexDirection: 'row',
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
   },
   name: {
     textAlign: 'center',
@@ -29,11 +29,12 @@ export default StyleSheet.create({
   },
   btnMessage: {
     position: 'absolute',
-    right: 0,
-    top: 0,
-    width: 30,
-    height: 30,
-    backgroundColor: Colors.transparent,
+    right: -6,
+    top: -6,
+    width: 24,
+    height: 23,
+    borderRadius: 3,
+    backgroundColor: Colors.brand.black,
     alignItems: 'flex-end',
   },
   imageBackdrop: {

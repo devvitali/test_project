@@ -12,7 +12,7 @@ export default StyleSheet.create({
   },
   bannerContainer: {
     marginHorizontal: Metrics.doubleBaseMargin,
-    marginVertical: Metrics.doubleBaseMargin,
+    marginTop: Metrics.doubleBaseMargin,
   },
   contentContainer: {
     flex: 1,

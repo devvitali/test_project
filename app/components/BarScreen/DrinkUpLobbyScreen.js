@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash';
 import { View } from 'react-native';
 import I18n from 'react-native-i18n';
 import {
@@ -74,10 +75,18 @@ export default class DrinkupLobbyScreen extends React.Component {
   onShowUserImage = user => this.setState({ showUserDialog: true, user })
 
   onCloseComposeMessageDialog = () => {
+    const { uid } = this.props;
     const { composedMessage, invitedUser } = this.state;
     this.setState({ showComposeMessage: false, invitedUser: null });
-    invitedUser.invitedBy = this.props.user.firstName;
-    invitedUser.message = composedMessage;
+
+    invitedUser.invitedBy = uid;
+    invitedUser.messages = {
+      [uid]: {
+        message: composedMessage,
+        sentAt: (new Date()).getTime(),
+      },
+    };
+
     this.props.sendDrinkupInvitation(this.props.bar, invitedUser);
   }
 
@@ -94,6 +103,7 @@ export default class DrinkupLobbyScreen extends React.Component {
   renderDialogs() {
     const { invitedUser, showComposeMessage, composedMessage, showUserDialog, user } = this.state;
     const { uid, users, waitingUsers, location } = this.props;
+
     if (invitedUser && showComposeMessage) {
       return (
         <ComposeMessageDialog
@@ -105,37 +115,43 @@ export default class DrinkupLobbyScreen extends React.Component {
         />
       );
     }
-    if (users[uid] && users[uid].invitedBy && !users[uid].messagesRead) {
-      const { invitedBy, message } = users[uid];
-      return (
-        <CheersDialog
-          onClose={this.onCloseMessage}
-          visible={this.state.showCheerDialog}
-          invitedBy={invitedBy}
-          message={message}
-        />
-      );
+
+    if (users[uid] && users[uid].invitedBy) {
+      const readAt = _.get(users, `${uid}.messages.${users[uid].invitedBy}.readAt`);
+      if (!readAt) {
+        const { invitedBy, messages } = users[uid];
+        return (
+          <CheersDialog
+            onClose={this.onCloseMessage}
+            visible={this.state.showCheerDialog}
+            invitedBy={users[invitedBy].firstName}
+            message={messages[invitedBy].message}
+          />
+        );
+      }
     }
+
     if (showUserDialog) {
       return (
         <UserDialog
           onClose={() => this.setState({ showUserDialog: false, user: null })}
           visible
-          message={user.message}
+          message={_.get(users, `${uid}.messages.${user.uid}`)}
           name={user.firstName}
           avatarSrc={user.photoURL}
         />
       );
     }
+
     if (waitingUsers && Object.keys(waitingUsers).length > 0) {
       if (this.state.showJoinDialog) {
-        const user = waitingUsers[Object.keys(waitingUsers)[0]];
-        const { firstName, photoURL, uid } = user;
+        const waitingUser = waitingUsers[Object.keys(waitingUsers)[0]];
+        const { firstName, photoURL, uid: userId } = waitingUser;
         return (
           <JoinDialog
-            onClose={() => this.onCloseJoiningDialog(user)}
+            onClose={() => this.onCloseJoiningDialog(waitingUser)}
             visible
-            uid={uid}
+            uid={userId}
             name={firstName}
             avatarSrc={photoURL}
             location={location.coords}
@@ -144,6 +160,7 @@ export default class DrinkupLobbyScreen extends React.Component {
       }
       setTimeout(() => this.setState({ showJoinDialog: true }), 100);
     }
+
     if (this.state.showWarningDialog) {
       return (
         <AlkoSpecialWarningDialog
@@ -154,6 +171,7 @@ export default class DrinkupLobbyScreen extends React.Component {
         />
       );
     }
+
     return (
       <AlkoSpecialWarningDialog
         onButtonPress={this.onAcceptRedeemWarning}
@@ -165,15 +183,14 @@ export default class DrinkupLobbyScreen extends React.Component {
 
   render() {
     const { bar, users } = this.props;
-    let special = null;
-    if (bar) {
-      special = bar.specialId;
-    }
+
     const userCount = Object.keys(users).length;
+
     return (
       <View style={[styles.mainContainer]}>
         <BarImages images={bar.images} />
-        {special && (
+
+        {_.get(bar, 'specialId') && (
           <View style={styles.bannerContainer}>
             <Banner
               onPress={userCount > 1 ? this.onRedeem : null}
@@ -182,6 +199,7 @@ export default class DrinkupLobbyScreen extends React.Component {
             />
           </View>
         )}
+
         <View style={styles.container}>
           <AvatarList
             users={users}

@@ -16,17 +16,22 @@ function renderIcon(props) {
 }
 
 function renderImage(props) {
-  const { width, message, disabled, imageStyle, messagesRead } = props;
+  const { width, disabled, imageStyle, message } = props;
   return (
     <View style={[styles.innerContainer, { width }]}>
-      <CachedImage source={props.image} style={[styles.image, imageStyle, { width, height: width }]} />
-      <View style={styles.btnMessage}>
-        <Icon name="envelope"
-          size={Metrics.icons.small}
-          color={Colors.snow}
-          style={{ opacity: 1 }}
-        />
-      </View>
+      <CachedImage
+        source={props.image}
+        style={[styles.image, imageStyle, { width, height: width }]}
+      />
+      {message && (
+        <View style={styles.btnMessage}>
+          <Icon name="envelope"
+            size={Metrics.icons.small}
+            color={Colors.snow}
+            style={{ opacity: message.readAt ? 0.7 : 1 }}
+          />
+        </View>
+      )}
       {disabled && <View style={styles.imageBackdrop} />}
     </View>
   );
@@ -38,6 +43,7 @@ function onAvatarPress(props) {
     onPress({ message, name, image });
   }
 }
+
 function renderAvatar(props) {
   const { image, name, width, style, disabled } = props;
   return (
@@ -47,6 +53,7 @@ function renderAvatar(props) {
     </View>
   );
 }
+
 export const Avatar = props => (props.onPress ?
   <TouchableOpacity activeOpacity={0.7} onPress={() => onAvatarPress(props)}>
     {renderAvatar(props)}
