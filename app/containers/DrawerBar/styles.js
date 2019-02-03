@@ -1,4 +1,3 @@
-
 import { Platform } from 'react-native';
 import { Metrics, Colors, Fonts } from '../../themes';
 
@@ -55,5 +54,5 @@ export default {
     alignSelf: 'stretch',
     flexDirection: 'row',
     justifyContent: 'space-between',
-  }
+  },
 };

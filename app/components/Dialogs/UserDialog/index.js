@@ -23,7 +23,7 @@ const UserDialog = ({ name, avatarSrc, message, onClose, joinTime }) => (
     {message && message.length > 0 &&
       <View>
         <Text style={styles.message}>"{message}"</Text>
-        <Text style={styles.time}>sent at {moment(joinTime).format('H:ma')}</Text>
+        <Text style={styles.time}>sent at {moment(joinTime).format('h:ma')}</Text>
       </View>
     }
   </Dialog>

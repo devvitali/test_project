@@ -5,14 +5,12 @@ export default class SpecialRedemption extends Base {
 
   constructor(db, actions) {
     super(db, actions);
-    this.ref = 'special_redemptions';
+    this.ref = 'specialRedemptions';
   }
 
   getByBarAndUser(barId, userId) {
-    const date = moment().format('YYYY-MM-DD');
-    const key = `special_redemptions/${userId}/${barId}/${date}`;
-
     return new Promise((resolve) => {
+      const key = `${userId}/${barId}/${this.getDate()}`;
       this.dbRef(key).once('value', (snapshot) => {
         resolve(snapshot.val());
       });
@@ -20,8 +18,7 @@ export default class SpecialRedemption extends Base {
   }
 
   setByBarAndUser(barId, userId) {
-    const date = moment().format('YYYY-MM-DD');
-    const key = `special_redemptions/${userId}/${barId}/${date}`;
+    const key = `${userId}/${barId}/${this.getDate()}`;
     const timestamp = (new Date()).getTime();
 
     this.dbRef(key).set({ timestamp });
@@ -38,6 +35,15 @@ export default class SpecialRedemption extends Base {
     const currentTimestamp = (new Date()).getTime();
     const diff = (currentTimestamp - timestamp) / 1000;
     return Math.max(0, (3 * 60) - diff); // 3 minutes
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  getDate() {
+    const date = moment();
+    if (date.hours() < 9) {
+      date.subtract(1, 'days');
+    }
+    return date.format('YYYY-MM-DD');
   }
 
 }

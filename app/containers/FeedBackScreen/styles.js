@@ -17,6 +17,13 @@ export default StyleSheet.create({
     marginTop: Metrics.doubleBaseMargin,
   },
 
+  successMessage: {
+    color: Colors.brand.orange,
+    fontFamily: Fonts.type.bold,
+    fontSize: 15,
+    marginTop: Metrics.doubleBaseMargin,
+  },
+
   textarea: {
     height: 180,
     borderColor: Colors.tundora,

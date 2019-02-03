@@ -16,6 +16,7 @@ class Redeem2For1Screen extends Component {
 
     this.state = {
       redemption: null,
+      // eslint-disable-next-line react/no-unused-state
       counter: 0,
     };
   }

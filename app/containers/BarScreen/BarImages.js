@@ -59,43 +59,48 @@ const styles = StyleSheet.create({
 });
 
 export class BarImages extends Component {
-  constructor(props){
+
+  constructor(props) {
     super(props);
+
     this.state = {
       activeImage: null,
     };
   }
+
   render() {
     if (!this.props.images || this.props.images.length === 0) {
       return null;
     }
     return (
       <View>
-        {this.state.activeImage &&
-        <Modal transparent>
-          <View style={styles.modalContainer}>
-            <ImageZoom
-              cropWidth={Metrics.screenWidth}
-              cropHeight={Metrics.screenHeight}
-              imageWidth={300}
-              imageHeight={300}
-            >
-              <CachedImage
-                source={{ uri: this.state.activeImage }}
-                style={styles.image}
-                resizeMode="contain"
-                activityIndicatorProps={{ size: 'large' }}
-              />
-            </ImageZoom>
-            <TouchableOpacity
-              style={styles.closeIconContainer}
-              onPress={() => this.setState({ activeImage: null })}
-            >
-              <Icon name="close" size={28} color="#FFF" />
-            </TouchableOpacity>
-          </View>
-        </Modal>
-        }
+
+        {this.state.activeImage && (
+          <Modal transparent>
+            <View style={styles.modalContainer}>
+              <ImageZoom
+                cropWidth={Metrics.screenWidth}
+                cropHeight={Metrics.screenHeight}
+                imageWidth={300}
+                imageHeight={300}
+              >
+                <CachedImage
+                  source={{ uri: this.state.activeImage }}
+                  style={styles.image}
+                  resizeMode="contain"
+                  activityIndicatorProps={{ size: 'large' }}
+                />
+              </ImageZoom>
+              <TouchableOpacity
+                style={styles.closeIconContainer}
+                onPress={() => this.setState({ activeImage: null })}
+              >
+                <Icon name="close" size={28} color="#FFF" />
+              </TouchableOpacity>
+            </View>
+          </Modal>
+        )}
+
         <Swiper
           containerStyle={styles.swiper}
           height={200}
@@ -109,6 +114,7 @@ export class BarImages extends Component {
             </TouchableOpacity>
           ))}
         </Swiper>
+
       </View>
     );
   }

@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { ScrollView, Image, View, Text, TouchableOpacity } from 'react-native';
 import I18n from 'react-native-i18n';
-import CodePush from "react-native-code-push";
+import CodePush from 'react-native-code-push';
 
 import AppContainer from '../AppContainer';
 import { Connect } from '../../redux';
@@ -22,9 +22,10 @@ class DrawBar extends Component {
     super(props);
     this.state = {
       metaData: {
-        label: ''
+        label: '',
       },
     };
+
     setTimeout(async () => {
       const metaData = await CodePush.getUpdateMetadata(CodePush.UpdateState.RUNNING);
       if (metaData && metaData.label) {

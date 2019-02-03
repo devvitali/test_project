@@ -8,11 +8,13 @@ import { NavItems, MarkDown, parseFile, Button } from '../../components';
 import styles from './styles';
 
 class SponsoredScreen extends React.Component {
+
   onEnterBar = () => {
     const { event } = this.props.navigation.state.params;
     this.props.setDrinkupBar({ ...event.bar });
     this.props.navigation.navigate('JoinDrinkUpScreen', { barId: event.bar.id });
   };
+
   render() {
     const { event } = this.props.navigation.state.params;
     if (event) {
@@ -39,6 +41,7 @@ class SponsoredScreen extends React.Component {
     }
     return null;
   }
+
 }
 const mapDispatchToProps = dispatch => ({
   setDrinkupBar: bar => dispatch(DrinkupActions.initDrinkupBar(bar)),

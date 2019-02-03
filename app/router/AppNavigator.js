@@ -18,7 +18,7 @@ import {
 import FeedBackScreen from '../containers/FeedBackScreen';
 import SponsoredScreen from '../containers/SponsoredScreen';
 import Redeem2For1Screen from '../containers/Redeem2For1Screen';
-import DrawBar from '../containers/DrawerBar';
+import DrawerBar from '../containers/DrawerBar';
 
 const DrinkupNavigator = StackNavigator(
   {
@@ -30,6 +30,7 @@ const DrinkupNavigator = StackNavigator(
   {
     initialRouteName: 'MapScreen',
     headerMode: 'none',
+    cardStyle: { shadowColor: 'transparent' },
   }
 );
 const DrawerNavigation = DrawerNavigator(
@@ -44,7 +45,7 @@ const DrawerNavigation = DrawerNavigator(
   },
   {
     initialRouteName: 'MapNavigator',
-    contentComponent: props => <DrawBar {...props} />,
+    contentComponent: props => <DrawerBar {...props} />,
   }
 );
 const AppNavigator = StackNavigator({
@@ -63,5 +64,6 @@ const AppNavigator = StackNavigator({
    * which conflicts with the drawer example gesture
    */
   // mode: Platform.OS === 'ios' ? 'modal' : 'card',
+  cardStyle: { shadowColor: 'transparent' },
 });
 export default () => <AppNavigator />;

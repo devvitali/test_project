@@ -9,14 +9,12 @@ import { firebaseDb } from '../../firebase';
 import { Colors } from '../../themes';
 
 class FeedbackScreen extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      feedback: '',
-    };
+
+  state = {
+    feedback: '',
+    successful: false,
   }
 
-  updateFeedback = feedback => this.setState({ feedback });
   doSubmitFeedback = () => {
     Keyboard.dismiss();
     const data = {
@@ -28,11 +26,19 @@ class FeedbackScreen extends Component {
         error ? reject(error) : resolve()
       ));
     })
-      .then(() => console.log('Thanks!'))
+      .then(() => {
+        this.setState({
+          feedback: '',
+          successful: true,
+        });
+        setTimeout(() => this.setState({ successful: false }), 2500);
+      })
       .catch(() => console.log('Fail!'));
   };
+
   render() {
-    const { feedback } = this.state;
+    const { feedback, successful } = this.state;
+
     return (
       <AppContainer
         title={I18n.t('SEND_FEEDBACK')}
@@ -45,6 +51,13 @@ class FeedbackScreen extends Component {
               Want to get your bar involved?
               Just wanna say hi?
             </Text>
+
+            {successful && (
+              <Text style={Styles.successMessage}>
+                Thanks for your feedback!
+              </Text>
+            )}
+
             <TextInput
               multiline
               autoFocus
@@ -53,7 +66,7 @@ class FeedbackScreen extends Component {
               underlineColorAndroid="transparent"
               selectionColor={Colors.snow}
               value={feedback}
-              onChangeText={this.updateFeedback}
+              onChangeText={f => this.setState({ feedback: f })}
               autoCapitalize="none"
               onSubmitEditing={this.doSubmitFeedback}
               autoCorrect
@@ -70,7 +83,9 @@ class FeedbackScreen extends Component {
     );
   }
 }
+
 const mapStateToProps = state => ({
   uid: state.auth.uid,
 });
+
 export default connect(mapStateToProps)(FeedbackScreen);
