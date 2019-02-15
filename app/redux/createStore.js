@@ -15,13 +15,14 @@ export default (rootReducer, rootSaga) => {
   /* ------------- Assemble Middleware ------------- */
   enhancers.push(applyMiddleware(...middleware));
 
+  const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
   /* ------------- AutoRehydrate Enhancer ------------- */
   // add the autoRehydrate enhancer
-  const store = createStore(rootReducer, compose(...enhancers));
+  const store = createStore(rootReducer, composeEnhancers(...enhancers));
   const persistor = persistStore(store, null, null);
 
   // kick off root saga
   sagaMiddleware.run(rootSaga);
   return { persistor, store };
 };
-

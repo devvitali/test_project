@@ -10,7 +10,7 @@ import {
   NavItems, BarResult, Button, Banner, IconAlko, NoBarResult, parseFile, ClusterMarker, BarMarker,
 } from '../../components';
 import { DrinkupActions, LocationActions } from '../../redux';
-import { geoFire } from '../../firebase';
+import { firebaseAnalytics, geoFire } from '../../firebase';
 import { calculateDistanceByRegion, hasLocation } from '../../utils/mapUtils';
 import { BarsInformation } from './barsInformation';
 import { EventsInformation } from './eventInformation';
@@ -28,6 +28,7 @@ const boulderPosition = {
 let lastMapLocation = null;
 
 class MapScreen extends Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -51,13 +52,17 @@ class MapScreen extends Component {
     this.barClicked = false;
     this.navigatedBarId = '';
   }
+
   componentDidMount() {
     if (googleAPI) {
       googleAPI.checkGooglePlayServices((result) => {
         this.setState({ googleAPIAvailable: result === 'success' });
       });
     }
+
+    firebaseAnalytics.setCurrentScreen('Map');
   }
+
   componentWillReceiveProps(newProps) {
     if (newProps.location && !isEqual(this.props.location, newProps.location)) {
       if (this.criteriaTimeout === -1) {

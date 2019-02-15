@@ -2,24 +2,35 @@ import React, { Component } from 'react';
 import I18n from 'react-native-i18n';
 import AppContainers from '../AppContainer';
 import { Document, NavItems } from '../../components';
+import { firebaseAnalytics, firebaseConfig } from '../../firebase';
 import { download } from '../../utils/downloadUtils';
-import localFile from './privacy-policy.md';
 
 export default class PrivacyPolicyScreen extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      file: localFile,
-    };
+
+  state = {
+    markdown: null,
+  }
+
+  componentDidMount() {
+    firebaseAnalytics.setCurrentScreen('Privacy Policy');
+
+    firebaseConfig.fetch()
+      .then(() => firebaseConfig.activateFetched())
+      .then(() => firebaseConfig.getValue('privacy_policy'))
+      .then(data => download(data.val()))
+      .then(markdown => this.setState({ markdown }))
+      .catch(error => console.log(`Error processing config: ${error}`));
   }
 
   renderContent() {
-    const { file } = this.state;
-    if (!file) {
+    const { markdown } = this.state;
+    if (!markdown) {
       return null;
     }
-    return <Document file={file} />;
+
+    return <Document file={markdown} />;
   }
+
   render() {
     return (
       <AppContainers
@@ -30,5 +41,5 @@ export default class PrivacyPolicyScreen extends Component {
       </AppContainers>
     );
   }
-}
 
+}

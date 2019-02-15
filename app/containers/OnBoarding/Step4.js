@@ -45,7 +45,7 @@ class OnboardingPushNotifications extends Component {
         <View style={styles.firstButton}>
           <Button
             text={I18n.t('Introduction_step4_disallow')}
-            theme={"disallow"}
+            theme="disallow"
             onPress={this.doCompleteProfile}
           />
         </View>

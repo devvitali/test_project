@@ -24,7 +24,7 @@ export default StyleSheet.create({
     paddingVertical: 5,
     paddingHorizontal: 10,
     height: 80,
-    borderRadius: 10,
+    borderRadius: 5,
     backgroundColor: Colors.snow,
     color: Colors.tundora,
     fontSize: Fonts.size.small,

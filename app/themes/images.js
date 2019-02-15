@@ -13,7 +13,6 @@ import pin from '../images/icons/pin.png';
 import pinMug from '../images/icons/pin_mug.png';
 import pinMugSeal from '../images/icons/pin_mug_seal.png';
 import pinSeal from '../images/icons/pin_seal.png';
-import sampleAvatar from '../images/sample_avatar.jpg';
 import seal from '../images/icons/seal.png';
 import beer from '../images/drinkIcons/beer.png';
 import martini from '../images/drinkIcons/martini.png';
@@ -22,6 +21,7 @@ import wineGlass from '../images/drinkIcons/wine-glass.png';
 import margarita from '../images/drinkIcons/margarita.png';
 import cluster from '../images/icons/icon-cluster.png';
 import locationBack from '../images/icons/icon_back.png';
+
 export const DrinkIcons = {
   beer,
   martini,
@@ -48,6 +48,5 @@ export default {
   pinMug,
   pinMugSeal,
   pinSeal,
-  sampleAvatar,
   seal,
 };

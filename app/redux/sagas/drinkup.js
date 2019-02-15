@@ -3,6 +3,7 @@ import { eventChannel } from 'redux-saga';
 import { pick } from 'lodash';
 import { watch } from '../../utils/sagaUtils';
 import DrinkupActions from '../drinkup';
+import { firebaseAnalytics } from '../../firebase';
 import { Bar, DrinkUp, Notification } from '../../firebase/models';
 
 const DRINKUP_USER_PROPERTIES = ['uid', 'photoURL', 'firstName', 'icon', 'messages', 'invitedBy', 'fcmToken', 'joinedAt'];
@@ -35,6 +36,8 @@ export function* getDrinkup({ drinkupId, userId }) {
 
 export function* startDrinkUp({ barId, user }) {
   try {
+    firebaseAnalytics.logEvent('Start_DrinkUp', { bar_id: barId, user_id: user.uid });
+
     user.joinedAt = new Date().getTime();
     const drinkup = {
       active: true,
@@ -54,6 +57,8 @@ export function* startDrinkUp({ barId, user }) {
 
 export function* leaveDrinkUp({ bar, user }) {
   try {
+    firebaseAnalytics.logEvent('Leave_DrinkUp', { bar_id: bar.id, user_id: user.uid });
+
     const drinkup = yield call([DrinkUp, DrinkUp.get], bar.currentDrinkUp);
     let users = drinkup.users ? { ...drinkup.users } : {};
     const leftUsers = drinkup.leftUsers ? { ...drinkup.leftUsers } : {};
@@ -75,6 +80,8 @@ export function* leaveDrinkUp({ bar, user }) {
 
 export function* sendRequestDrinkUp({ bar, user }) {
   try {
+    firebaseAnalytics.logEvent('Send_DrinkUp_Request', { bar_id: bar.id, user_id: user.uid });
+
     const drinkup = yield call([DrinkUp, DrinkUp.get], bar.currentDrinkUp);
     const waitingUsers = drinkup.waitingUsers ? { ...drinkup.waitingUsers } : {};
     waitingUsers[user.uid] = user;
@@ -94,6 +101,8 @@ export function* sendRequestDrinkUp({ bar, user }) {
 
 export function* cancelRequestDrinkUp({ bar, user }) {
   try {
+    firebaseAnalytics.logEvent('Cancel_DrinkUp_Request', { bar_id: bar.id, user_id: user.uid });
+
     const drinkup = yield call([DrinkUp, DrinkUp.get], bar.currentDrinkUp);
     const waitingUsers = drinkup.waitingUsers ? { ...drinkup.waitingUsers } : {};
     delete waitingUsers[user.uid];
@@ -106,6 +115,8 @@ export function* cancelRequestDrinkUp({ bar, user }) {
 
 export function* sendDrinkupInvitation({ bar, user }) {
   try {
+    firebaseAnalytics.logEvent('Send_DrinkUp_Invitation', { bar_id: bar.id, user_id: user.uid });
+
     const drinkup = yield call([DrinkUp, DrinkUp.get], bar.currentDrinkUp);
     const waitingUsers = drinkup.waitingUsers ? { ...drinkup.waitingUsers } : {};
     delete waitingUsers[user.uid];
@@ -129,6 +140,8 @@ export function* sendDrinkupInvitation({ bar, user }) {
 
 export function* acceptDrinkupInvitation({ bar, uid }) {
   try {
+    firebaseAnalytics.logEvent('Accept_DrinkUp_Invitation', { bar_id: bar.id, user_id: uid });
+
     const drinkup = yield call([DrinkUp, DrinkUp.get], bar.currentDrinkUp);
     const users = drinkup.users ? { ...drinkup.users } : {};
     if (users[uid]) {

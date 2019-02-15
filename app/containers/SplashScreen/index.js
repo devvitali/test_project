@@ -39,12 +39,10 @@ class SplashScreen extends Component {
   }
   redirect(newProps) {
     const { joined, user, isUserValid } = newProps;
-    console.log('SplashScreen', user, joined, isUserValid);
     if (!user && this.routedScene !== 'OnBoardingStep1') {
       this.navigate('OnBoardingStep1');
     } else if (joined) {
       this.navigate('DrawerNavigation', 'DrinkUpScreen');
-      console.log('goto drinkUp');
     } else if (isUserValid) {
       this.navigate('DrawerNavigation');
     } else if (this.routedScene !== 'OnBoardingStep1') {

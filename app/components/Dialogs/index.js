@@ -5,15 +5,6 @@ import IconFontAwesome from 'react-native-vector-icons/FontAwesome';
 import Styles from './styles';
 import { Colors } from '../../themes';
 
-function renderCloseButton(onPress) {
-  return (
-    <View style={Styles.closeButton}>
-      <TouchableOpacity onPress={onPress}>
-        <IconFontAwesome name="close" color={Colors.snow} size={16} style={Styles.closeIcon} />
-      </TouchableOpacity>
-    </View>
-  );
-}
 const Dialog = props => (
   <Modal
     transparent
@@ -31,7 +22,13 @@ const Dialog = props => (
       </TouchableHighlight>
       <View style={[Styles.dialogContainer, props.dialogContainer]}>
         <View style={[Styles.contentContainer, props.dialogStyle]}>{props.children}</View>
-        {props.closeButton && renderCloseButton(props.onClose)}
+        {props.closeButton && (
+          <View style={Styles.closeButton}>
+            <TouchableOpacity onPress={props.onClose}>
+              <IconFontAwesome name="close" color={Colors.snow} size={16} style={Styles.closeIcon} />
+            </TouchableOpacity>
+          </View>
+        )}
       </View>
       <View style={Styles.subcontentContainer}>
         {props.subcontent}
@@ -39,6 +36,7 @@ const Dialog = props => (
     </View>
   </Modal>
 );
+
 Dialog.defaultProps = {
   onClose: () => {},
   closeOnBackdropPress: true,
@@ -46,6 +44,7 @@ Dialog.defaultProps = {
   animationType: 'fade',
   visible: false,
 };
+
 export default Dialog;
 export { default as AlkoSpecialWarningDialog } from './AlkoSpecialWarningDialog';
 export { default as CheersDialog } from './CheersDialog';

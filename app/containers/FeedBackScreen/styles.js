@@ -25,7 +25,7 @@ export default StyleSheet.create({
   },
 
   textarea: {
-    height: 180,
+    height: 150,
     borderColor: Colors.tundora,
     borderWidth: 1,
     borderRadius: 5,

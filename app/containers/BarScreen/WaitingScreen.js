@@ -32,7 +32,6 @@ class WaitingScreen extends Component {
 
   componentWillReceiveProps(newProps) {
     if (!this.props.joined && newProps.joined) {
-      console.log('Waiting screen navigate DrinkUpScreen');
       this.props.navigation.navigate('DrinkUpScreen', { barId: this.props.draftBar.id });
     }
   }

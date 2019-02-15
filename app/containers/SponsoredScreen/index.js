@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
+import { firebaseAnalytics } from '../../firebase';
 import { DrinkupActions } from '../../redux';
 import { BarImages } from '../BarScreen/BarImages';
 import AppContainer from '../AppContainer';
@@ -8,6 +9,10 @@ import { NavItems, MarkDown, parseFile, Button } from '../../components';
 import styles from './styles';
 
 class SponsoredScreen extends React.Component {
+
+  componentDidMount() {
+    firebaseAnalytics.setCurrentScreen('Event');
+  }
 
   onEnterBar = () => {
     const { event } = this.props.navigation.state.params;

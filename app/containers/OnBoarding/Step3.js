@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, ScrollView, Alert } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import I18n from 'react-native-i18n';
 import styles from './styles';
 import { Button } from '../../components';

@@ -3,10 +3,9 @@ import { eventChannel } from 'redux-saga';
 
 import authActions from '../auth';
 import drinkupActions from '../drinkup';
-import { firebaseAuth, firebaseStorage } from '../../firebase';
+import { geoFire, firebaseAnalytics, firebaseAuth, firebaseStorage } from '../../firebase';
 import { User } from '../../firebase/models';
 import { watch } from '../../utils/sagaUtils';
-import { geoFire } from '../../firebase';
 
 function subscribe(key) {
   return eventChannel(emit => User.subscribe(emit, key));
@@ -20,7 +19,7 @@ export function* signIn() {
   }
 }
 
-export function* signOut({ navigation, uid, bar }) {
+export function* signOut({ navigation, bar }) {
   try {
     const authData = firebaseAuth.currentUser;
     yield put(drinkupActions.cancelRequestDrinkup(bar, authData));
@@ -84,6 +83,8 @@ export function* updateLocation({ location }) {
 }
 export function* updateProfile({ diff }) {
   try {
+    firebaseAnalytics.logEvent('Update_Profile', { diff, user_id: user.uid });
+
     const authData = yield call([firebaseAuth, firebaseAuth.signInAnonymouslyAndRetrieveData]);
     const { user } = authData;
     if (user) {
@@ -97,9 +98,12 @@ export function* updateProfile({ diff }) {
 
 export function* uploadProfilePhoto({ photo }) {
   try {
-    yield put(authActions.updateProfileFulfilled({ photoURL: photo.path }));
     const authData = yield call([firebaseAuth, firebaseAuth.signInAnonymouslyAndRetrieveData]);
     const { user } = authData;
+
+    firebaseAnalytics.logEvent('Upload_Photo', { user_id: user.uid });
+
+    yield put(authActions.updateProfileFulfilled({ photoURL: photo.path }));
     if (user) {
       const storageOpts = { contentType: 'image/jpeg', contentEncoding: 'base64' };
       const filename = photo.path.replace(/^.*[\\/]/, '');

@@ -19,13 +19,10 @@ const updateCodePush = () => {
 class App extends Component {
 
   componentDidMount() {
-    AppState.addEventListener('change', this.onAppStateChanged);
     Instabug.startWithToken('350cd7e5d499ced551b26651779a17ec', Instabug.invocationEvent.shake);
     Instabug.setPrimaryColor(processColor('#FF7604'));
-    updateCodePush();
-  }
 
-  onAppStateChanged = () => {
+    AppState.addEventListener('change', updateCodePush);
     updateCodePush();
   }
 

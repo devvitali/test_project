@@ -2,27 +2,38 @@ import React, { Component } from 'react';
 import I18n from 'react-native-i18n';
 import AppContainers from '../AppContainer';
 import { Document, NavItems } from '../../components';
+import { firebaseAnalytics, firebaseConfig } from '../../firebase';
 import { download } from '../../utils/downloadUtils';
-import localFile from './terms-of-service.md';
 
 export default class TermsOfServiceScreen extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      file: localFile,
-    };
+
+  state = {
+    markdown: null,
   }
+
+  componentDidMount() {
+    firebaseAnalytics.setCurrentScreen('Terms of Service');
+
+    firebaseConfig.fetch()
+      .then(() => firebaseConfig.activateFetched())
+      .then(() => firebaseConfig.getValue('terms_of_service'))
+      .then(data => download(data.val()))
+      .then(markdown => this.setState({ markdown }))
+      .catch(error => console.log(`Error processing config: ${error}`));
+  }
+
   renderContent() {
-    const { file } = this.state;
-    if (!file) {
+    const { markdown } = this.state;
+    if (!markdown) {
       return null;
     }
-    return <Document file={file} />;
+
+    return <Document file={markdown} />;
   }
+
   render() {
     return (
       <AppContainers
-        navigation={this.props.navigation}
         title={I18n.t('TERMS_OF_SERVICE')}
         renderLeftButton={NavItems.hamburgerButton(this.props.navigation)}
       >
@@ -30,4 +41,5 @@ export default class TermsOfServiceScreen extends Component {
       </AppContainers>
     );
   }
+
 }

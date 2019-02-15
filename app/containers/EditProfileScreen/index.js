@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { Image, Text, TextInput, TouchableOpacity, View, Keyboard, ActivityIndicator } from 'react-native';
 import I18n from 'react-native-i18n';
-import { debounce, map } from 'lodash';
+import { map } from 'lodash';
 import { connect } from 'react-redux';
 import { CachedImage } from 'react-native-cached-image';
 import AppContainer from '../AppContainer';
-import { firebaseStorage } from '../../firebase';
+import { firebaseAnalytics, firebaseStorage } from '../../firebase';
 import { DrinkupActions, AuthActions } from '../../redux';
 import { Button, PicPhotoSourceDialog, NavItems } from '../../components';
 import { openPicker } from '../../utils/photoUtils';
@@ -27,6 +27,10 @@ class EditProfileScreen extends Component {
       photoURL: props.user.photoURL,
       imageUploading: false,
     };
+  }
+
+  componentDidMount() {
+    firebaseAnalytics.setCurrentScreen('Edit Profile');
   }
 
   onImageSelected = async (photo) => {

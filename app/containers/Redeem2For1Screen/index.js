@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { View, Text, Image, ScrollView } from 'react-native';
 import I18n from 'react-native-i18n';
 import moment from 'moment';
+import { firebaseAnalytics } from '../../firebase';
 import styles from './styles';
 import AppContainer from '../AppContainer';
 import { Button } from '../../components';
@@ -11,14 +12,10 @@ import { SpecialRedemption } from '../../firebase/models';
 
 class Redeem2For1Screen extends Component {
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      redemption: null,
-      // eslint-disable-next-line react/no-unused-state
-      counter: 0,
-    };
+  state = {
+    redemption: null,
+    // eslint-disable-next-line react/no-unused-state
+    counter: 0,
   }
 
   componentDidMount() {
@@ -35,6 +32,8 @@ class Redeem2For1Screen extends Component {
 
         this.setState({ redemption }, this.startInterval);
       });
+
+    firebaseAnalytics.setCurrentScreen('Redeem Special');
   }
 
   componentWillUnmount() {

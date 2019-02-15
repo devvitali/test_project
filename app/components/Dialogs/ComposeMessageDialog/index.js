@@ -13,6 +13,7 @@ const previousMessages = [
   'Sitting with the guy in the clown suit.',
   'Front table, wearing a pink hat.',
 ];
+
 const ComposeMessageDialog = (props) => {
   const { onClose, visible, messagePlaceholder, onChangeMessage, message } = props;
   const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
@@ -22,7 +23,11 @@ const ComposeMessageDialog = (props) => {
       onClose={onClose}
       visible={visible}
       dialogStyle={styles.dialog}
+      animationType="none"
     >
+      <Text style={styles.title}>
+        {I18n.t('Drinkup_SendMessagePrompt')}
+      </Text>
       <TextInput
         multiline
         numberOfLines={4}
@@ -50,4 +55,5 @@ const ComposeMessageDialog = (props) => {
     </Dialog>
   );
 };
+
 export default ComposeMessageDialog;

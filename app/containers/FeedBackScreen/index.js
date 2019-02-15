@@ -5,7 +5,7 @@ import I18n from 'react-native-i18n';
 import AppContainer from '../AppContainer';
 import { Button, NavItems } from '../../components';
 import Styles from './styles';
-import { firebaseDb } from '../../firebase';
+import { firebaseAnalytics, firebaseDb } from '../../firebase';
 import { Colors } from '../../themes';
 
 class FeedbackScreen extends Component {
@@ -13,6 +13,10 @@ class FeedbackScreen extends Component {
   state = {
     feedback: '',
     successful: false,
+  }
+
+  componentDidMount() {
+    firebaseAnalytics.setCurrentScreen('Feedback');
   }
 
   doSubmitFeedback = () => {

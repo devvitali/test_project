@@ -5,13 +5,14 @@ import { createSelector } from 'reselect';
 import AppContainer from '../AppContainer';
 import WaitingScreen from './WaitingScreen';
 import NoDrinkUp from './NoDrinkUpScreen';
+import { firebaseAnalytics } from '../../firebase';
 import { BarFactory } from '../../firebase/models';
 import { NavItems, DirectionDialog } from '../../components';
 import { isUserValid } from '../../utils/auth';
 import { DrinkupActions } from '../../redux';
 import styles from './styles';
 
-class JoinDrinkUp extends Component {
+class JoinDrinkUpScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -24,7 +25,8 @@ class JoinDrinkUp extends Component {
   }
   componentDidMount() {
     this.barSubscribeModel.subscribe(() => {}, this.props.draftBar.id);
-    console.log('bar name', this.props.draftBar.name);
+
+    firebaseAnalytics.setCurrentScreen('Join DrinkUp');
   }
   componentWillUnmount() {
     this.barSubscribeModel.unsubscribe(this.props.draftBar.id);
@@ -114,4 +116,4 @@ const mapDispatchToProps = dispatch => ({
 });
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(JoinDrinkUp);
+export default connect(mapStateToProps, mapDispatchToProps)(JoinDrinkUpScreen);

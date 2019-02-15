@@ -6,9 +6,10 @@ import AppContainer from '../AppContainer';
 import { NavItems, DirectionDialog, DrinkUpLobby } from '../../components';
 import styles from './styles';
 import { DrinkupActions } from '../../redux';
+import { firebaseAnalytics } from '../../firebase';
 import { BarFactory } from '../../firebase/models';
 
-class DrinkUp extends Component {
+class DrinkUpScreen extends Component {
 
   constructor(props) {
     super(props);
@@ -29,6 +30,8 @@ class DrinkUp extends Component {
         this.props.getUsers(this.props.bar.currentDrinkUp);
       }
     }
+
+    firebaseAnalytics.setCurrentScreen('DrinkUp');
   }
 
   componentWillReceiveProps(newProps) {
@@ -127,4 +130,4 @@ const mapDispatchToProps = dispatch => ({
   acceptDrinkupInvitation: (bar, uid) => dispatch(DrinkupActions.acceptDrinkupInvitation(bar, uid)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(DrinkUp);
+export default connect(mapStateToProps, mapDispatchToProps)(DrinkUpScreen);
