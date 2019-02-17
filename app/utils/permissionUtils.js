@@ -1,5 +1,4 @@
 import Permissions from 'react-native-permissions';
-import FCM from 'react-native-fcm';
 
 const requestPermission = (...args) => (
   new Promise((resolve, reject) => {
@@ -51,6 +50,7 @@ export const locationPermission = () => requestPermission('location', 'whenInUse
 
 export const notificationPermission = () => (
   new Promise((resolve, reject) => {
+    /*
     FCM.requestPermissions()
       .then(() => {
         FCM.getFCMToken()
@@ -64,5 +64,6 @@ export const notificationPermission = () => (
           }).catch(reject);
       })
       .catch(reject);
+    */
   })
 );

@@ -22,7 +22,7 @@ NSString *const kGCMMessageIDKey = @"gcm.message_id";
 {
   NSURL *jsCodeLocation;
 #ifdef DEBUG
-  jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index.ios" fallbackResource:nil];
+  jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
 #else
   jsCodeLocation = [CodePush bundleURL];
 #endif
@@ -31,13 +31,13 @@ NSString *const kGCMMessageIDKey = @"gcm.message_id";
                                                initialProperties:nil
                                                    launchOptions:launchOptions];
   UIView *backgroundView = [[[NSBundle mainBundle] loadNibNamed:@"LaunchScreen" owner:self options:nil] firstObject];
-  
+
   rootView.backgroundColor = [UIColor clearColor];
-  
+
   [GMSServices provideAPIKey:@"AIzaSyAnQdY1dgtyDDFTGHtpYoqVHQxiVQ0c4xU"];
   [FIRApp configure];
   [FIRMessaging messaging].delegate = self;
-  
+
   self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
   UIViewController *rootViewController = [UIViewController new];
   self.window.rootViewController = rootViewController;
@@ -47,7 +47,7 @@ NSString *const kGCMMessageIDKey = @"gcm.message_id";
   rootView.frame = backgroundView.frame;
 //  rootViewController.view = rootView;
 //  [self.window makeKeyAndVisible];
-  
+
   [[UIApplication sharedApplication] registerForRemoteNotifications];
   return YES;
 }
@@ -57,10 +57,10 @@ NSString *const kGCMMessageIDKey = @"gcm.message_id";
   // If you are receiving a notification message while your app is in the background,
   // this callback will not be fired till the user taps on the notification launching the application.
   // TODO: Handle data of notification
-  
+
   // With swizzling disabled you must let Messaging know about the message, for Analytics
   // [[FIRMessaging messaging] appDidReceiveMessage:userInfo];
-  
+
   // Print message ID.
   if (userInfo[kGCMMessageIDKey]) {
     NSLog(@"Message ID: %@", userInfo[kGCMMessageIDKey]);
@@ -74,18 +74,18 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
   // If you are receiving a notification message while your app is in the background,
   // this callback will not be fired till the user taps on the notification launching the application.
   // TODO: Handle data of notification
-  
+
   // With swizzling disabled you must let Messaging know about the message, for Analytics
   // [[FIRMessaging messaging] appDidReceiveMessage:userInfo];
-  
+
   // Print message ID.
   if (userInfo[kGCMMessageIDKey]) {
     NSLog(@"Message ID: %@", userInfo[kGCMMessageIDKey]);
   }
-  
+
   // Print full message.
   NSLog(@"%@", userInfo);
-  
+
   [RNFIRMessaging didReceiveRemoteNotification:userInfo fetchCompletionHandler:completionHandler];
   completionHandler(UIBackgroundFetchResultNewData);
 }
@@ -96,18 +96,18 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
        willPresentNotification:(UNNotification *)notification
          withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler {
   NSDictionary *userInfo = notification.request.content.userInfo;
-  
+
   // With swizzling disabled you must let Messaging know about the message, for Analytics
   // [[FIRMessaging messaging] appDidReceiveMessage:userInfo];
-  
+
   // Print message ID.
   if (userInfo[kGCMMessageIDKey]) {
     NSLog(@"Message ID: %@", userInfo[kGCMMessageIDKey]);
   }
-  
+
   // Print full message.
   NSLog(@"%@", userInfo);
-  
+
   // Change this to your preferred presentation option
   completionHandler(UNNotificationPresentationOptionNone);
 }
@@ -120,10 +120,10 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
   if (userInfo[kGCMMessageIDKey]) {
     NSLog(@"Message ID: %@", userInfo[kGCMMessageIDKey]);
   }
-  
+
   // Print full message.
   NSLog(@"%@", userInfo);
-  
+
   completionHandler();
 }
 #endif
@@ -135,7 +135,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
   // time. So if you need to retrieve the token as soon as it is available this is where that
   // should be done.
   NSLog(@"FCM registration token: %@", fcmToken);
-  
+
   // TODO: If necessary send token to application server.
 }
 // [END refresh_token]
@@ -156,7 +156,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 // the FCM registration token.
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
   NSLog(@"APNs device token retrieved: %@", deviceToken);
-  
+
   // With swizzling disabled you must set the APNs device token here.
   // [FIRMessaging messaging].APNSToken = deviceToken;
 }

@@ -1,7 +1,9 @@
 source 'https://github.com/CocoaPods/Specs.git'
-platform :ios, ‘8.0’
+platform :ios, '8.0'
 
 target 'ALKO' do
+  pod 'react-native-maps', :path => '../node_modules/react-native-maps'
+
 end
 
 [

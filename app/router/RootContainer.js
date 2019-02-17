@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { SafeAreaView, StatusBar } from 'react-native';
 import { connect } from 'react-redux';
-import FCM, { FCMEvent } from 'react-native-fcm';
 
 import AppNavigator from './AppNavigator';
 import { StartupActions, AuthActions } from '../redux';
@@ -13,6 +12,7 @@ class RootContainer extends Component {
   componentDidMount() {
     this.props.startup();
 
+    /*
     FCM.getFCMToken().then((fcmToken) => {
       this.props.updateProfile({ fcmToken });
     });
@@ -20,6 +20,8 @@ class RootContainer extends Component {
     this.refreshTokenListener = FCM.on(FCMEvent.RefreshToken, (fcmToken) => {
       this.props.updateProfile({ fcmToken });
     });
+    */
+
   }
 
   componentWillUnmount() {

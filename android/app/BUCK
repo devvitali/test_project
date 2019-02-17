@@ -45,12 +45,12 @@ android_library(
 
 android_build_config(
     name = "build_config",
-    package = "com.alko",
+    package = "com.alko.alko",
 )
 
 android_resource(
     name = "res",
-    package = "com.alko",
+    package = "com.alko.alko",
     res = "src/main/res",
 )
 

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { View, StyleSheet } from 'react-native';
-import FCM, { FCMEvent } from 'react-native-fcm';
 import { Colors } from '../themes';
 import NavigationBar from '../components/NavigationBar';
 
@@ -18,6 +17,7 @@ export default class AppContainer extends Component {
 
   componentDidMount() {
 
+    /*
     this.messageListener = FCM.on(FCMEvent.Notification, async (message) => {
       if (this.props.navigation) {
         this.props.navigation.navigate('DrinkUpScreen');
@@ -27,6 +27,7 @@ export default class AppContainer extends Component {
     FCM.on(FCMEvent.DirectChannelConnectionChanged, (data) => {
       console.log('direct channel connected', data);
     });
+    */
 
   }
 

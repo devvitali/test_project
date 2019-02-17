@@ -1,4 +1,4 @@
-package com.alko;
+package com.alko.alko;
 
 import com.facebook.react.ReactActivity;
 
