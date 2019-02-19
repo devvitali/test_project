@@ -5,7 +5,6 @@ import {
   OnBoardingStep1,
   OnBoardingStep2,
   OnBoardingStep3,
-  OnBoardingStep4,
 } from '../containers/OnBoarding';
 import EditProfileScreen from '../containers/EditProfileScreen';
 import MapScreen from '../containers/MapScreen';
@@ -33,6 +32,7 @@ const DrinkupNavigator = createStackNavigator(
     cardStyle: { shadowColor: 'transparent' },
   }
 );
+
 const DrawerNavigation = createDrawerNavigator(
   {
     EditProfileScreen: { screen: EditProfileScreen },
@@ -48,12 +48,12 @@ const DrawerNavigation = createDrawerNavigator(
     contentComponent: props => <DrawerBar {...props} />,
   }
 );
+
 const AppNavigator = createStackNavigator({
   SplashScreen: { screen: SplashScreen },
   OnBoardingStep1: { screen: OnBoardingStep1 },
   OnBoardingStep2: { screen: OnBoardingStep2 },
   OnBoardingStep3: { screen: OnBoardingStep3 },
-  OnBoardingStep4: { screen: OnBoardingStep4 },
   Redeem2For1Screen: { screen: Redeem2For1Screen },
   DrawerNavigation: { screen: DrawerNavigation },
 }, {
@@ -66,6 +66,7 @@ const AppNavigator = createStackNavigator({
   // mode: Platform.OS === 'ios' ? 'modal' : 'card',
   cardStyle: { shadowColor: 'transparent' },
 });
+
 const App = createAppContainer(AppNavigator);
 
 export default () => <App />;

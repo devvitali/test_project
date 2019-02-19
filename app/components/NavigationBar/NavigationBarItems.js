@@ -1,5 +1,6 @@
 import React from 'react';
 import { TouchableOpacity, Keyboard } from 'react-native';
+import { DrawerActions } from 'react-navigation-drawer';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import IconAlko from '../IconAlko';
@@ -8,13 +9,16 @@ import { Colors } from '../../themes';
 
 function openDrawer(navigation) {
   Keyboard.dismiss();
-  navigation.navigate('DrawerOpen');
+  navigation.dispatch(DrawerActions.openDrawer());
 }
+
 function goBack(navigation) {
   Keyboard.dismiss();
   navigation.goBack();
 }
+
 export default {
+
   backButton(navigation, onBack) {
     const onPress = () => {
       if (onBack) {
@@ -22,6 +26,7 @@ export default {
       }
       goBack(navigation);
     };
+
     return () => (
       <TouchableOpacity onPress={onPress} style={styles.backButton}>
         <Icon name="angle-left" size={35} color={Colors.snow} style={styles.backIcon} />
@@ -50,4 +55,5 @@ export default {
       <IconAlko name="alko" size={20} color={Colors.snow} />
     );
   },
+
 };

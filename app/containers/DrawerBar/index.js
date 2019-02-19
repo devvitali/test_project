@@ -39,22 +39,25 @@ class DrawBar extends Component {
     actions.signOut(navigation, auth.uid, bar);
   };
 
-  navigateTo = page => () => this.props.navigation.navigate(page);
+  navigateTo = page => () => this.props.navigation.navigate(page)
+
   render() {
     const { activeItemKey, auth: { profile = {} }, joined, bar } = this.props;
+
     return (
       <AppContainer hideNavBar>
         <View style={styles.container}>
           <View style={styles.header}>
             <View style={styles.avatarContainer}>
-              {profile.photoURL ?
-                <Image source={{ uri: profile.photoURL }} style={styles.avatar} /> :
-                <Image source={avatar} style={styles.avatar} />
+              {profile.photoURL
+                ? <Image source={{ uri: profile.photoURL }} style={styles.avatar} />
+                : <Image source={avatar} style={styles.avatar} />
               }
             </View>
             <Text style={styles.name}>{profile.firstName}</Text>
           </View>
           <ScrollView style={styles.contentContainer}>
+
             {joined ? (
               <DrawerButton
                 isActive={activeItemKey !== 'EditProfileScreen' && activeItemKey !== 'FeedBackScreen'}
@@ -76,6 +79,7 @@ class DrawBar extends Component {
               text="MY PROFILE"
               onPress={this.navigateTo('EditProfileScreen')}
             />
+
             {
               /*
             <DrawerButton
@@ -85,6 +89,7 @@ class DrawBar extends Component {
             />
                */
             }
+
             <DrawerButton
               isActive={activeItemKey === 'FeedBackScreen'}
               text="IDEAS? FEEDBACK?"
@@ -102,7 +107,9 @@ class DrawBar extends Component {
               </TouchableOpacity>
             </View>
             <TouchableOpacity onPress={this.onLogout}>
-              <Text style={styles.copyright}>© ALKO LLC {this.state.metaData.label}</Text>
+              <Text style={styles.copyright}>
+                © ALKO LLC {this.state.metaData.label}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>

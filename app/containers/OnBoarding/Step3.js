@@ -1,24 +1,62 @@
-import React from 'react';
-import { View, Text, ScrollView } from 'react-native';
+import React, { Component } from 'react';
+import { Text, View } from 'react-native';
 import I18n from 'react-native-i18n';
-import styles from './styles';
+import { Connect } from '../../redux';
 import { Button } from '../../components';
+import styles from './styles';
+import { notificationPermission } from '../../utils/permissionUtils';
 
-const requestLocationPermission = (props) => {
-  navigator.geolocation.requestAuthorization();
-  props.navigation.navigate('OnBoardingStep4');
-};
+class OnboardingPushNotifications extends Component {
 
-export default props => (
-  <View style={styles.container}>
-    <ScrollView style={styles.contentContainer}>
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>{I18n.t('Introduction_step3_title')}</Text>
-        <Text style={styles.description}>{I18n.t('Introduction_step3_description')}</Text>
+  doNotificationPermissionRequest = () => (
+    notificationPermission()
+      .then((token) => {
+        console.log({
+          name: 'NotificationPermissionAccepted',
+          value: { token },
+          important: true,
+        });
+
+        this.props.actions.updateProfile({ fcmToken: token });
+        this.doCompleteProfile();
+      })
+      .catch((e) => {
+        console.log('err', e);
+        this.doCompleteProfile();
+      })
+  );
+
+  doCompleteProfile = () => {
+    const { updateProfile } = this.props.actions;
+
+    updateProfile({ onboardingComplete: true });
+    this.props.navigation.navigate('DrawerNavigation');
+  };
+
+  render() {
+    return (
+      <View style={styles.container}>
+        <View style={styles.topSection}>
+          <Text style={styles.sectionTitle}>{I18n.t('Introduction_step3_title')}</Text>
+          <Text style={styles.description}>
+            Tilde vaporware meditation mlkshk subway tile, poutine cred 3 wolf moon four dollar toast yuccie vegan.
+          </Text>
+        </View>
+        <View style={styles.firstButton}>
+          <Button
+            text={I18n.t('Introduction_step3_disallow')}
+            theme="disallow"
+            onPress={this.doCompleteProfile}
+          />
+        </View>
+        <Button
+          text={I18n.t('Introduction_step3_btn')}
+          onPress={this.doNotificationPermissionRequest}
+        />
+
       </View>
-    </ScrollView>
-    <View styles={styles.footer}>
-      <Button onPress={() => requestLocationPermission(props)} text={I18n.t('Introduction_step3_btn')} />
-    </View>
-  </View>
-);
+    );
+  }
+}
+
+export default Connect(OnboardingPushNotifications);

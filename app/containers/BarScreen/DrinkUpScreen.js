@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
 import { connect } from 'react-redux';
-import { NavigationActions } from 'react-navigation';
+import { NavigationActions, StackActions } from 'react-navigation';
 import AppContainer from '../AppContainer';
 import { NavItems, DirectionDialog, DrinkUpLobby } from '../../components';
 import styles from './styles';
@@ -36,7 +36,7 @@ class DrinkUpScreen extends Component {
 
   componentWillReceiveProps(newProps) {
     if (this.props.joined !== newProps.joined && !newProps.joined) {
-      const resetAction = NavigationActions.reset({
+      const resetAction = StackActions.reset({
         index: 0,
         actions: [
           NavigationActions.navigate({ routeName: 'JoinDrinkUpScreen' }),

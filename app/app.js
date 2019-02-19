@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { AppState, processColor, View } from 'react-native';
+import { AppState, processColor } from 'react-native';
 import { Provider } from 'react-redux';
 import codePush from 'react-native-code-push';
 import Instabug from 'instabug-reactnative';
@@ -19,6 +19,7 @@ const updateCodePush = () => {
 class App extends Component {
 
   componentDidMount() {
+
     Instabug.startWithToken('350cd7e5d499ced551b26651779a17ec', [Instabug.invocationEvent.shake]);
     Instabug.setPrimaryColor(processColor('#FF7604'));
 

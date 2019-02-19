@@ -37,14 +37,10 @@
   "Introduction_step2_description": "Join a drink-up, show your\nphone to the bartender,\nget a free drink. Any drink.",
   "Introduction_step2_btn": "Okay, free drinks are cool",
 
-  "Introduction_step3_title": "LOCATION DATA",
-  "Introduction_step3_description": "We use your phone’s location data so we can tell you about drink-ups starting nearby.\n\nALKO also uses location data to figure out your taste in bars. Whether you’re at home or traveling, ALKO can suggest great bars, personalized just for you.\n\nALKO won’t drain your battery because of how rarely it uses location data.",
-  "Introduction_step3_btn": "Turn on location",
-
-  "Introduction_step4_title": "PUSH NOTIFICATIONS",
-  "Introduction_step4_description": "We’ll only tell you about Drink-ups when you’d like us to.",
-  "Introduction_step4_btn": "Allow push notifications",
-  "Introduction_step4_disallow": "no, maybe later",
+  "Introduction_step3_title": "PUSH NOTIFICATIONS",
+  "Introduction_step3_description": "We’ll only tell you about Drink-ups when you’d like us to.",
+  "Introduction_step3_btn": "Allow push notifications",
+  "Introduction_step3_disallow": "no, maybe later",
 
   "Bar_StartADrinkUp": "Start a Drink-up",
   "Bar_StartADrinkUpForSpecial": "Start a Drink-Up for a 2-for-1 Special",

@@ -32,15 +32,17 @@ export default class AppContainer extends Component {
   }
 
   componentWillUnmount() {
-    this.messageListener.remove();
+    // this.messageListener.remove();
   }
 
   render() {
+    const { hideNavBar, children } = this.props;
+
     return (
       <View style={styles.container}>
-        {!this.props.hideNavBar && <NavigationBar {...this.props} />}
+        {!hideNavBar && <NavigationBar {...this.props} />}
         <View style={styles.viewContainer}>
-          {this.props.children}
+          {children}
         </View>
       </View>
     );

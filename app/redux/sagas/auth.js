@@ -12,7 +12,7 @@ function subscribe(key) {
 }
 export function* signIn() {
   try {
-    const authData = yield call([firebaseAuth, firebaseAuth.signInAnonymouslyAndRetrieveData]);
+    const authData = yield call([firebaseAuth, firebaseAuth.signInAnonymously]);
     yield put(authActions.signInFulfilled(authData.user));
   } catch (error) {
     yield put(authActions.signInFailed(error));
@@ -70,10 +70,11 @@ export function* createProfile() {
     yield put(authActions.createProfileFailed(error));
   }
 }
+
 export function* updateLocation({ location }) {
   if (location.coords) {
     const { latitude, longitude } = location.coords;
-    const authData = yield call([firebaseAuth, firebaseAuth.signInAnonymouslyAndRetrieveData]);
+    const authData = yield call([firebaseAuth, firebaseAuth.signInAnonymously]);
     const { user } = authData;
     if (user) {
       geoFire('userLocations').set(user.uid, [latitude, longitude]);
@@ -81,12 +82,14 @@ export function* updateLocation({ location }) {
   }
   console.log('updateLocation', location);
 }
+
 export function* updateProfile({ diff }) {
   try {
+    const authData = yield call([firebaseAuth, firebaseAuth.signInAnonymously]);
+    const { user } = authData;
+
     firebaseAnalytics.logEvent('Update_Profile', { diff, user_id: user.uid });
 
-    const authData = yield call([firebaseAuth, firebaseAuth.signInAnonymouslyAndRetrieveData]);
-    const { user } = authData;
     if (user) {
       yield call([User, User.update], user.uid, diff);
       yield call(watch, subscribe, user.uid);
@@ -98,7 +101,7 @@ export function* updateProfile({ diff }) {
 
 export function* uploadProfilePhoto({ photo }) {
   try {
-    const authData = yield call([firebaseAuth, firebaseAuth.signInAnonymouslyAndRetrieveData]);
+    const authData = yield call([firebaseAuth, firebaseAuth.signInAnonymously]);
     const { user } = authData;
 
     firebaseAnalytics.logEvent('Upload_Photo', { user_id: user.uid });

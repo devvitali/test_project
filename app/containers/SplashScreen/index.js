@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { NavigationActions } from 'react-navigation';
+import { NavigationActions, StackActions } from 'react-navigation';
 import { isUserValid } from '../../utils/auth';
 import { Connect } from '../../redux';
 import { Colors } from '../../themes';
@@ -17,6 +17,7 @@ class SplashScreen extends Component {
     super(props);
     this.routedScene = '';
   }
+
   componentWillReceiveProps(newProps) {
     if (this.routedScene === '') {
       this.redirect(newProps);
@@ -24,42 +25,48 @@ class SplashScreen extends Component {
   }
 
   navigate(route) {
+    const { navigation } = this.props;
+
     if (route !== this.routedScene) {
       if (route === 'DrawerNavigation') {
-        const resetAction = NavigationActions.reset({
+        const resetAction = StackActions.reset({
           index: 0,
           actions: [NavigationActions.navigate({ routeName: 'DrawerNavigation' })],
         });
-        this.props.navigation.dispatch(resetAction);
+        navigation.dispatch(resetAction);
       } else {
-        this.props.navigation.navigate(route);
+        navigation.navigate(route);
       }
     }
     this.routedScene = route;
   }
+
   redirect(newProps) {
-    const { joined, user, isUserValid } = newProps;
+    const { joined, user, userIsValid } = newProps;
+
+    console.log({ user });
+
     if (!user && this.routedScene !== 'OnBoardingStep1') {
       this.navigate('OnBoardingStep1');
     } else if (joined) {
       this.navigate('DrawerNavigation', 'DrinkUpScreen');
-    } else if (isUserValid) {
+    } else if (userIsValid) {
       this.navigate('DrawerNavigation');
     } else if (this.routedScene !== 'OnBoardingStep1') {
       this.navigate('OnBoardingStep1');
     }
   }
+
   render() {
-    return (
-      <View style={styles.container} />
-    );
+    return <View style={styles.container} />;
   }
+
 }
 
 const mapStateToProps = state => ({
   user: state.auth.profile,
   joined: state.drinkup.joined,
-  isUserValid: isUserValid(state.auth.profile),
+  userIsValid: isUserValid(state.auth.profile),
 });
 
 export default Connect(SplashScreen, mapStateToProps);

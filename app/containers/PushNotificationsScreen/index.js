@@ -3,7 +3,7 @@ import { Switch, Text, View } from 'react-native';
 import I18n from 'react-native-i18n';
 import AppContainer from '../AppContainer';
 import { NavItems } from '../../components';
-import { Colors } from '../../themes/';
+import { Colors } from '../../themes';
 import { Connect } from '../../redux';
 import Styles from './styles';
 
@@ -47,7 +47,7 @@ class PushNotificationsScreen extends Component {
           <View style={Styles.formContainer}>
 
             <View style={Styles.topSection}>
-              <Text style={Styles.description}>{I18n.t('Introduction_step4_description')}</Text>
+              <Text style={Styles.description}>{I18n.t('Introduction_step3_description')}</Text>
             </View>
 
             <View>
