@@ -53,5 +53,5 @@
     "pre-commit": "1.2.2",
     "precommit": "1.2.2",
     "react-test-renderer": "16.6.3"
-  },
+  }
 }
