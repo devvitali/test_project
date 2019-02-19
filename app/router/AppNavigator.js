@@ -1,5 +1,5 @@
 import React from 'react';
-import { StackNavigator, DrawerNavigator } from 'react-navigation';
+import { createStackNavigator, createAppContainer, createDrawerNavigator } from 'react-navigation';
 import SplashScreen from '../containers/SplashScreen';
 import {
   OnBoardingStep1,
@@ -20,7 +20,7 @@ import SponsoredScreen from '../containers/SponsoredScreen';
 import Redeem2For1Screen from '../containers/Redeem2For1Screen';
 import DrawerBar from '../containers/DrawerBar';
 
-const DrinkupNavigator = StackNavigator(
+const DrinkupNavigator = createStackNavigator(
   {
     MapScreen: { screen: MapScreen },
     JoinDrinkUpScreen: { screen: JoinDrinkUpScreen },
@@ -33,7 +33,7 @@ const DrinkupNavigator = StackNavigator(
     cardStyle: { shadowColor: 'transparent' },
   }
 );
-const DrawerNavigation = DrawerNavigator(
+const DrawerNavigation = createDrawerNavigator(
   {
     EditProfileScreen: { screen: EditProfileScreen },
     FeedBackScreen: { screen: FeedBackScreen },
@@ -48,7 +48,7 @@ const DrawerNavigation = DrawerNavigator(
     contentComponent: props => <DrawerBar {...props} />,
   }
 );
-const AppNavigator = StackNavigator({
+const AppNavigator = createStackNavigator({
   SplashScreen: { screen: SplashScreen },
   OnBoardingStep1: { screen: OnBoardingStep1 },
   OnBoardingStep2: { screen: OnBoardingStep2 },
@@ -66,4 +66,6 @@ const AppNavigator = StackNavigator({
   // mode: Platform.OS === 'ios' ? 'modal' : 'card',
   cardStyle: { shadowColor: 'transparent' },
 });
-export default () => <AppNavigator />;
+const App = createAppContainer(AppNavigator);
+
+export default () => <App />;

@@ -1,37 +1,73 @@
-source 'https://github.com/CocoaPods/Specs.git'
-platform :ios, '8.0'
+# Uncomment the next line to define a global platform for your project
+# platform :ios, '9.0'
 
 target 'ALKO' do
+  # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
+  # use_frameworks!
+
+  # Pods for ALKO
+
+  # Pods for testing
+  pod 'instabug-reactnative', :path => '../node_modules/instabug-reactnative'
+
+  pod 'RNBackgroundGeolocation', :path => '../node_modules/react-native-background-geolocation'
+
+  pod 'CodePush', :path => '../node_modules/react-native-code-push'
+
+  pod 'react-native-fetch-blob', :path => '../node_modules/react-native-fetch-blob'
+
+  pod 'RNI18n', :path => '../node_modules/react-native-i18n'
+
+  pod 'RNImageCropPicker', :path => '../node_modules/react-native-image-crop-picker'
+
+  pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
+
   pod 'react-native-maps', :path => '../node_modules/react-native-maps'
 
-end
+  pod 'ReactNativePermissions', :path => '../node_modules/react-native-permissions'
 
-[
-  'RSKImageCropper',
-  'QBImagePickerController',
-  'Firebase',
-  'Firebase/Core',
-  'Firebase/Auth',
-  'Firebase/Storage',
-  'Firebase/Database',
-  'Firebase/RemoteConfig',
-  'Firebase/Messaging',
-].each do |lib|
-  pod lib
-  pod ‘GoogleMaps’
-  pod ‘GooglePlaces’
-end
-post_install do |installer|
-  `rm -rf Pods/leveldb-library/port/win`
-  installer.pods_project.targets.each do |target|
-      if target.name == "React"
-          target.remove_from_project
-      end
-      if target.name == 'yoga'
-          target.build_configurations.each do |config|
-              config.build_settings['GCC_TREAT_WARNINGS_AS_ERRORS'] = 'NO'
-              config.build_settings['GCC_WARN_64_TO_32_BIT_CONVERSION'] = 'NO'
-          end
-      end
-  end
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
+  pod 'RSKImageCropper'
+  pod 'QBImagePickerController'
+  pod 'Firebase'
+  pod 'Firebase/Core'
+  pod 'Firebase/Auth'
+  pod 'Firebase/Storage'
+  pod 'Firebase/Database'
+  pod 'Firebase/RemoteConfig'
+  pod 'Firebase/Messaging'
+  
+  
+  pod 'React', :path => '../node_modules/react-native', :subspecs => [
+    'Core',
+    'CxxBridge', # Include this for RN >= 0.47
+    'DevSupport', # Include this to enable In-App Devmenu if RN >= 0.43
+    'RCTActionSheet',
+    'RCTAnimation',
+    'RCTGeolocation',
+    'RCTImage',
+    'RCTLinkingIOS',
+    'RCTNetwork',
+    'RCTPushNotification',
+    'RCTSettings',
+    'RCTText',
+    'RCTVibration',
+    'RCTWebSocket', # Needed for debugging
+  ]
+  # Explicitly include Yoga if you are using RN >= 0.42.0
+  pod 'yoga', :path => '../node_modules/react-native/ReactCommon/yoga'
+  
+  # Third party deps podspec link
+  pod 'DoubleConversion', :podspec => '../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec'
+  pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
+  pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
+  
+  pod 'RNBackgroundFetch', :path => '../node_modules/react-native-background-fetch'
+
+  pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
+
+  pod 'react-native-google-maps', :path => '../node_modules/react-native-maps'
+  pod 'GoogleMaps'  # Uncomment this line if you want to support GoogleMaps on iOS
+  pod 'Google-Maps-iOS-Utils' # Uncomment this line if you want to support GoogleMaps on iOS
 end

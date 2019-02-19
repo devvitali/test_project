@@ -1,4 +1,4 @@
-import supercluster from 'supercluster';
+import SuperCluster from 'supercluster';
 
 function convertGeoJSON(bars) {
   return Object.keys(bars).map((key) => {
@@ -21,7 +21,7 @@ function convertGeoJSON(bars) {
 }
 export function getClusters(bars, zoom) {
   const points = convertGeoJSON(bars);
-  const index = supercluster({ log: false, radius: 20 });
+  const index = new SuperCluster({ log: false, radius: 20 });
   index.load(points);
   return index.getClusters([-180, -85, 180, 85], zoom);
 }
