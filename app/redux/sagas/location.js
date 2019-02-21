@@ -15,6 +15,6 @@ const watchLocation = (action) => eventChannel((emit) => {
 });
 
 export function* startBackgroundGeoLocation() {
-  navigator.geolocation.requestAuthorization();
+  // navigator.geolocation.requestAuthorization();
   yield call(watch, watchLocation, LocationActions.onLocationChange);
 }
